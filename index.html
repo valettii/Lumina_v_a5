@@ -156,6 +156,20 @@ body::before{
   opacity:0;pointer-events:none;transition:opacity .2s;max-width:86vw;text-align:center}
 .toast.show{opacity:1}
 
+/* пентада */
+.pent{display:flex;align-items:center;gap:16px;width:100%;background:var(--surface);border-radius:20px;padding:16px;cursor:pointer;transition:transform .12s}
+.pent:active{transform:scale(.99)}
+.pring{position:relative;width:96px;height:96px;flex:none}
+.pring svg{width:100%;height:100%;display:block}
+.pring-c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.pbig{font-size:22px;font-weight:300;font-variant-numeric:tabular-nums;line-height:1}
+.psmall{font-size:11px;color:var(--muted);margin-top:4px;min-height:13px}
+.pmain{flex:1;min-width:0}
+.pname{font-size:17px;font-weight:700;letter-spacing:.08em}
+.psign{font-size:12px;color:var(--muted);margin-top:5px}
+.ptitle{font-size:14px;margin-top:10px;color:rgba(226,232,240,.92);line-height:1.3}
+.chev{color:var(--muted);font-size:24px;flex:none}
+
 </style>
 </head>
 <body>
@@ -808,6 +822,148 @@ function replaceAll(routes) { stack.length = 0; routes.forEach((r) => stack.push
 const $app = document.getElementById('app');
 const EL_RU = { Fire: 'ОГОНЬ', Earth: 'ЗЕМЛЯ', Air: 'ВОЗДУХ', Water: 'ВОДА' };
 const EL_COLOR = { Fire: '#EF4444', Earth: '#10B981', Air: '#3B82F6', Water: '#8B5CF6' };
+const EL_NAME = { Fire: 'Огонь', Earth: 'Земля', Air: 'Воздух', Water: 'Вода' };
+
+// ───────── Три уровня времени: сезон (знак) → пентада (5 дней) → окно (20 минут) ─────────
+const SIGNS = [
+  { n: 'Овен', t: 'Старт и импульс', x: 'Начало годового цикла. Время выбирать направление и делать первые шаги.' },
+  { n: 'Телец', t: 'Опора и ресурс', x: 'Закрепление и накопление. Ценность в устойчивости, ресурсах и спокойном темпе.' },
+  { n: 'Близнецы', t: 'Связи и информация', x: 'Обмен и обучение. Много информации, поэтому важны отбор, ясность и связи.' },
+  { n: 'Рак', t: 'Основание и восстановление', x: 'Опора и восстановление. Внимание к основанию: дому, телу, близким.' },
+  { n: 'Лев', t: 'Воля и проявление', x: 'Проявление и воля. Время делать видимое и брать ответственность за результат.' },
+  { n: 'Дева', t: 'Порядок и точность', x: 'Порядок и точность. Подходит для доработки, анализа и наведения порядка.' },
+  { n: 'Весы', t: 'Баланс и форма', x: 'Выравнивание нагрузки, договорённостей и структуры. Ищем баланс и чистую форму.' },
+  { n: 'Скорпион', t: 'Глубина и перестройка', x: 'Глубина и перестройка. Время вскрывать причины и отпускать лишнее.' },
+  { n: 'Стрелец', t: 'Горизонт и смысл', x: 'Расширение и смысл. Время сверяться с целью и расширять горизонт.' },
+  { n: 'Козерог', t: 'Структура и результат', x: 'Структура и результат. Время выстраивать систему и доводить до итога.' },
+  { n: 'Водолей', t: 'Система и новизна', x: 'Система и новизна. Время пересматривать подходы и пробовать новое.' },
+  { n: 'Рыбы', t: 'Завершение и итог', x: 'Завершение и растворение. Время подвести итоги и подготовиться к новому циклу.' },
+];
+const MODALITY = ['Кардинальный', 'Фиксированный', 'Мутабельный'];
+
+function seasonOf(regId) {
+  const i = Math.floor((regId - 1) / 6) % 12;
+  const reg = getRegister(regId);
+  return { sign: SIGNS[i], modality: MODALITY[i % 3], elementName: EL_NAME[reg.element],
+    caption: SIGNS[i].n + ' · ' + EL_NAME[reg.element] + ' · ' + MODALITY[i % 3] };
+}
+
+// [фокус на 5 дней, практика на пятидневку] — выровнено по порядку записей внутри каждой стихии
+const PENT_TEXTS = {
+  Fire: [
+    ['Запустить одну главную линию на пять дней и не плодить параллельные.', 'В первый день выбери цель пятидневки, затем каждое утро делай по ней первый шаг до остальных дел.'],
+    ['Держать ровный темп без рывков и провалов.', 'Ограничь рабочий день тремя блоками по 25 минут на главное дело и не превышай их все пять дней.'],
+    ['Превратить намерение в понятный план из трёх этапов.', 'В первый день набросай план на три этапа, дальше каждый день закрывай по одному пункту.'],
+    ['Преодолеть инерцию и начать то, что откладывалось.', 'Каждое утро начинай отложенное дело с пяти минут и фиксируй, сколько удалось сделать.'],
+    ['Исправлять отклонения без самокритики.', 'Вечером каждого дня записывай одно отклонение и одно исправляющее действие на завтра.'],
+    ['Сузить внимание до одной цели пятидневки.', 'Назови главную цель и каждый день отсекай одно дело, которое с ней не связано.'],
+    ['Беречь силы на длинную дистанцию.', 'Раздели большое дело на пять равных порций и делай ровно одну в день.'],
+    ['Принимать решения после паузы, а не по реакции.', 'Все важные решения этой пятидневки откладывай минимум на час и записывай итог.'],
+    ['Говорить напрямую и вовремя.', 'Каждый день отправляй одно короткое и ясное сообщение по незакрытому вопросу.'],
+    ['Укреплять то, что не видно, но держит результат.', 'Выделяй по 20 минут в день на документы, порядок или базовые процессы.'],
+    ['Закреплять результаты, а не гнаться за новыми.', 'Каждый вечер вычёркивай законченное и фиксируй результат одной строкой.'],
+    ['Сократить лишние входящие нагрузки.', 'Каждый день отказывай в одной лишней просьбе и отключай уведомления на один рабочий блок.'],
+    ['Согласовать нагрузку с восстановлением.', 'Ставь в день две паузы по 10 минут и пять дней подряд не отменяй их.'],
+    ['Снизить темп там, где растут ошибки.', 'В середине каждого дня проверяй число ошибок и при росте замедляйся на 20%.'],
+    ['Закрывать развилки, а не копить варианты.', 'Каждый день принимай одно отложенное решение по правилу: два варианта, один критерий, срок.'],
+    ['Определить, за что ты отвечаешь и что можно передать.', 'Каждое утро записывай, что сегодня за тобой, и передавай одно дело другому.'],
+    ['Закрепить навык ежедневной серией.', 'Выбери один навык и пять дней подряд повторяй его в одно и то же время.'],
+    ['Довести начатое до итога и передать импульс дальше.', 'В последний день подведи итог по трём пунктам: сделано, осталось, передаётся дальше.'],
+  ],
+  Earth: [
+    ['Стабилизировать состояние через тело.', 'Каждый день по 10 минут ходьбы или растяжки в одно и то же время.'],
+    ['Убрать хаос из рабочего пространства.', 'Каждый вечер за 5 минут возвращай рабочее место в исходное состояние.'],
+    ['Планировать по реальным остаткам сил и времени.', 'Каждое утро оценивай запас энергии от 1 до 10 и подгоняй план под него.'],
+    ['Выстроить регулярное питание.', 'Все пять дней ешь в одно и то же время и фиксируй, что сбивало режим.'],
+    ['Закрепить опорный ритуал.', 'Выбери утренний ритуал из трёх действий и выполняй его пять дней без исключений.'],
+    ['Увидеть цифры вместо тревоги.', 'Ежедневно записывай траты одной строкой, в конце пятидневки подведи сумму.'],
+    ['Наращивать результат малыми законченными шагами.', 'Каждый день заканчивай одну часть работы на 20–30 минут.'],
+    ['Защитить время глубокой работы.', 'Ежедневно один блок на 45 минут без уведомлений и разговоров.'],
+    ['Проверить и починить рабочие инструменты.', 'Каждый день обслуживай один инструмент: обновление, заряд, копия или чистка.'],
+    ['Ограничивать задачи сроками.', 'Перед каждой задачей заранее называй срок окончания и сверяйся вечером.'],
+    ['Снимать напряжение движением.', 'Каждый день проходи 20 минут пешком без рабочих звонков.'],
+    ['Замечать усталость вовремя.', 'Трижды в день оценивай напряжение в теле от 1 до 10 и записывай.'],
+    ['Создать буфер на непредвиденное.', 'Каждый день откладывай 10 минут времени или небольшую сумму в резерв.'],
+    ['Закрыть мелкие хвосты.', 'Ежедневно по 15 минут закрывай мелкие дела из списка.'],
+    ['Выбирать рабочий вариант вместо идеального.', 'Перед каждым делом записывай критерий «достаточно» и останавливайся на нём.'],
+    ['Сократить список дел до реального.', 'Каждый вечер вычёркивай или переноси три пункта.'],
+    ['Увидеть собранные результаты.', 'В последний день пятидневки запиши три результата и что из них стоит повторить.'],
+    ['Закрепить работающие правила.', 'Выбери одно рабочее правило и применяй его все пять дней без изменений.'],
+  ],
+  Air: [
+    ['Собирать информацию без оценки.', 'Каждый день читай один материал полностью и выписывай три факта.'],
+    ['Привести мысли в схему.', 'Ежедневно за 5 минут записывай главное из головы в три пункта.'],
+    ['Отличать данные от предположений.', 'Каждый день проверяй одно важное утверждение по независимому источнику.'],
+    ['Говорить короче и яснее.', 'Все важные сообщения сначала сокращай вдвое, затем отправляй.'],
+    ['Слышать, а не готовить ответ.', 'В одном разговоре в день перескажи собеседнику его мысль до своего ответа.'],
+    ['Видеть систему целиком.', 'Каждый день рисуй схему текущего проекта из трёх блоков и сверяй с вчерашней.'],
+    ['Поддерживать рабочие связи.', 'Каждый день пиши одному человеку без просьбы, просто по делу.'],
+    ['Добавлять знание малыми дозами.', 'Ежедневно по 10 минут изучай одну идею и применяй её в одном действии.'],
+    ['Снизить информационный шум.', 'Один час в день без новостей и мессенджеров, пять дней подряд.'],
+    ['Свериться с собственным путём роста.', 'Каждый вечер записывай один навык, который стал чуть лучше.'],
+    ['Найти повторяющиеся сбои.', 'Веди список повторяющихся ошибок и в конце пятидневки выбери одну для исправления.'],
+    ['Согласовать задачи и сроки.', 'Каждое утро сверяй календарь со списком дел и снимай одно противоречие.'],
+    ['Формулировать точно.', 'Перед каждым важным разговором записывай цель одной фразой.'],
+    ['Задавать верные вопросы.', 'Перед каждой задачей записывай вопрос, на который она отвечает.'],
+    ['Отобрать источники информации.', 'За пятидневку отпишись от трёх лишних источников и добавь один проверенный.'],
+    ['Сохранять знание для повторного использования.', 'Каждый вечер оформляй одну заметку: что узнал и как повторить.'],
+    ['Проверять идеи во внешней среде.', 'Покажи сырой набросок двум людям за пятидневку и собери комментарии.'],
+    ['Превратить данные в решение.', 'В последний день запиши принятое решение и первое действие по нему.'],
+  ],
+  Water: [
+    ['Отслеживать внутреннее состояние.', 'Три раза в день отмечай состояние словом и числом от 1 до 10.'],
+    ['Снижать уровень возбуждения.', 'Дважды в день делай по 5 минут дыхания 4/6.'],
+    ['Делать паузы без чувства вины.', 'Планируй три паузы по 3 минуты в день и проводи их без экрана.'],
+    ['Поддерживать тело жидкостью.', 'Ставь воду на рабочее место и выпивай стакан каждые два часа.'],
+    ['Восстановить режим сна.', 'Ложись в одно и то же время пять дней и убирай экраны за 30 минут до сна.'],
+    ['Принимать итог без самокритики.', 'После каждого дела записывай итог без оценок и одно, что повторишь.'],
+    ['Учитывать реакцию тела при выборе.', 'Перед каждым важным выбором отмечай телесную реакцию на варианты.'],
+    ['Уделять внимание близким.', 'Каждый день по 10 минут внимания близкому человеку без телефона.'],
+    ['Освободиться от накопленного напряжения.', 'Ежедневно выписывай тревоги на бумаге 3 минуты и откладывай лист.'],
+    ['Снизить внутренний темп.', 'Одно рутинное дело в день выполняй вдвое медленнее обычного.'],
+    ['Восстанавливаться через комфорт.', 'Каждый вечер 20 минут тепла: душ, чай, тишина.'],
+    ['Сочувствовать без перегруза.', 'В каждом разговоре сначала выслушай, потом предложи один конкретный шаг помощи.'],
+    ['Генерировать идеи без критики.', 'Ежедневно 5 идей за 3 минуты, а оценка только на следующий день.'],
+    ['Снизить фоновую стимуляцию.', 'Каждый день 10 минут в тишине без экрана.'],
+    ['Закрыть то, что потеряло смысл.', 'За пятидневку вычеркни два обязательства, которые больше не нужны.'],
+    ['Держать регулярность без насилия над собой.', 'Выбери минимальную версию привычки и выполняй её по 2 минуты каждый день.'],
+    ['Замечать то, что работает.', 'Каждый вечер записывай три вещи, которые сработали.'],
+    ['Подвести итог и подготовить новый цикл.', 'В последний день подведи итог тремя строками и выбери первую задачу следующей пятидневки.'],
+  ],
+};
+const PENT_BY_ID = (() => {
+  const used = { Fire: 0, Earth: 0, Air: 0, Water: 0 };
+  const out = {};
+  REGISTERS.forEach((r) => { out[r.id] = PENT_TEXTS[r.element][used[r.element]]; used[r.element] += 1; });
+  return out;
+})();
+
+/** Текущая пентада по долготе Солнца и время до её конца (по мгновенной скорости Солнца). */
+function pentadState(now) {
+  const lam = calculateSunLongitude(now);
+  const id = Math.max(1, Math.min(REGISTER_COUNT, Math.floor(lam / PENTAD_DEG) + 1));
+  const into = lam - (id - 1) * PENTAD_DEG;
+  const remainDeg = Math.max(0, PENTAD_DEG - into);
+  let speed = calculateSunLongitude(new Date(now.getTime() + 3600000)) - lam; // °/час
+  if (speed < 0) speed += 360;
+  if (!(speed > 0.01)) speed = 0.041;
+  return { id, frac: remainDeg / PENTAD_DEG, msToEnd: (remainDeg / speed) * 3600000, lenMs: (PENTAD_DEG / speed) * 3600000 };
+}
+function fmtLeft(ms) {
+  const m = Math.max(0, Math.floor(ms / 60000));
+  const d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), mi = m % 60;
+  if (d >= 1) return { big: d + ' д', small: h + ' ч' };
+  if (h >= 1) return { big: h + ' ч', small: mi + ' м' };
+  return { big: mi + ' м', small: '' };
+}
+function fmtLeftFull(ms) {
+  const l = fmtLeft(ms);
+  return l.small ? l.big + ' ' + l.small : l.big;
+}
+function fmtMoment(d) {
+  return d.getDate() + ' ' + MONTHS_GEN[d.getMonth()] + ', ' + formatClock(d);
+}
+
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const col = (reg) => EL_COLOR[reg.element];
 const val = (id) => { const el = document.getElementById(id); return el ? el.value : ''; };
@@ -859,24 +1015,22 @@ function tileHTML(label, id, kind) {
     '<div class="tile-el" style="color:' + col(reg) + '">' + EL_RU[reg.element] + '</div></div>';
 }
 
-function dialHTML(activeId) {
-  const c = 110;
-  let lines = '';
-  REGISTERS.forEach((r) => {
-    const a = ((r.id - 0.5) / REGISTER_COUNT) * 2 * Math.PI - Math.PI / 2;
-    const now = r.id === activeId;
-    const outer = c - 6;
-    const inner = now ? c - 34 : c - 24;
-    lines += '<line x1="' + (c + inner * Math.cos(a)).toFixed(2) + '" y1="' + (c + inner * Math.sin(a)).toFixed(2) +
-      '" x2="' + (c + outer * Math.cos(a)).toFixed(2) + '" y2="' + (c + outer * Math.sin(a)).toFixed(2) +
-      '" stroke="' + (now ? '#E2E8F0' : col(r)) + '" stroke-opacity="' + (now ? 1 : r.id < activeId ? 0.95 : 0.26) +
-      '" stroke-width="' + (now ? 4 : 3) + '" stroke-linecap="round"/>';
-  });
-  const legend = ['Fire', 'Earth', 'Air', 'Water'].map((e) =>
-    '<span><i class="dot" style="background:' + EL_COLOR[e] + '"></i>' + EL_RU[e] + '</span>').join('');
-  return '<div class="dial-wrap"><div class="dial"><svg viewBox="0 0 220 220">' + lines + '</svg>' +
-    '<div class="dial-center"><div class="dial-num">№' + activeId + '</div><div class="ring-cap">ИЗ 72</div></div></div>' +
-    '<div class="legend">' + legend + '</div></div>';
+function pentHTML(ps) {
+  const reg = getRegister(ps.id);
+  const color = col(reg);
+  const season = seasonOf(ps.id);
+  const l = fmtLeft(ps.msToEnd);
+  const R = 42, circ = 2 * Math.PI * R, off = circ * (1 - ps.frac);
+  const common = 'cx="50" cy="50" r="' + R + '" fill="none" stroke-linecap="round" stroke-dasharray="' + circ + ' ' + circ + '" stroke-dashoffset="' + off + '"';
+  return '<button class="pent" data-action="open-detail" data-kind="meso">' +
+    '<div class="pring"><svg viewBox="0 0 100 100"><g transform="rotate(-90 50 50)">' +
+    '<circle cx="50" cy="50" r="' + R + '" fill="none" stroke="#1A1C23" stroke-width="6"/>' +
+    '<circle class="parc-glow" ' + common + ' stroke="' + color + '" stroke-opacity=".14" stroke-width="12"/>' +
+    '<circle class="parc" ' + common + ' stroke="' + color + '" stroke-width="6"/></g></svg>' +
+    '<div class="pring-c"><div class="pbig" data-live="pbig">' + l.big + '</div><div class="psmall" data-live="psmall">' + l.small + '</div></div></div>' +
+    '<div class="pmain"><div class="pname">№' + reg.id + ' · ' + reg.name_translit + '</div>' +
+    '<div class="psign">' + esc(season.caption) + '</div>' +
+    '<div class="ptitle">' + esc(reg.vector_title) + '</div></div><div class="chev">›</div></button>';
 }
 
 function logRowHTML(l) {
@@ -929,6 +1083,7 @@ function dashboardHTML(route) {
   const now = new Date();
   const r = getRegister(getActiveRegisterId(now));
   const ms = getMsToWindowEnd(now);
+  const ps = pentadState(now);
   const logs = isProfile ? S.todayLogs : S.sessionLogs;
 
   let html = topbar(title);
@@ -936,10 +1091,10 @@ function dashboardHTML(route) {
     html += '<div class="card" style="margin-top:16px"><div class="body">Быстрый расчёт: записи журнала не сохраняются. Чтобы вести журнал, сохрани расчёт как профиль.</div>' +
       '<button class="btn btn-ghost" data-action="save-as-profile" style="margin-top:8px">СОХРАНИТЬ КАК ПРОФИЛЬ ›</button></div>';
   }
-  html += ringHTML(r, ms) + briefHTML(r) +
-    '<div class="section">Персональная ось</div><div class="tiles">' +
+  html += '<div class="section">Персональная ось</div><div class="tiles">' +
     tileHTML('Ядро · N_phys', nPhys, 'phys') + tileHTML('Вектор · N_evol', nEvol, 'evol') + '</div>' +
-    '<div class="section">Сутки · 72 окна</div>' + dialHTML(r.id) +
+    '<div class="section">Пентада · 5 дней</div>' + pentHTML(ps) +
+    '<div class="section">Окно · 20 минут</div>' + ringHTML(r, ms) + briefHTML(r) +
     '<div class="section">Журнал действий</div>' +
     '<input class="input page" id="logText" maxlength="' + MAX_TEXT + '" placeholder="Зафиксировать физическое действие..." autocomplete="off" enterkeyhint="done">' +
     '<button class="btn btn-solid" data-action="add-log">ЗАЗЕМЛИТЬ</button>' +
@@ -948,26 +1103,50 @@ function dashboardHTML(route) {
   return html;
 }
 
-const DETAIL_CAPTION = { phys: 'Физическое ядро · N_phys', evol: 'Эволюционный вектор · N_evol', window: 'Активное окно' };
+const DETAIL_CAPTION = { meso: 'Пентада · 5 дней', phys: 'Физическое ядро · N_phys', evol: 'Эволюционный вектор · N_evol', window: 'Активное окно' };
 
 function detailHTML(route) {
   const kind = route.kind;
   const isWin = kind === 'window';
-  const reg = getRegister(isWin ? getActiveRegisterId(new Date()) : route.regId);
+  const isMeso = kind === 'meso';
+  const now = new Date();
+  const ps = isMeso ? pentadState(now) : null;
+  const reg = getRegister(isWin ? getActiveRegisterId(now) : isMeso ? ps.id : route.regId);
   const color = col(reg);
   let html = topbar(DETAIL_CAPTION[kind]);
-  html += '<div class="dcard"' + (isWin ? ' style="box-shadow:inset 0 0 0 1px ' + color + '55"' : '') + '>' +
+  html += '<div class="dcard"' + (isWin || isMeso ? ' style="box-shadow:inset 0 0 0 1px ' + color + '55"' : '') + '>' +
     '<div class="dcard-top"><div class="d-num">№' + reg.id + '</div><span class="tag" style="color:' + color + ';border-color:' + color + '">' + EL_RU[reg.element] + '</span></div>' +
     '<div class="d-name">' + reg.name_translit + '</div>' +
     '<div class="d-vec">' + esc(reg.vector_title) + '</div>';
+  if (isMeso) {
+    const end = new Date(now.getTime() + ps.msToEnd);
+    html += '<div class="d-int">' + esc(seasonOf(reg.id).caption) + '</div>' +
+      '<div class="d-timer"><div class="label">До смены пентады осталось:</div><div class="big" style="color:' + color + '" data-live="pcount">' +
+      fmtLeftFull(ps.msToEnd) + '</div><div class="d-int" style="margin-top:8px">Смена: ' + fmtMoment(end) + '</div></div>';
+  }
   if (isWin) {
     html += '<div class="d-int">' + reg.time_window_start + ' — ' + reg.time_window_end + '</div>' +
       '<div class="d-timer"><div class="label">До смены окна осталось:</div><div class="big" style="color:' + color + '" data-live="count">' +
-      formatCountdown(getSecondsToWindowEnd(new Date())) + '</div></div>';
+      formatCountdown(getSecondsToWindowEnd(now)) + '</div></div>';
   }
   const sec = (t, x) => '<div class="dsec"><div class="label">' + t + '</div><div class="body">' + esc(x) + '</div></div>';
-  html += sec('Операционная функция', reg.function_core) + sec('Инструкция заземления (R→0)', reg.grounding_action) +
-    sec('Типичный перекос', reg.typical_distortion) + sec('Практика на день', reg.daily_practice) + '</div>';
+  if (isMeso) {
+    const pt = PENT_BY_ID[reg.id];
+    html += sec('Фокус на 5 дней', pt[0]) + sec('Практика на пятидневку', pt[1]) + sec('Типичный перекос', reg.typical_distortion) +
+      sec('Операционная функция', reg.function_core);
+  } else {
+    html += sec('Операционная функция', reg.function_core) + sec('Инструкция заземления (R→0)', reg.grounding_action) +
+      sec('Типичный перекос', reg.typical_distortion) + sec('Практика на день', reg.daily_practice);
+  }
+  html += '</div>';
+  if (isMeso) {
+    const sg = seasonOf(reg.id);
+    const nextReg = getRegister(reg.id === REGISTER_COUNT ? 1 : reg.id + 1);
+    html += '<div class="section">Сезон · ' + esc(sg.sign.n) + '</div><div class="card"><div class="d-vec" style="margin:0 0 8px">' + esc(sg.sign.t) +
+      '</div><div class="body">' + esc(sg.sign.x) + '</div></div>' +
+      '<div class="section">Следующая пентада</div><div class="card"><div class="body">№' + nextReg.id + ' · ' + nextReg.name_translit +
+      ' — ' + esc(nextReg.vector_title) + '</div></div>';
+  }
   if (isWin) {
     const prev = getRegister(reg.id === 1 ? REGISTER_COUNT : reg.id - 1);
     const next = getRegister(reg.id === REGISTER_COUNT ? 1 : reg.id + 1);
@@ -1019,10 +1198,7 @@ function sheetHTML() {
 const KEEP_IDS = ['quickDate', 'logText', 'profName', 'profDate'];
 let liveTimer = null;
 let liveActive = null;
-
-function needsWindowRefresh(route) {
-  return route.name === 'quick' || route.name === 'profile' || (route.name === 'detail' && route.kind === 'window');
-}
+let liveMeso = null;
 
 function render(animate) {
   const route = cur();
@@ -1055,18 +1231,28 @@ function startLive() {
   liveTimer = null;
   const route = cur();
   if (!document.querySelector('[data-live]')) return;
+  const isDash = route.name === 'quick' || route.name === 'profile';
+  const watchWin = isDash || (route.name === 'detail' && route.kind === 'window');
+  const watchPent = isDash || (route.name === 'detail' && route.kind === 'meso');
   liveActive = getActiveRegisterId(new Date());
+  liveMeso = pentadState(new Date()).id;
+  const WCIRC = 2 * Math.PI * 142, PCIRC = 2 * Math.PI * 42;
+  const setText = (sel, v) => document.querySelectorAll(sel).forEach((el) => { if (el.textContent !== v) el.textContent = v; });
   liveTimer = setInterval(() => {
     const now = new Date();
-    if (needsWindowRefresh(route) && getActiveRegisterId(now) !== liveActive) { render(false); return; }
+    if (watchWin && getActiveRegisterId(now) !== liveActive) { render(false); return; }
+    const ps = pentadState(now);
+    if (watchPent && ps.id !== liveMeso) { render(false); return; }
     const ms = getMsToWindowEnd(now);
     const frac = Math.min(1, Math.max(0, ms / (WINDOW_MIN * 60000)));
-    const circ = 2 * Math.PI * 142;
-    document.querySelectorAll('.arc, .arc-glow').forEach((c) => c.setAttribute('stroke-dashoffset', String(circ * (1 - frac))));
-    const count = formatCountdown(Math.ceil(ms / 1000));
-    document.querySelectorAll('[data-live="count"]').forEach((el) => { if (el.textContent !== count) el.textContent = count; });
-    const clock = formatClock(now);
-    document.querySelectorAll('[data-live="clock"]').forEach((el) => { if (el.textContent !== clock) el.textContent = clock; });
+    document.querySelectorAll('.arc, .arc-glow').forEach((c) => c.setAttribute('stroke-dashoffset', String(WCIRC * (1 - frac))));
+    document.querySelectorAll('.parc, .parc-glow').forEach((c) => c.setAttribute('stroke-dashoffset', String(PCIRC * (1 - ps.frac))));
+    setText('[data-live="count"]', formatCountdown(Math.ceil(ms / 1000)));
+    setText('[data-live="clock"]', formatClock(now));
+    const l = fmtLeft(ps.msToEnd);
+    setText('[data-live="pbig"]', l.big);
+    setText('[data-live="psmall"]', l.small);
+    setText('[data-live="pcount"]', fmtLeftFull(ps.msToEnd));
   }, 200);
 }
 
