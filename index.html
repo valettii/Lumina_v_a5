@@ -170,6 +170,64 @@ body::before{
 .ptitle{font-size:14px;margin-top:10px;color:rgba(226,232,240,.92);line-height:1.3}
 .chev{color:var(--muted);font-size:24px;flex:none}
 
+/* ───── правки v3 ───── */
+.section{font-size:13px;font-weight:700;letter-spacing:.14em;color:#B4BECE;margin:26px 0 10px;text-transform:uppercase}
+.sec-row{display:flex;justify-content:space-between;align-items:center}
+.chev.sm{font-size:20px}
+.top-center{flex:1;min-width:0;text-align:center}
+.top-cap{font-size:10px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
+.top-name{font-size:17px;font-weight:700;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.top-sub{font-size:12px;color:var(--muted);margin-top:2px;font-variant-numeric:tabular-nums}
+
+/* раскрывающиеся блоки */
+.acc{background:var(--surface);border-radius:20px;overflow:hidden}
+.acc-head{display:flex;align-items:center;gap:12px;width:100%;padding:16px;cursor:pointer}
+.acc-main{flex:1;min-width:0}
+.acc-title{font-size:14px;font-weight:700;letter-spacing:.08em;color:#D5DCE8}
+.acc-sub{font-size:13px;color:var(--muted);margin-top:5px}
+.acc-sub .dot{width:7px;height:7px;margin:0 3px 1px 0}
+.acc .chev{transition:transform .25s ease}
+.acc.open > .acc-head .chev{transform:rotate(90deg)}
+.acc-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+.acc.open > .acc-body{grid-template-rows:1fr}
+.acc-inner{min-height:0;overflow:hidden}
+.acc-pad{padding:0 16px 16px}
+.tiles.in-acc .tile{background:var(--surface2)}
+
+/* блок «окно» целиком нажимается */
+.blk{cursor:pointer;display:block}
+.blk .section{margin-bottom:0}
+.brief{display:block;width:100%}
+.log.tap{cursor:pointer;align-items:center}
+.log-main{flex:1;min-width:0}
+.log .chev{flex:none}
+
+/* Pro */
+.btn-pro{display:flex;align-items:center;justify-content:space-between;background:var(--surface);color:var(--accent);
+  box-shadow:inset 0 0 0 1px rgba(226,232,240,.2);margin-top:12px;letter-spacing:.16em}
+.pro-badge{font-size:10px;font-weight:800;letter-spacing:.16em;color:var(--bg);background:var(--accent);border-radius:6px;padding:3px 7px;white-space:nowrap}
+.proitem{display:flex;gap:12px;align-items:flex-start;margin-top:12px}
+.proitem .check{color:var(--accent);font-size:13px;margin-top:2px}
+.prorow{margin-top:14px}
+.prorow.locked{opacity:.45}
+#quickAcc.open .acc-sub{display:none}
+
+/* ───── сутки ───── */
+.dial-wrap{display:flex;flex-direction:column;align-items:center;margin-top:6px}
+.dial{position:relative;width:var(--d,190px);height:var(--d,190px)}
+.dial svg{width:100%;height:100%;display:block}
+.dial-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.dial-num{font-size:calc(var(--d,190px) * .18);font-weight:200;line-height:1.1}
+.legend{display:flex;flex-wrap:wrap;justify-content:center;margin-top:12px}
+.legend span{display:flex;align-items:center;margin:2px 8px;font-size:10px;letter-spacing:.2em;color:var(--muted)}
+.legend .dot{width:8px;height:8px;margin-right:6px}
+.blkrow{display:flex;align-items:center;padding:11px 12px;border-radius:12px;background:var(--surface);margin-top:6px;font-size:14px;font-variant-numeric:tabular-nums}
+.blkrow .dot{margin-right:12px}
+.blkrow .t{width:116px;flex:none;color:var(--muted)}
+.blkrow .n{flex:1}
+.blkrow .r{color:var(--muted);font-size:12px}
+.blkrow.now .t,.blkrow.now .n{color:var(--accent);font-weight:700}
+
 </style>
 </head>
 <body>
@@ -812,7 +870,7 @@ async function deleteProfileData(pid) {
 }
 
 // ───────── Состояние и навигация ─────────
-const S = { profiles: [], todayLogs: [], sessionLogs: [], journal: [], openGroups: {}, confirmId: null };
+const S = { profiles: [], lastLog: null, sessionLogs: [], journal: [], openGroups: {}, confirmId: null, quickOpen: false, axisOpen: false, winsOpen: false };
 const stack = [{ name: 'home' }];
 const cur = () => stack[stack.length - 1];
 function go(route) { stack.push(route); render(true); }
@@ -978,13 +1036,23 @@ function topbar(title, opts) {
     '</div>';
 }
 
+/** Верхняя панель дашборда: имя профиля крупно и ярко. */
+function dashTopbar(isProfile, name, birthDate) {
+  const center = isProfile
+    ? '<div class="top-cap">Профиль</div><div class="top-name">' + esc(name) + '</div>'
+    : '<div class="top-name">БЫСТРЫЙ РАСЧЁТ</div><div class="top-sub">' + esc(birthDate) + '</div>';
+  return '<div class="topbar"><button class="icon-btn" data-action="back" aria-label="Назад">‹</button>' +
+    '<div class="top-center">' + center + '</div>' +
+    '<div class="clock" data-live="clock">' + formatClock(new Date()) + '</div></div>';
+}
+
 function ringHTML(r, ms) {
   const c = 160, R = 142, circ = 2 * Math.PI * R;
   const frac = Math.min(1, Math.max(0, ms / (WINDOW_MIN * 60000)));
   const off = circ * (1 - frac);
   const color = col(r);
   const common = 'cx="' + c + '" cy="' + c + '" r="' + R + '" fill="none" stroke-linecap="round" stroke-dasharray="' + circ + ' ' + circ + '" stroke-dashoffset="' + off + '"';
-  return '<div class="hero" data-action="open-detail" data-kind="window"><div class="ring">' +
+  return '<div class="hero"><div class="ring">' +
     '<svg viewBox="0 0 320 320"><g transform="rotate(-90 160 160)">' +
     '<circle cx="160" cy="160" r="' + R + '" fill="none" stroke="#1A1C23" stroke-width="8"/>' +
     '<circle class="arc-glow" ' + common + ' stroke="' + color + '" stroke-opacity=".12" stroke-width="20"/>' +
@@ -999,20 +1067,63 @@ function ringHTML(r, ms) {
 }
 
 function briefHTML(r) {
-  return '<button class="brief" data-action="open-detail" data-kind="window">' +
+  return '<div class="brief">' +
     '<div class="brief-title">' + esc(r.vector_title) + '</div>' +
     '<div class="brief-text">' + esc(r.function_core) + '</div>' +
     '<div class="card ground"><div class="bar" style="background:' + col(r) + '"></div><div>' +
     '<div class="label">Заземление · R→0</div><div class="body" style="margin-top:8px">' + esc(r.grounding_action) + '</div>' +
-    '</div></div><div class="more">ПОДРОБНЕЕ ›</div></button>';
+    '</div></div></div>';
 }
 
 function tileHTML(label, id, kind) {
   const reg = getRegister(id);
   return '<div class="tile" data-action="open-detail" data-kind="' + kind + '">' +
-    '<div class="tile-top"><span class="label">' + label + '</span><span class="dot" style="background:' + col(reg) + '"></span></div>' +
+    '<div class="tile-top"><span class="label">' + label + '</span><span class="chev sm">›</span></div>' +
     '<div class="tile-num">№' + reg.id + '</div><div class="tile-name">' + reg.name_translit + '</div>' +
     '<div class="tile-el" style="color:' + col(reg) + '">' + EL_RU[reg.element] + '</div></div>';
+}
+
+/** Сворачиваемый блок «Персональная ось» со сводкой в свёрнутом виде. */
+function axisHTML(nPhys, nEvol) {
+  const a = getRegister(nPhys), b = getRegister(nEvol);
+  const sum = '<span class="dot" style="background:' + col(a) + '"></span> №' + a.id + ' ' + a.name_translit +
+    ' &nbsp;·&nbsp; <span class="dot" style="background:' + col(b) + '"></span> №' + b.id + ' ' + b.name_translit;
+  return '<div class="acc' + (S.axisOpen ? ' open' : '') + '" id="axisAcc">' +
+    '<button class="acc-head" data-action="toggle-axis"><div class="acc-main"><div class="acc-title">Персональная ось</div>' +
+    '<div class="acc-sub">' + sum + '</div></div><span class="chev">›</span></button>' +
+    '<div class="acc-body"><div class="acc-inner"><div class="acc-pad"><div class="tiles in-acc">' +
+    tileHTML('Ядро · N_phys', nPhys, 'phys') + tileHTML('Вектор · N_evol', nEvol, 'evol') + '</div></div></div></div></div>';
+}
+
+/** Последняя запись журнала (с стрелкой, если ведёт в журнал). */
+function lastLogHTML(l, withArrow) {
+  if (!l) return '<div class="empty">Записей пока нет.</div>';
+  const reg = getRegister(l.registerId);
+  return '<div class="log' + (withArrow ? ' tap" data-action="open-journal' : '') + '"><div class="log-bar" style="background:' + col(reg) + '"></div>' +
+    '<div class="log-main"><div class="log-text">' + esc(l.text) + '</div>' +
+    '<div class="log-meta">' + formatDateTime(new Date(l.timestamp)) + ' · №' + reg.id + ' ' + reg.name_translit + '</div></div>' +
+    (withArrow ? '<span class="chev">›</span>' : '') + '</div>';
+}
+
+/** Суточный диск: 72 деления, полночь сверху; пройденные окна ярче, текущее выделено. */
+function dialHTML(activeId, size) {
+  const c = 110;
+  let lines = '';
+  REGISTERS.forEach((r) => {
+    const a = ((r.id - 0.5) / REGISTER_COUNT) * 2 * Math.PI - Math.PI / 2;
+    const now = r.id === activeId;
+    const outer = c - 6;
+    const inner = now ? c - 34 : c - 24;
+    lines += '<line x1="' + (c + inner * Math.cos(a)).toFixed(2) + '" y1="' + (c + inner * Math.sin(a)).toFixed(2) +
+      '" x2="' + (c + outer * Math.cos(a)).toFixed(2) + '" y2="' + (c + outer * Math.sin(a)).toFixed(2) +
+      '" stroke="' + (now ? '#E2E8F0' : col(r)) + '" stroke-opacity="' + (now ? 1 : r.id < activeId ? 0.95 : 0.26) +
+      '" stroke-width="' + (now ? 4 : 3) + '" stroke-linecap="round"/>';
+  });
+  const legend = ['Fire', 'Earth', 'Air', 'Water'].map((e) =>
+    '<span><i class="dot" style="background:' + EL_COLOR[e] + '"></i>' + EL_RU[e] + '</span>').join('');
+  return '<div class="dial-wrap"><div class="dial" style="--d:' + size + 'px"><svg viewBox="0 0 220 220">' + lines + '</svg>' +
+    '<div class="dial-center"><div class="dial-num">№' + activeId + '</div><div class="ring-cap">ИЗ 72</div></div></div>' +
+    '<div class="legend">' + legend + '</div></div>';
 }
 
 function pentHTML(ps) {
@@ -1052,11 +1163,14 @@ function homeHTML() {
   }).join('');
   return topbar('', { noBack: true, noClock: true }) +
     '<div class="brand">LUMINA</div><div class="brand-sub">// System Calibration</div>' +
-    '<div class="section">Быстрый расчёт</div>' +
-    '<div class="card"><div class="label field-label">Дата рождения</div>' +
+    '<div class="section" style="margin-top:30px">Быстрый расчёт</div>' +
+    '<div class="acc' + (S.quickOpen ? ' open' : '') + '" id="quickAcc">' +
+    '<button class="acc-head" data-action="toggle-quick"><div class="acc-main"><div class="acc-title">Дата рождения</div>' +
+    '<div class="acc-sub">Введи дату рождения</div></div><span class="chev">›</span></button>' +
+    '<div class="acc-body"><div class="acc-inner"><div class="acc-pad">' +
     '<input class="input" id="quickDate" data-mask="date" inputmode="numeric" maxlength="10" placeholder="ДД.ММ.ГГГГ" autocomplete="off">' +
     '<div class="error" id="quickErr"></div>' +
-    '<button class="btn btn-solid" data-action="quick">РАССЧИТАТЬ</button></div>' +
+    '<button class="btn btn-solid" data-action="quick">РАССЧИТАТЬ</button></div></div></div></div>' +
     '<div class="section">Профили</div>' +
     (S.profiles.length ? profiles : '<div class="card"><div class="body">Профилей пока нет. Создай профиль, чтобы вести журнал заземлений.</div></div>') +
     '<button class="btn btn-soft" data-action="create">+ СОЗДАТЬ ПРОФИЛЬ</button>';
@@ -1079,34 +1193,65 @@ function dashboardHTML(route) {
   if (isProfile && !prof) return '<div class="empty">Профиль не найден.</div>';
   const nPhys = isProfile ? prof.nPhys : route.nPhys;
   const nEvol = isProfile ? prof.nEvol : route.nEvol;
-  const title = isProfile ? 'Профиль · ' + prof.name : 'Быстрый расчёт · ' + route.birthDate;
   const now = new Date();
   const r = getRegister(getActiveRegisterId(now));
   const ms = getMsToWindowEnd(now);
   const ps = pentadState(now);
-  const logs = isProfile ? S.todayLogs : S.sessionLogs;
+  const last = isProfile ? S.lastLog : (S.sessionLogs[0] || null);
 
-  let html = topbar(title);
+  let html = dashTopbar(isProfile, isProfile ? prof.name : '', route.birthDate);
   if (!isProfile) {
     html += '<div class="card" style="margin-top:16px"><div class="body">Быстрый расчёт: записи журнала не сохраняются. Чтобы вести журнал, сохрани расчёт как профиль.</div>' +
       '<button class="btn btn-ghost" data-action="save-as-profile" style="margin-top:8px">СОХРАНИТЬ КАК ПРОФИЛЬ ›</button></div>';
   }
-  html += '<div class="section">Персональная ось</div><div class="tiles">' +
-    tileHTML('Ядро · N_phys', nPhys, 'phys') + tileHTML('Вектор · N_evol', nEvol, 'evol') + '</div>' +
+  html += '<div style="margin-top:22px">' + axisHTML(nPhys, nEvol) + '</div>' +
     '<div class="section">Пентада · 5 дней</div>' + pentHTML(ps) +
-    '<div class="section">Окно · 20 минут</div>' + ringHTML(r, ms) + briefHTML(r) +
+    '<div class="blk" data-action="open-detail" data-kind="day">' +
+    '<div class="section sec-row"><span>Сутки · 72 окна</span><span class="chev sm">›</span></div>' +
+    dialHTML(r.id, 190) + '</div>' +
+    '<div class="blk" data-action="open-detail" data-kind="window">' +
+    '<div class="section sec-row"><span>Окно · 20 минут</span><span class="chev sm">›</span></div>' +
+    ringHTML(r, ms) + briefHTML(r) + '</div>' +
     '<div class="section">Журнал действий</div>' +
     '<input class="input page" id="logText" maxlength="' + MAX_TEXT + '" placeholder="Зафиксировать физическое действие..." autocomplete="off" enterkeyhint="done">' +
     '<button class="btn btn-solid" data-action="add-log">ЗАЗЕМЛИТЬ</button>' +
-    (logs.length ? logs.map(logRowHTML).join('') : '<div class="empty">Сегодня действий не зафиксировано.</div>');
-  if (isProfile) html += '<button class="btn btn-ghost" data-action="open-journal">ВЕСЬ ЖУРНАЛ ›</button>';
+    '<div style="margin-top:10px">' + lastLogHTML(last, isProfile && !!last) + '</div>';
   return html;
 }
 
-const DETAIL_CAPTION = { meso: 'Пентада · 5 дней', phys: 'Физическое ядро · N_phys', evol: 'Эволюционный вектор · N_evol', window: 'Активное окно' };
+const DETAIL_CAPTION = { day: 'Сутки · 72 окна', meso: 'Пентада · 5 дней', phys: 'Физическое ядро · N_phys', evol: 'Эволюционный вектор · N_evol', window: 'Активное окно' };
+
+function dayDetailHTML(now) {
+  const r = getRegister(getActiveRegisterId(now));
+  const color = col(r);
+  const blocks = [];
+  for (let b = 0; b < 12; b++) {
+    const first = REGISTERS[b * 6], last = REGISTERS[b * 6 + 5];
+    const isNow = r.id >= first.id && r.id <= last.id;
+    blocks.push('<div class="blkrow' + (isNow ? ' now' : '') + '"' + (isNow ? ' style="box-shadow:inset 0 0 0 1px ' + col(first) + '66"' : '') + '>' +
+      '<i class="dot" style="background:' + col(first) + '"></i><span class="t">' + first.time_window_start + '–' + last.time_window_end + '</span>' +
+      '<span class="n">' + SIGNS[b].n + ' · ' + EL_NAME[first.element] + '</span><span class="r">№' + first.id + '–' + last.id + '</span></div>');
+  }
+  const rows = REGISTERS.map((x) =>
+    '<div class="wrow' + (x.id === r.id ? ' now" id="winNow' : '') + '"><i class="dot" style="background:' + col(x) + '"></i>' +
+    '<span class="t">' + x.time_window_start + '–' + x.time_window_end + '</span><span>№' + x.id + ' ' + x.name_translit + '</span></div>').join('');
+  return topbar('Сутки · 72 окна') +
+    '<div class="dcard"><div class="dcard-top"><div class="d-vec" style="margin:0">' + now.getDate() + ' ' + MONTHS_GEN[now.getMonth()] + ' ' + now.getFullYear() + '</div>' +
+    '<span class="tag" style="color:' + color + ';border-color:' + color + '">' + EL_RU[r.element] + '</span></div>' +
+    dialHTML(r.id, 250) +
+    '<div class="d-int" style="text-align:center;margin-top:14px">Сейчас: №' + r.id + ' · ' + r.name_translit + ' · ' + r.time_window_start + '–' + r.time_window_end + '</div></div>' +
+    '<button class="btn btn-pro" data-action="open-pro"><span>ПОЛНАЯ РАЗВЁРТКА</span><span class="pro-badge">PRO</span></button>' +
+    '<div class="section">Сутки по двухчасовым блокам</div>' + blocks.join('') +
+    '<div class="section">Все окна</div>' +
+    '<div class="acc' + (S.winsOpen ? ' open' : '') + '" id="winsAcc">' +
+    '<button class="acc-head" data-action="toggle-wins"><div class="acc-main"><div class="acc-title">Все окна суток</div>' +
+    '<div class="acc-sub">72 окна · сейчас №' + r.id + ' ' + r.name_translit + '</div></div><span class="chev">›</span></button>' +
+    '<div class="acc-body"><div class="acc-inner"><div class="acc-pad">' + rows + '</div></div></div></div>';
+}
 
 function detailHTML(route) {
   const kind = route.kind;
+  if (kind === 'day') return dayDetailHTML(new Date());
   const isWin = kind === 'window';
   const isMeso = kind === 'meso';
   const now = new Date();
@@ -1139,6 +1284,7 @@ function detailHTML(route) {
       sec('Типичный перекос', reg.typical_distortion) + sec('Практика на день', reg.daily_practice);
   }
   html += '</div>';
+  html += '<button class="btn btn-pro" data-action="open-pro"><span>ПОЛНАЯ РАЗВЁРТКА</span><span class="pro-badge">PRO</span></button>';
   if (isMeso) {
     const sg = seasonOf(reg.id);
     const nextReg = getRegister(reg.id === REGISTER_COUNT ? 1 : reg.id + 1);
@@ -1154,11 +1300,73 @@ function detailHTML(route) {
     html += '<div class="section">Соседние окна</div><div class="card">' +
       '<div class="label">Предыдущее</div><div class="body" style="margin:6px 0 14px">' + line(prev) + '</div>' +
       '<div class="label">Следующее</div><div class="body" style="margin-top:6px">' + line(next) + '</div></div>' +
-      '<div class="section">Все окна суток</div>' +
-      REGISTERS.map((x) => '<div class="wrow' + (x.id === reg.id ? ' now' : '') + '"><i class="dot" style="background:' + col(x) + '"></i>' +
-        '<span class="t">' + x.time_window_start + '–' + x.time_window_end + '</span><span>№' + x.id + ' ' + x.name_translit + '</span></div>').join('');
+      '';
   }
   return html;
+}
+
+const PRO_INFO = {
+  phys: { title: 'Полная развёртка ядра', items: ['Связка ядра и вектора: как две линии работают вместе', 'Влияние текущей пентады на личную ось', 'Сильные стороны и типичные перекосы', 'Ритм недели: когда включаться, когда снижать темп', 'Три практики на неделю'] },
+  evol: { title: 'Полная развёртка вектора', items: ['Связка вектора и ядра: как две линии работают вместе', 'Влияние текущей пентады на личную ось', 'Сильные стороны и типичные перекосы', 'Ритм недели: когда включаться, когда снижать темп', 'Три практики на неделю'] },
+  meso: { title: 'Полная развёртка пентады', items: ['Пять дней по дням: фокус и практика на каждый день', 'Связка пентады с твоим ядром и вектором', 'Прогноз следующих пентад'] },
+  day: { title: 'Карта окон суток', items: ['Лучшие окна суток под твоё ядро', 'Когда включаться в работу, а когда восстанавливаться', 'Подсказки заземления для каждого окна суток'] },
+  window: { title: 'Полная развёртка окна', items: ['Развёртка именно этого окна: функция, перекос, практика', 'Связка окна с текущей пентадой и твоим ядром', 'Подсказки заземления на разные состояния'] }
+};
+
+function elementRuns(element) {
+  const runs = [];
+  let start = null, prev = null;
+  REGISTERS.forEach((r) => {
+    if (r.element === element) { if (!start) start = r; prev = r; }
+    else if (start) { runs.push(start.time_window_start + '–' + prev.time_window_end); start = null; }
+  });
+  if (start) runs.push(start.time_window_start + '–' + prev.time_window_end);
+  return runs;
+}
+
+function proHTML(route) {
+  const info = PRO_INFO[route.kind];
+  const ctx = route.ctx || {};
+  let sample = '';
+  if (route.kind === 'phys' || route.kind === 'evol') {
+    const a = getRegister(ctx.nPhys || 1), b = getRegister(ctx.nEvol || 1);
+    sample = '<div class="label">Пример раздела · связка ядра и вектора</div>' +
+      '<div class="body" style="margin-top:8px"><b>Ядро №' + a.id + ' ' + a.name_translit + ':</b> ' + esc(a.function_core) + '.<br><br>' +
+      '<b>Вектор №' + b.id + ' ' + b.name_translit + ':</b> ' + esc(b.function_core) + '.<br><br>' +
+      '<span class="muted">В Pro эти две линии объединяются в одну рекомендацию на неделю.</span></div>';
+  } else if (route.kind === 'meso') {
+    const ps = pentadState(new Date());
+    const end = new Date(Date.now() + ps.msToEnd), startMs = end.getTime() - ps.lenMs;
+    const rows = [];
+    for (let i = 0; i < 5; i++) {
+      const d = new Date(startMs + (i * ps.lenMs) / 5 + ps.lenMs / 10);
+      const head = 'День ' + (i + 1) + ' · ' + d.getDate() + ' ' + MONTHS_GEN[d.getMonth()];
+      rows.push(i === 0
+        ? '<div class="prorow"><div class="label">' + head + '</div><div class="body" style="margin-top:6px">' + esc(PENT_BY_ID[ps.id][0]) + '</div></div>'
+        : '<div class="prorow locked"><div class="label">' + head + '</div><div class="body">Только в Pro</div></div>');
+    }
+    sample = '<div class="label">Пример раздела · пять дней по дням</div>' + rows.join('');
+  } else if (route.kind === 'day') {
+    const core = getRegister(ctx.nPhys || 1);
+    sample = '<div class="label">Пример раздела · окна твоей стихии</div>' +
+      '<div class="body" style="margin-top:8px">Ядро №' + core.id + ' ' + core.name_translit + ', стихия: <b>' + EL_NAME[core.element] + '</b>.<br>' +
+      'Окна этой стихии в сутках: <b>' + elementRuns(core.element).join(' · ') + '</b>.<br><br>' +
+      '<span class="muted">В Pro каждому окну добавляются рекомендации, когда включаться в работу, а когда восстанавливаться.</span></div>';
+  } else {
+    const w = getRegister(getActiveRegisterId(new Date()));
+    const p = pentadState(new Date());
+    sample = '<div class="label">Пример раздела · окно в связке с пентадой</div>' +
+      '<div class="body" style="margin-top:8px"><b>Окно №' + w.id + ' ' + w.name_translit + ':</b> ' + esc(w.function_core) + '.<br><br>' +
+      '<b>Пентада №' + p.id + ':</b> ' + esc(PENT_BY_ID[p.id][0]) + '<br><br>' +
+      '<span class="muted">В Pro эти две линии объединяются в подсказку на ближайшие 20 минут.</span></div>';
+  }
+  return topbar('Полная развёртка', { noClock: true }) +
+    '<div class="dcard" style="box-shadow:inset 0 0 0 1px rgba(226,232,240,.18)">' +
+    '<div class="dcard-top"><div class="d-vec" style="margin:0">' + info.title + '</div><span class="pro-badge">PRO · СКОРО</span></div>' +
+    '<div class="section" style="margin-top:20px">Что войдёт</div>' +
+    info.items.map((x) => '<div class="proitem"><span class="check">✓</span><span class="body">' + x + '</span></div>').join('') + '</div>' +
+    '<div class="card" style="margin-top:12px">' + sample + '</div>' +
+    '<div class="empty" style="margin-top:16px">Pro пока в разработке: оплаты и закрытого контента нет. Это показ идеи.</div>';
 }
 
 function journalHTML(route) {
@@ -1202,6 +1410,7 @@ let liveMeso = null;
 
 function render(animate) {
   const route = cur();
+  if (animate) { S.axisOpen = false; S.winsOpen = false; S.quickOpen = S.profiles.length === 0; }
   const kept = {};
   if (!animate) {
     KEEP_IDS.forEach((id) => {
@@ -1215,6 +1424,7 @@ function render(animate) {
   else if (route.name === 'create') body = createHTML(route);
   else if (route.name === 'quick' || route.name === 'profile') body = dashboardHTML(route);
   else if (route.name === 'detail') body = detailHTML(route);
+  else if (route.name === 'pro') body = proHTML(route);
   else if (route.name === 'journal') body = journalHTML(route);
   $app.innerHTML = '<div class="screen' + (animate ? ' enter' : '') + '">' + body + '</div>' + sheetHTML();
   KEEP_IDS.forEach((id) => {
@@ -1232,7 +1442,7 @@ function startLive() {
   const route = cur();
   if (!document.querySelector('[data-live]')) return;
   const isDash = route.name === 'quick' || route.name === 'profile';
-  const watchWin = isDash || (route.name === 'detail' && route.kind === 'window');
+  const watchWin = isDash || (route.name === 'detail' && (route.kind === 'window' || route.kind === 'day'));
   const watchPent = isDash || (route.name === 'detail' && route.kind === 'meso');
   liveActive = getActiveRegisterId(new Date());
   liveMeso = pentadState(new Date()).id;
@@ -1298,7 +1508,7 @@ async function saveProfile() {
   };
   try { await saveProfiles(S.profiles.concat([profile])); } catch (e) { setError('createErr', 'Не удалось сохранить профиль.'); return; }
   S.profiles.push(profile);
-  S.todayLogs = [];
+  S.lastLog = null;
   haptic('medium');
   replaceAll([{ name: 'home' }, { name: 'profile', id: profile.id }]);
 }
@@ -1314,13 +1524,14 @@ async function addLog() {
   if (route.name === 'profile') {
     try {
       const all = await addLogEntry(route.id, text, regId);
-      S.todayLogs = all.reverse();
+      S.lastLog = all[all.length - 1] || null;
     } catch (e) { toast('Лимит записей за день достигнут'); return; }
   } else {
     S.sessionLogs.unshift({ id: 's' + Date.now(), profileId: '', text, timestamp: new Date().toISOString(), registerId: regId });
   }
   input.value = '';
   render(false);
+  toast('Записано');
 }
 
 async function handle(action, el) {
@@ -1330,9 +1541,40 @@ async function handle(action, el) {
     case 'create': go({ name: 'create', initialDate: '' }); break;
     case 'save-as-profile': go({ name: 'create', initialDate: cur().birthDate || '' }); break;
     case 'save-profile': await saveProfile(); break;
+    case 'toggle-quick': {
+      const acc = document.getElementById('quickAcc');
+      if (!acc) break;
+      const open = !acc.classList.contains('open');
+      acc.classList.toggle('open', open);
+      S.quickOpen = open;
+      if (open) { const inp = document.getElementById('quickDate'); if (inp) inp.focus(); }
+      haptic('light');
+      break;
+    }
+    case 'toggle-axis': {
+      const acc = document.getElementById('axisAcc');
+      if (!acc) break;
+      const open = !acc.classList.contains('open');
+      acc.classList.toggle('open', open);
+      S.axisOpen = open;
+      haptic('light');
+      break;
+    }
+    case 'toggle-wins': {
+      const acc = document.getElementById('winsAcc');
+      if (!acc) break;
+      const open = !acc.classList.contains('open');
+      acc.classList.toggle('open', open);
+      S.winsOpen = open;
+      if (open) setTimeout(() => { const el = document.getElementById('winNow'); if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 330);
+      haptic('light');
+      break;
+    }
+    case 'open-pro': haptic('light'); go({ name: 'pro', kind: cur().kind, ctx: cur().ctx }); break;
     case 'open-profile': {
       const id = el.dataset.id;
-      S.todayLogs = (await loadDay(id, new Date())).reverse();
+      const all = await loadAllLogs(id);
+      S.lastLog = all.reduce((a, b) => (!a || b.timestamp > a.timestamp ? b : a), null);
       haptic('light');
       go({ name: 'profile', id });
       break;
@@ -1343,7 +1585,7 @@ async function handle(action, el) {
       const base = route.name === 'profile' ? S.profiles.find((p) => p.id === route.id) : route;
       const regId = kind === 'phys' ? base.nPhys : kind === 'evol' ? base.nEvol : 0;
       haptic('light');
-      go({ name: 'detail', kind, regId });
+      go({ name: 'detail', kind, regId, ctx: { nPhys: base.nPhys, nEvol: base.nEvol } });
       break;
     }
     case 'open-journal': {
