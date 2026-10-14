@@ -567,6 +567,16 @@ input[type="time"]{min-width:0;max-width:100%}
 .dm-t{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
 .dm-now{margin-left:auto;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0A0A0C;background:#E4D5A8;border-radius:999px;padding:3px 9px}
 
+/* значок звука на всех экранах */
+.top-right{display:flex;align-items:center;gap:8px}
+.spk-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+/* верхняя панель: при длинном имени ничего не накладывается */
+.topbar{grid-template-columns:minmax(40px,1fr) minmax(0,auto) minmax(92px,1fr)}
+.topbar.dash{grid-template-columns:minmax(40px,1fr) minmax(0,auto) minmax(124px,1fr)}
+.top-center,.top-title{min-width:0;max-width:100%}
+.top-name,.top-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
 </style>
 </head>
 <body>
@@ -1695,12 +1705,13 @@ const betaTag = (id) => (isBeta(id) ? '<span class="beta">БЕТА</span>' : '')
 const val = (id) => { const el = document.getElementById(id); return el ? el.value : ''; };
 
 // ───────── Блоки интерфейса ─────────
+const spkButton = () => '<button class="icon-btn sm spk-btn" data-action="mute-toggle" aria-label="Звук">' + (S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON) + '</button>';
 function topbar(title, opts) {
   const o = opts || {};
   return '<div class="topbar">' +
     (o.noBack ? '<div class="icon-spacer"></div>' : '<button class="icon-btn" data-action="back" aria-label="Назад">‹</button>') +
     '<div class="top-title">' + esc(title || '') + '</div>' +
-    (o.noClock ? '<div class="icon-spacer"></div>' : '<div class="clock" data-live="clock">' + formatClock(new Date()) + '</div>') +
+    '<div class="top-right">' + spkButton() + (o.noClock ? '' : '<div class="clock" data-live="clock">' + formatClock(new Date()) + '</div>') + '</div>' +
     '</div>';
 }
 
@@ -1711,9 +1722,9 @@ function dashTopbar(isProfile, name, birthDate) {
     ? '<div class="top-cap">Профиль</div><div class="top-name">' + esc(name) + '</div><div class="top-status">Наблюдатель</div>'
     : '<div class="top-name">БЫСТРЫЙ РАСЧЁТ</div><div class="top-sub">' + esc(birthDate) + '</div>';
   const cab = isProfile ? '<button class="icon-btn sm" data-action="open-cabinet" aria-label="Личный кабинет">' + ICON_CABINET + '</button>' : '';
-  return '<div class="topbar"><button class="icon-btn" data-action="back" aria-label="Назад">‹</button>' +
+  return '<div class="topbar dash"><button class="icon-btn" data-action="back" aria-label="Назад">‹</button>' +
     '<div class="top-center">' + center + '</div>' +
-    '<div class="top-actions">' + cab + '<button class="icon-btn sm" data-action="open-settings" aria-label="Настройки">' + ICON_GEAR + '</button></div></div>';
+    '<div class="top-actions">' + spkButton() + cab + '<button class="icon-btn sm" data-action="open-settings" aria-label="Настройки">' + ICON_GEAR + '</button></div></div>';
 }
 
 function ringHTML(r, ms) {
@@ -2393,10 +2404,10 @@ async function handle(action, el) {
     case 'lec-toggle': await toggleLecture(); break;
     case 'sgn-freeze': { const cm = document.getElementById('sgnCam'); if (cm) cm.classList.remove('small'); const v = document.getElementById('sgnVid'); if (v && v.srcObject) { if (v.paused) v.play(); else v.pause(); const m = document.getElementById('sgnRec'); if (m) m.textContent = v.paused ? 'кадр заморожен · нажми, чтобы вернуть камеру' : 'камера включена'; } break; }
     case 'sign-save': { const r = parseInt(el.dataset.r, 10); haptic('medium'); await logGround('k', r, 0, ''); break; }
-    case 'mute-start': {
+    case 'mute-toggle': {
       S.settings.sound = S.settings.sound === false;
-      if (!S.settings.sound) stopIntro(); else startIntro();
-      el.innerHTML = S.settings.sound ? ICON_SPK_ON : ICON_SPK_OFF;
+      if (!S.settings.sound) { muteIntro(); stopLecture(); } else startIntro();
+      syncSpk();
       await saveSettings(); break;
     }
     case 'listen-toggle': await toggleListen(); break;
@@ -2406,7 +2417,7 @@ async function handle(action, el) {
     case 'move-start': startMove(parseInt(el.dataset.r, 10)); break;
     case 'res-pick': pickResonance(parseInt(el.dataset.r, 10), parseInt(el.dataset.a, 10)); break;
     case 'open-settings': haptic('light'); openSettings(); break;
-    case 'toggle-sound': S.settings.sound = S.settings.sound === false; el.classList.toggle('on', S.settings.sound); if (!S.settings.sound) { stopIntro(); stopLecture(); } await saveSettings(); break;
+    case 'toggle-sound': S.settings.sound = S.settings.sound === false; el.classList.toggle('on', S.settings.sound); if (!S.settings.sound) { muteIntro(); stopLecture(); } else startIntro(); syncSpk(); await saveSettings(); break;
     case 'toggle-haptic': S.settings.haptic = S.settings.haptic === false; el.classList.toggle('on', S.settings.haptic); await saveSettings(); haptic('light'); break;
     case 'edit-profile': go({ name: 'edit', id: cur().id }); break;
     case 'update-profile': await updateProfile(); break;
@@ -2700,8 +2711,8 @@ function fadeOutAudio(a) {
   } catch (e) { try { a.pause(); } catch (e2) {} }
 }
 function playRitualSound() {
-  stopIntro();
   if (S.settings.sound === false) return () => {};
+  pauseIntro();
   let fallback = null, a = null;
   try {
     a = new Audio(SND_RES);
@@ -2709,7 +2720,7 @@ function playRitualSound() {
     const pr = a.play();
     if (pr && pr.catch) pr.catch(() => { if (!fallback) fallback = playChord(15); });
   } catch (e) { fallback = playChord(15); }
-  return () => { if (fallback) fallback(); if (a) fadeOutAudio(a); };
+  return () => { if (fallback) fallback(); if (a) fadeOutAudio(a); resumeIntro(); };
 }
 
 // ───────── Слушай: минутная запись в отдельном файле listen.mp3 ─────────
@@ -2720,6 +2731,7 @@ const fmtMS = (sec) => { const t = Math.max(0, Math.round(sec)); return Math.flo
 function stopListen() {
   if (LS.audio) { try { LS.audio.pause(); LS.audio.currentTime = 0; } catch (e) {} }
   if (LS.state !== 'error') LS.state = 'idle';
+  resumeIntro();
 }
 
 function syncListenUI() {
@@ -2742,13 +2754,13 @@ async function toggleListen() {
   if (LS.state === 'loading') return;
   if (S.settings.sound === false) { toast('Звук выключен в настройках'); return; }
   haptic('light');
-  stopIntro(); stopLecture();
+  pauseIntro(); stopLecture();
   if (!LS.audio || LS.state === 'error') {
     const a = new Audio();
     a.preload = 'auto';
     a.addEventListener('timeupdate', syncListenUI);
-    a.addEventListener('ended', () => { LS.state = 'idle'; try { a.currentTime = 0; } catch (e) {} syncListenUI(); });
-    a.addEventListener('error', () => { LS.state = 'error'; syncListenUI(); });
+    a.addEventListener('ended', () => { LS.state = 'idle'; try { a.currentTime = 0; } catch (e) {} syncListenUI(); resumeIntro(); });
+    a.addEventListener('error', () => { LS.state = 'error'; syncListenUI(); resumeIntro(); });
     a.src = LISTEN_SRC;
     LS.audio = a;
   }
@@ -2857,32 +2869,44 @@ function startHTML() {
   const item = (action, icon, label, beta, extra) => '<button class="srim" data-action="' + action + '"' + (extra || '') + '><span class="sbtn">' + START_ICONS[icon] +
     '<i class="ssep"></i><span class="slbl">' + label + '</span>' + (beta ? '<span class="sbeta">BETA</span>' : '') + '</span></button>';
   return '<div class="start-bg">' + CRACKS_SVG + '</div>' +
-    '<button class="spk" data-action="mute-start" aria-label="Звук">' + (S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON) + '</button>' +
+    '<button class="spk" data-action="mute-toggle" aria-label="Звук">' + (S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON) + '</button>' +
     '<div class="start-main"><div class="start-title">LUMINA<span> OS</span></div><div class="start-sub">Core</div><div class="start-btns">' +
     item('go-calib', 'dna', 'Calibration', false) + item('go-lectures', 'scroll', 'Lectures', false) +
     item('go-soon', 'wave', 'Music', true, ' data-t="Music"') + item('go-soon', 'lotus', 'Biohacking', true, ' data-t="Biohacking"') +
     item('go-soon', 'key', 'Sanctuary', true, ' data-t="Sanctuary"') + '</div></div>';
 }
 
-// ───────── Вступление (первые 20 секунд трека) ─────────
-const INTRO = { audio: null, played: false, armed: false };
-function stopIntro() { if (INTRO.audio) { try { INTRO.audio.pause(); } catch (e) {} } }
-function startIntro() {
-  if (INTRO.played || S.settings.sound === false) return;
-  INTRO.played = true;
-  try {
-    const a = INTRO.audio || (INTRO.audio = new Audio('intro20.mp3'));
+// ───────── Вступление: полный трек играет в фоне до конца ─────────
+const INTRO = { audio: null, armed: false, done: false, dead: false, hold: false };
+function introAudio() {
+  if (!INTRO.audio) {
+    const a = new Audio('intro_full.mp3');
     a.preload = 'auto';
+    a.addEventListener('ended', () => { INTRO.done = true; });
+    INTRO.audio = a;
+  }
+  return INTRO.audio;
+}
+function startIntro() {
+  if (S.settings.sound === false || INTRO.done || INTRO.dead || INTRO.hold) return;
+  try {
+    const a = introAudio();
+    if (!a.paused) return;
     const p = a.play();
-    if (p && p.catch) p.catch(() => { INTRO.played = false; armIntro(); });
-  } catch (e) { INTRO.played = false; }
+    if (p && p.catch) p.catch(() => { armIntro(); });
+  } catch (e) {}
 }
 function armIntro() {
-  if (INTRO.armed || INTRO.played) return;
+  if (INTRO.armed || INTRO.done || INTRO.dead) return;
   INTRO.armed = true;
   const go = () => { document.removeEventListener('pointerdown', go, true); INTRO.armed = false; startIntro(); };
   document.addEventListener('pointerdown', go, true);
 }
+function muteIntro() { if (INTRO.audio) { try { INTRO.audio.pause(); } catch (e) {} } }
+function pauseIntro() { INTRO.hold = true; muteIntro(); }
+function resumeIntro() { if (!INTRO.hold) return; INTRO.hold = false; startIntro(); }
+function killIntro() { INTRO.dead = true; INTRO.hold = false; muteIntro(); }
+function syncSpk() { document.querySelectorAll('[data-action="mute-toggle"]').forEach((b) => { b.innerHTML = S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON; }); }
 
 // ───────── Lectures: список и плеер промо ─────────
 const ICON_PLAY = SVG_OPEN + '<polygon points="8,5 19,12 8,19"/></svg>';
@@ -2923,7 +2947,7 @@ async function toggleLecture() {
   if (LEC.state === 'playing') { LEC.audio.pause(); LEC.state = 'paused'; syncLectureUI(); return; }
   if (S.settings.sound === false) { toast('Звук выключен в настройках'); return; }
   haptic('light');
-  stopIntro(); stopListen();
+  killIntro(); stopListen();
   if (!LEC.audio || LEC.state === 'error') {
     const a = new Audio();
     a.preload = 'auto';
