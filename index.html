@@ -577,6 +577,93 @@ input[type="time"]{min-width:0;max-width:100%}
 .top-center,.top-title{min-width:0;max-width:100%}
 .top-name,.top-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
+/* ───────────── хаб: камень и четыре угла ───────────── */
+.hub{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;min-height:100vh;box-sizing:border-box;padding:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 30px) 14px 28px}
+.hub .start-title{margin-top:6px}
+.hub-stage{position:relative;width:100%;max-width:390px;flex:1;min-height:560px;margin-top:14px}
+.hbtn{position:absolute;width:118px;display:flex;flex-direction:column;align-items:center;gap:6px;background:none;padding:0}
+.hbtn:active{transform:scale(.96)}
+.hb-oct{width:118px;height:118px;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))}
+.hb-ic{position:absolute;left:0;right:0;top:0;height:118px;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.hb-ic svg{width:46px;height:46px;fill:none;stroke:#E4C77A;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.hb-lbl{font-size:15px;color:#EDE6D0;letter-spacing:.02em;text-align:center}
+.hb-tl{left:2%;top:0}.hb-tr{right:2%;top:0}.hb-bl{left:2%;bottom:0}.hb-br{right:2%;bottom:0}
+.hgem{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:210px;display:flex;flex-direction:column;align-items:center;gap:10px;background:none;padding:0}
+.hgem svg{width:200px;height:200px;filter:drop-shadow(0 0 28px rgba(46,230,160,.55));animation:gemPulse 6s ease-in-out infinite}
+.hg-lbl{font-size:19px;color:#EDE6D0;letter-spacing:.06em}
+@keyframes gemPulse{0%,100%{transform:scale(.985);filter:drop-shadow(0 0 22px rgba(46,230,160,.4))}50%{transform:scale(1.03);filter:drop-shadow(0 0 40px rgba(46,230,160,.75))}}
+@media (prefers-reduced-motion:reduce){.hgem svg{animation:none}}
+.spk{z-index:6}
+
+/* Solar Matrix */
+.sol-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.sol-chip{padding:7px 14px;border-radius:999px;background:rgba(12,14,22,.72);box-shadow:inset 0 0 0 1px rgba(214,170,70,.3);font-size:13px;color:#EDE3C8}
+.sol-card{margin-top:16px;border-radius:20px;padding:18px 16px;background:rgba(12,14,22,.72);box-shadow:inset 0 0 0 1px rgba(228,213,168,.5)}
+.sol-t{font-size:22px;font-weight:700;margin-top:6px}
+.sol-h{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#C9B27A;margin-top:2px}
+.sol-day{font-size:15px;margin-top:14px;font-variant-numeric:tabular-nums}
+.sol-bar{height:4px;border-radius:2px;background:rgba(214,170,70,.2);margin:8px 0 6px}
+.sol-bar i{display:block;height:100%;border-radius:2px;background:#E4D5A8}
+.sol-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;margin-top:6px;background:rgba(12,14,22,.5);box-shadow:inset 0 0 0 1px rgba(214,170,70,.14)}
+.sol-row.now{box-shadow:inset 0 0 0 1px rgba(228,213,168,.7)}
+.sol-n{width:34px;font-weight:700;color:#C9B27A}
+.sol-nm{flex:1;font-size:15px}
+.sol-rg{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* тарифы (демо) */
+.tar-row{padding:12px 14px;border-radius:14px;margin-top:8px;background:rgba(12,14,22,.5);box-shadow:inset 0 0 0 1px rgba(214,170,70,.2)}
+.tar-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
+.tar-n{font-weight:700;font-size:16px}
+.tar-p{font-size:13px;color:#E4D5A8;text-align:right}
+
+/* хаб строго в один экран */
+.hub{position:fixed;inset:0;min-height:0;overflow:hidden;--hb:clamp(84px,13.5vh,118px);--hg:clamp(150px,24vh,200px)}
+.hub-stage{min-height:0;margin-top:10px;margin-bottom:4px}
+.hbtn{width:var(--hb)}
+.hb-oct{width:var(--hb);height:var(--hb)}
+.hb-ic{height:var(--hb)}
+.hb-ic svg{width:calc(var(--hb) * .39);height:calc(var(--hb) * .39)}
+.hgem{width:calc(var(--hg) + 10px)}
+.hgem svg{width:var(--hg);height:var(--hg)}
+@media (max-height:720px){.hub .start-title{font-size:36px}.hub{padding-top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 18px)}.hb-lbl{font-size:13px}.hg-lbl{font-size:16px}}
+
+/* ───────────── v24: один профиль, первый экран, сканер ───────────── */
+.hub-top{position:fixed;top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 14px);right:16px;z-index:6;display:flex;gap:8px}
+.hub-tip{position:fixed;top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 62px);right:16px;z-index:6;padding:9px 14px;border-radius:14px;background:rgba(12,14,22,.92);
+  box-shadow:inset 0 0 0 1px rgba(228,213,168,.55);color:#EDE3C8;font-size:13px;letter-spacing:.04em;animation:tipIn .7s .5s cubic-bezier(.22,.61,.36,1) both}
+.hub-tip i{position:absolute;top:-6px;right:49px;width:10px;height:10px;background:rgba(12,14,22,.96);transform:rotate(45deg);box-shadow:-1px -1px 0 rgba(228,213,168,.55)}
+@keyframes tipIn{from{opacity:0;transform:translate(24px,-12px) scale(.9)}to{opacity:1;transform:none}}
+.hgem-wrap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;gap:12px}
+.hgem-wrap .hgem{position:static;transform:none;left:auto;top:auto}
+.hsanc{padding:9px 26px;border-radius:999px;font-size:14px;letter-spacing:.14em;color:#EDE3C8;background:rgba(12,14,22,.72);box-shadow:inset 0 0 0 1px rgba(214,170,70,.5)}
+.hsanc:active{transform:scale(.97)}
+.topbar.dash{grid-template-columns:minmax(40px,1fr) minmax(0,auto) minmax(40px,1fr)}
+.sig-grid.sig-one{grid-template-columns:minmax(0,210px);justify-content:center}
+
+.sgn-cam{touch-action:none}
+.sgn-cam video{transform-origin:center}
+.sgn-cam.flash{animation:camFlash .25s}
+@keyframes camFlash{from{box-shadow:inset 0 0 0 40px rgba(255,255,255,.55)}to{box-shadow:inset 0 0 0 1px rgba(214,170,70,.3)}}
+.sgn-zoom{position:absolute;right:12px;top:10px;font-size:12px;color:#E4D5A8;background:rgba(5,6,9,.6);padding:3px 9px;border-radius:999px}
+.sgn-cap{display:block;margin:12px auto 0;padding:9px 20px;border-radius:999px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#EDE3C8;background:rgba(12,14,22,.72);box-shadow:inset 0 0 0 1px rgba(214,170,70,.4)}
+.sgn-input{display:flex;align-items:center;min-height:50px;cursor:text}
+.sgn-val{font-size:20px;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.sgn-ph{color:var(--muted);font-size:15px}
+.sgn-pad{position:fixed;left:0;right:0;bottom:0;z-index:40;padding:10px 14px calc(max(var(--tg-safe-area-inset-bottom,0px),env(safe-area-inset-bottom,0px)) + 10px);background:rgba(10,12,20,.96);box-shadow:0 -1px 0 rgba(214,170,70,.3);transform:translateY(105%);transition:transform .22s}
+.sgn-pad.open{transform:none}
+.pad-grid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,42px);gap:8px;max-width:360px;margin:0 auto}
+.pad-k{border-radius:12px;background:rgba(28,34,52,.95);color:#F1F5FF;font-size:19px;box-shadow:inset 0 0 0 1px rgba(214,170,70,.22)}
+.pad-k:active{background:rgba(60,70,100,.95)}
+.pad-bs{grid-column:4;grid-row:1/3}
+.pad-enter{grid-column:4;grid-row:3/5;background:#E4D5A8;color:#15130C;font-size:15px;font-weight:700}
+body.padopen .screen{padding-bottom:300px}
+
+/* заголовок первого экрана ниже ряда значков */
+.hub{padding-top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 92px)}
+@media (max-height:720px){.hub{padding-top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 96px)}}
+@media (max-height:700px){.hub{--hb:80px;--hg:136px}.hgem-wrap{gap:8px}.hsanc{padding:7px 22px;font-size:13px}.hg-lbl{font-size:15px}.hb-lbl{font-size:12px}}
+@media (max-height:620px){.hub{--hb:68px;--hg:116px}.hub .start-title{font-size:30px}}
+
 </style>
 </head>
 <body>
@@ -1724,7 +1811,7 @@ function dashTopbar(isProfile, name, birthDate) {
   const cab = isProfile ? '<button class="icon-btn sm" data-action="open-cabinet" aria-label="Личный кабинет">' + ICON_CABINET + '</button>' : '';
   return '<div class="topbar dash"><button class="icon-btn" data-action="back" aria-label="Назад">‹</button>' +
     '<div class="top-center">' + center + '</div>' +
-    '<div class="top-actions">' + spkButton() + cab + '<button class="icon-btn sm" data-action="open-settings" aria-label="Настройки">' + ICON_GEAR + '</button></div></div>';
+    '<div class="top-actions">' + spkButton() + '</div></div>';
 }
 
 function ringHTML(r, ms) {
@@ -1928,12 +2015,7 @@ function dashboardHTML(route) {
   html += '<div style="margin-top:22px">' + axisHTML(nPhys, nEvol, ps) + '</div>' +
     '<div class="blk" data-action="open-detail" data-kind="window">' +
     '<div class="section sec-row"><span>Окно · сутки / 20 минут</span><span class="chev sm">›</span></div>' +
-    dualHTML(r, ms) + briefHTML(r) + legendHTML() + '</div>' +
-    '<div class="btn-row"><button class="btn-half" data-action="open-signal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="2"/><path d="M7.5 7.5a6.4 6.4 0 0 0 0 9M16.5 7.5a6.4 6.4 0 0 1 0 9M4.7 4.7a10.4 10.4 0 0 0 0 14.6M19.3 4.7a10.4 10.4 0 0 1 0 14.6"/></svg><span>СИГНАЛ</span></button><button class="btn-half" data-action="open-rhythm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span>РИТМ ДНЯ</span></button></div>' +
-    groundHTML(r) +
-    '<div class="section">Журнал действий</div>' +
-    lastLogHTML(last, isProfile && !!last) +
-    '<button class="btn btn-pro" data-action="soon" style="margin-top:12px"><span>АНАЛИЗИРОВАТЬ ЖУРНАЛ</span><span class="pro-badge">PRO</span></button>';
+    dualHTML(r, ms) + briefHTML(r) + legendHTML() + '</div>';
   return html;
 }
 
@@ -2078,6 +2160,7 @@ function proHTML(route) {
     '<div class="section" style="margin-top:20px">Что войдёт</div>' +
     info.items.map((x) => '<div class="proitem"><span class="check">✓</span><span class="body">' + x + '</span></div>').join('') + '</div>' +
     '<div class="card" style="margin-top:12px">' + sample + '</div>' +
+    (S.settings.proDemo ? tariffsHTML() : '') +
     '<div class="empty" style="margin-top:16px">' + (S.settings.proDemo ? 'Демо-режим: показан пример полного раздела. Оплаты пока нет.' : 'Pro пока в разработке: оплаты и закрытого контента нет. Это показ идеи.') + '</div>';
 }
 
@@ -2171,6 +2254,8 @@ function render(animate) {
   else if (route.name === 'rhythm') body = rhythmHTML();
   else if (route.name === 'cabinet') body = cabinetHTML(route);
   else if (route.name === 'lectures') body = lecturesHTML();
+  else if (route.name === 'solar') body = solarHTML();
+  else if (route.name === 'sanctuary') body = sanctuaryHTML();
   else if (route.name === 'lecture') body = lectureHTML();
   else if (route.name === 'dev') body = devHTML(route);
   else if (route.name === 'listen') body = listenHTML();
@@ -2190,7 +2275,9 @@ function render(animate) {
   if (route.name === 'lecture') syncLectureUI();
   if (route.name === 'sign') { renderSignOut(); startCamera(); }
   if (route.name === 'rhythm') updateRhythmUI();
-  if (route.name === 'profile' && !S.welcomed) setTimeout(showWelcome, 350);
+  if (route.name === 'solar') renderSolarOut();
+  if (route.name === 'start' && activeProfile() && !S.welcomed) setTimeout(showWelcome, 350);
+  if (route.name !== 'sign') document.body.classList.remove('padopen');
   syncBackButton();
   startLive();
 }
@@ -2201,7 +2288,7 @@ function startLive() {
   const route = cur();
   if (!document.querySelector('[data-live]')) return;
   const isDash = route.name === 'quick' || route.name === 'profile';
-  const watchWin = isDash || (route.name === 'detail' && route.kind === 'window');
+  const watchWin = isDash || route.name === 'rhythm' || (route.name === 'detail' && route.kind === 'window');
   const watchPent = isDash || (route.name === 'detail' && route.kind === 'meso');
   liveActive = getActiveRegisterId(new Date());
   liveMeso = pentadState(new Date()).id;
@@ -2281,7 +2368,7 @@ async function saveProfile() {
   S.lastLog = null;
   S.axisOpen = false;
   haptic('medium');
-  replaceAll([{ name: 'start' }, { name: 'home' }, { name: 'profile', id: profile.id }]);
+  replaceAll([{ name: 'start' }]);
 }
 
 async function handle(action, el) {
@@ -2350,11 +2437,12 @@ async function handle(action, el) {
       break;
     }
     case 'open-journal': {
-      const route = cur();
-      S.journal = await loadAllLogs(route.id);
+      const ap = activeProfile();
+      if (!ap) break;
+      S.journal = await loadAllLogs(ap.id);
       S.openGroups = {};
       haptic('light');
-      go({ name: 'journal', id: route.id });
+      go({ name: 'journal', id: ap.id });
       break;
     }
     case 'toggle': {
@@ -2376,11 +2464,14 @@ async function handle(action, el) {
         await saveProfiles(S.profiles);
       } catch (e) { toast('Не удалось удалить профиль'); }
       haptic('medium');
-      render(false);
+      S.lastLog = null;
+      replaceAll([{ name: 'start' }]);
       break;
     }
     case 'soon': haptic('light'); openSoon(); break;
-    case 'go-calib': haptic('light'); go({ name: 'home' }); break;
+    case 'go-calib': { haptic('light'); const ap = activeProfile(); if (ap) { S.axisOpen = false; go({ name: 'profile', id: ap.id }); } else go({ name: 'create', initialDate: '' }); break; }
+    case 'open-sanctuary': haptic('light'); go({ name: 'sanctuary' }); break;
+    case 'open-channel': { const tg = window.Telegram && window.Telegram.WebApp; if (CHANNEL_URL) { if (tg && tg.openTelegramLink && /t\.me\//.test(CHANNEL_URL)) tg.openTelegramLink(CHANNEL_URL); else window.open(CHANNEL_URL, '_blank'); } break; }
     case 'go-soon': haptic('light'); go({ name: 'soon', title: el.dataset.t || '' }); break;
     case 'ground': {
       const regId = getActiveRegisterId(new Date());
@@ -2395,14 +2486,25 @@ async function handle(action, el) {
     case 'cmt-save': { const p = ov.pending; const c = (val('gComment') || '').trim(); closeOverlay(); haptic('medium'); if (p) await logGround(p.v, p.regId, p.art, c); break; }
     case 'cmt-exit': { const p = ov.pending; closeOverlay(); if (p) await logGround(p.v, p.regId, p.art, ''); break; }
     case 'open-signal': haptic('light'); go({ name: 'signal' }); break;
-    case 'open-sign': haptic('light'); go({ name: 'sign' }); break;
+    case 'open-sign': haptic('light'); SGN.text = ''; go({ name: 'sign' }); break;
     case 'open-listen': haptic('light'); go({ name: 'listen' }); break;
     case 'open-rhythm': haptic('light'); go({ name: 'rhythm' }); break;
-    case 'open-cabinet': haptic('light'); go({ name: 'cabinet', id: cur().id }); break;
+    case 'open-cabinet': { haptic('light'); const ap = activeProfile(); if (ap) go({ name: 'cabinet', id: ap.id }); else go({ name: 'create', initialDate: '' }); break; }
+    case 'open-solar': haptic('light'); go({ name: 'solar' }); break;
     case 'go-lectures': haptic('light'); go({ name: 'lectures' }); break;
     case 'open-lecture': haptic('light'); go({ name: 'lecture' }); break;
     case 'lec-toggle': await toggleLecture(); break;
-    case 'sgn-freeze': { const cm = document.getElementById('sgnCam'); if (cm) cm.classList.remove('small'); const v = document.getElementById('sgnVid'); if (v && v.srcObject) { if (v.paused) v.play(); else v.pause(); const m = document.getElementById('sgnRec'); if (m) m.textContent = v.paused ? 'кадр заморожен · нажми, чтобы вернуть камеру' : 'камера включена'; } break; }
+    case 'sgn-capture': {
+      const v = document.getElementById('sgnVid'), b = document.getElementById('sgnCap'), m = document.getElementById('sgnRec'), cm = document.getElementById('sgnCam');
+      if (v && v.srcObject) {
+        if (v.paused) { v.play(); b.textContent = 'Зафиксировать'; if (m) m.textContent = 'камера включена'; }
+        else { v.pause(); b.textContent = 'Вернуть камеру'; if (m) m.textContent = 'кадр зафиксирован'; haptic('medium'); cm.classList.add('flash'); setTimeout(() => cm.classList.remove('flash'), 250); }
+      }
+      break;
+    }
+    case 'sgn-open': openPad(true); break;
+    case 'pad': { const k = el.dataset.k; if (k === 'back') sgnSet(SGN.text.slice(0, -1)); else if (SGN.text.length < 18) sgnSet(SGN.text + k); haptic('light'); break; }
+    case 'pad-enter': openPad(false); break;
     case 'sign-save': { const r = parseInt(el.dataset.r, 10); haptic('medium'); await logGround('k', r, 0, ''); break; }
     case 'mute-toggle': {
       S.settings.sound = S.settings.sound === false;
@@ -2569,7 +2671,7 @@ function playChord(sec) {
 
 async function logGround(v, regId, art, comment) {
   const route = cur();
-  const pr = stack.slice().reverse().find((x) => x.name === 'profile');
+  const pr = activeProfile();
   const rec = { v, r: regId };
   if (art) rec.a = art;
   const c = (comment || '').trim().slice(0, 140);
@@ -2855,25 +2957,53 @@ const CRACKS_SVG = (function () {
     '<g filter="url(#crb)" opacity=".8">' + g('#8A5A10', 5) + '</g>' + g('#DDA93C', 1) + g('#FFE9A8', 0.35, ' opacity=".7"') + '</svg>';
 })();
 
-const START_ICONS = {
-  dna: '<svg viewBox="0 0 40 40"><path d="M12 4c0 8 16 10 16 18s-16 10-16 14M28 4c0 8-16 10-16 18s16 10 16 14"/><path d="M14 10h12M13 17h14M13 26h14M14 33h12"/></svg>',
-  scroll: '<svg viewBox="0 0 40 40"><rect x="9" y="6" width="22" height="28" rx="3"/><path d="M14 13h12M14 19h12M14 25h8"/><path d="M7 9c-2 0-3 1-3 3s1 3 3 3M33 31c2 0 3-1 3-3s-1-3-3-3"/></svg>',
-  wave: '<svg viewBox="0 0 40 40"><path d="M10 15v10M14 9v22M18 14v12M22 6v28M26 12v16M30 16v8M34 19v2"/></svg>',
-  lotus: '<svg viewBox="0 0 40 40"><circle cx="20" cy="9" r="3.5"/><path d="M20 14v8M12 22c3-3 13-3 16 0M8 31c4-5 20-5 24 0M12 31l8-9 8 9"/></svg>',
-  key: '<svg viewBox="0 0 40 40"><circle cx="12" cy="13" r="6"/><path d="M16.5 17.5L32 33M26 27l4-4M30 31l3-3"/></svg>',
-};
 const ICON_SPK_ON = SVG_OPEN + '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>';
 const ICON_SPK_OFF = SVG_OPEN + '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>';
 
+// ───────── Хаб: центральный камень и четыре угла ─────────
+const HUB_ICONS = {
+  solar: '<svg viewBox="0 0 48 48"><path d="M24 6l15 9v18l-15 9-15-9V15z"/><path d="M24 6v36M9 15l30 18M39 15L9 33"/></svg>',
+  rhythm: '<svg viewBox="0 0 48 48"><path d="M32 9a15 15 0 1 0 8 26 12 12 0 0 1-8-26z"/><circle cx="14" cy="14" r="4"/><path d="M14 5v2M14 21v2M5 14h2M21 14h2"/></svg>',
+  scanner: '<svg viewBox="0 0 48 48"><rect x="6" y="14" width="36" height="25" rx="4"/><circle cx="24" cy="26" r="7"/><path d="M17 14l3-5h8l3 5"/></svg>',
+  signal: '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="3"/><path d="M15 15a13 13 0 0 0 0 18M33 15a13 13 0 0 1 0 18M9 9a21 21 0 0 0 0 30M39 9a21 21 0 0 1 0 30"/></svg>',
+};
+const HUB_DEFS = '<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>' +
+  '<linearGradient id="octMetal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A7B0C4"/><stop offset=".5" stop-color="#586277"/><stop offset="1" stop-color="#2C3446"/></linearGradient>' +
+  '<linearGradient id="octInner" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1F3166"/><stop offset="1" stop-color="#0B1230"/></linearGradient>' +
+  '<linearGradient id="gemTable" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6CF5C0"/><stop offset="1" stop-color="#139F72"/></linearGradient></defs></svg>';
+const OCT_OUT = '30,3 70,3 97,30 97,70 70,97 30,97 3,70 3,30';
+const OCT_IN = '33.6,11.5 66.4,11.5 88.5,33.6 88.5,66.4 66.4,88.5 33.6,88.5 11.5,66.4 11.5,33.6';
+const OCT_V = [[30, 3], [70, 3], [97, 30], [97, 70], [70, 97], [30, 97], [3, 70], [3, 30]];
+const OCT_BTN_SVG = '<svg class="hb-oct" viewBox="-6 -6 112 112" aria-hidden="true"><polygon points="' + OCT_OUT + '" fill="url(#octMetal)" stroke="#0A0D16" stroke-width="1.2"/>' +
+  '<polygon points="' + OCT_IN + '" fill="url(#octInner)" stroke="rgba(214,170,70,.45)" stroke-width="1"/>' +
+  OCT_V.map((v, i) => '<polygon points="' + v[0] + ',' + (v[1] - 5) + ' ' + (v[0] + 4) + ',' + v[1] + ' ' + v[0] + ',' + (v[1] + 5) + ' ' + (v[0] - 4) + ',' + v[1] + '" fill="' + (i % 2 ? '#2C57D8' : '#25C48A') + '" stroke="#0B1020" stroke-width=".8"/>').join('') + '</svg>';
+const GEM_SVG = (function () {
+  const out = [[59, 5], [141, 5], [195, 59], [195, 141], [141, 195], [59, 195], [5, 141], [5, 59]];
+  const inn = out.map((p) => [100 + (p[0] - 100) * 0.55, 100 + (p[1] - 100) * 0.55]);
+  const pal = ['#1FAA78', '#13805A', '#2BD196', '#0E6A4B', '#35E0A5', '#17936A', '#27BE88', '#0F7852'];
+  const pt = (p) => p[0].toFixed(1) + ',' + p[1].toFixed(1);
+  let f = '';
+  for (let i = 0; i < 8; i++) { const j = (i + 1) % 8; f += '<polygon points="' + pt(out[i]) + ' ' + pt(out[j]) + ' ' + pt(inn[j]) + ' ' + pt(inn[i]) + '" fill="' + pal[i] + '" stroke="rgba(200,255,235,.5)" stroke-width="1"/>'; }
+  return '<svg viewBox="0 0 200 200" aria-hidden="true">' + f + '<polygon points="' + inn.map(pt).join(' ') + '" fill="url(#gemTable)" stroke="rgba(220,255,240,.7)" stroke-width="1.2"/>' +
+    '<polygon points="' + pt(inn[0]) + ' ' + pt(inn[1]) + ' 100,100" fill="rgba(255,255,255,.22)"/></svg>';
+})();
+
+function activeProfile() { return S.profiles.length ? S.profiles[S.profiles.length - 1] : null; }
+
 function startHTML() {
-  const item = (action, icon, label, beta, extra) => '<button class="srim" data-action="' + action + '"' + (extra || '') + '><span class="sbtn">' + START_ICONS[icon] +
-    '<i class="ssep"></i><span class="slbl">' + label + '</span>' + (beta ? '<span class="sbeta">BETA</span>' : '') + '</span></button>';
-  return '<div class="start-bg">' + CRACKS_SVG + '</div>' +
-    '<button class="spk" data-action="mute-toggle" aria-label="Звук">' + (S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON) + '</button>' +
-    '<div class="start-main"><div class="start-title">LUMINA<span> OS</span></div><div class="start-sub">Core</div><div class="start-btns">' +
-    item('go-calib', 'dna', 'Calibration', false) + item('go-lectures', 'scroll', 'Lectures', false) +
-    item('go-soon', 'wave', 'Music', true, ' data-t="Music"') + item('go-soon', 'lotus', 'Biohacking', true, ' data-t="Biohacking"') +
-    item('go-soon', 'key', 'Sanctuary', true, ' data-t="Sanctuary"') + '</div></div>';
+  const corner = (pos, action, icon, label) => '<button class="hbtn hb-' + pos + '" data-action="' + action + '">' + OCT_BTN_SVG + '<span class="hb-ic">' + HUB_ICONS[icon] + '</span><span class="hb-lbl">' + label + '</span></button>';
+  return HUB_DEFS + '<div class="start-bg">' + CRACKS_SVG + '</div>' +
+    '<div class="hub-top"><button class="icon-btn sm spk-btn" data-action="mute-toggle" aria-label="Звук">' + (S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON) + '</button>' +
+    '<button class="icon-btn sm" data-action="open-cabinet" aria-label="Личный кабинет">' + ICON_CABINET + '</button>' +
+    '<button class="icon-btn sm" data-action="open-settings" aria-label="Настройки">' + ICON_GEAR + '</button></div>' +
+    (activeProfile() ? '' : '<button class="hub-tip" data-action="open-cabinet">Создай профиль<i></i></button>') +
+    '<div class="hub"><div class="start-title">LUMINA<span> OS</span></div><div class="start-sub">Core</div>' +
+    '<div class="hub-stage">' +
+    corner('tl', 'open-solar', 'solar', 'Solar Matrix') + corner('tr', 'open-rhythm', 'rhythm', 'Rhythm') +
+    '<div class="hgem-wrap"><button class="hgem" data-action="go-calib" aria-label="Calibration">' + GEM_SVG + '<span class="hg-lbl">Calibration</span></button>' +
+    '<button class="hsanc" data-action="open-sanctuary">Sanctuary</button></div>' +
+    corner('bl', 'open-sign', 'scanner', 'Scanner') + corner('br', 'open-signal', 'signal', 'Signal') +
+    '</div></div>';
 }
 
 // ───────── Вступление: полный трек играет в фоне до конца ─────────
@@ -2907,6 +3037,79 @@ function pauseIntro() { INTRO.hold = true; muteIntro(); }
 function resumeIntro() { if (!INTRO.hold) return; INTRO.hold = false; startIntro(); }
 function killIntro() { INTRO.dead = true; INTRO.hold = false; muteIntro(); }
 function syncSpk() { document.querySelectorAll('[data-action="mute-toggle"]').forEach((b) => { b.innerHTML = S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON; }); }
+
+// ───────── Solar Matrix: девять личных фаз от дня рождения ─────────
+const SOL_END = [40, 80, 120, 161, 202, 243, 284, 325, 366];
+const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
+const SOL_PH = [
+  ['Чистый импульс', 'Серафимы', 'Выход из статики, запуск новых дел, пробитие ментального застоя.', 'Разогрев и короткие импульсные нагрузки.'],
+  ['Кристальная мудрость', 'Херувимы', 'Архитектура ума, видение структуры, интуитивные инсайты.', 'Снятие напряжения с шеи и плеч, фиксация взгляда, лёгкое простукивание.'],
+  ['Плотность и опора', 'Престолы', 'Закладка прочного фундамента, воплощение замыслов, удержание формы вопреки суете.', 'Упор стоп, заземление, работа с центром тяжести.'],
+  ['Закон и порядок', 'Господства', 'Распределение личного ресурса, отказ от импульсивных трат сил, спокойствие.', 'Выравнивание осанки, контроль ритма дыхания, вытяжение макушки.'],
+  ['Укрощение хаоса', 'Силы', 'Устранение зажимов, отказ от чужого трения, защита своих границ.', 'Изометрические сжатия и сброс напряжения.'],
+  ['Сохранение ритма', 'Власти', 'Синхронизация внутренних ритмов с внешней средой, мягкое преодоление трудных фаз.', 'Плавные растяжки, микро-ротации суставов, выравнивание правого и левого боков.'],
+  ['Связи и масштаб', 'Начала', 'Проявление в мире, масштабирование идей, точные партнёрские связи.', 'Раскрытие грудной клетки, межреберное дыхание, свободное движение рук.'],
+  ['Оцифрованное знание', 'Архангелы', 'Перевод сложных идей на язык действий, оцифровка опыта, передача знаний.', 'Мелкая моторика, внимание к слуху, зрению и осязанию.'],
+  ['Покой и восстановление', 'Ангелы', 'Завершение циклов, спокойствие в быту, отдых и подготовка к новому кругу.', 'Расслабление мышц живота, спокойное дыхание, тёплый душ по желанию.'],
+];
+const DAY_MS = 86400000;
+function solarState(dateStr) {
+  const p = parseBirthDate(dateStr);
+  if (!p) return null;
+  const now = new Date(), today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  let last = new Date(today.getFullYear(), p.month - 1, p.day);
+  if (last > today) last = new Date(today.getFullYear() - 1, p.month - 1, p.day);
+  const day = Math.round((today - last) / DAY_MS) + 1;
+  let i = SOL_END.findIndex((e) => day <= e); if (i < 0) i = 8;
+  const start = i === 0 ? 1 : SOL_END[i - 1] + 1, len = (i === 8 ? 365 : SOL_END[i]) - start + 1;
+  const nextStart = i === 8 ? new Date(last.getFullYear() + 1, p.month - 1, p.day) : new Date(last.getTime() + SOL_END[i] * DAY_MS);
+  return { i: i, day: day, inDay: Math.min(day - start + 1, len), len: len, nextStart: nextStart, daysToNext: Math.max(0, Math.round((nextStart - today) / DAY_MS)) };
+}
+function solarHTML() {
+  const ap = activeProfile();
+  const lectures = '<div class="section">Раздел</div><div class="lec-list" style="margin-top:8px"><button class="lec on" data-action="go-lectures"><span class="lec-ic">' + ICON_PLAY + '</span><span class="lec-t">Lectures</span><span class="lec-s">Промо</span><span class="chev sm">›</span></button></div>';
+  const note = S.settings.devNotes !== false ? '<div class="devnote" style="margin:26px auto 0"><div class="label">Заметка разработчика</div><div class="body" style="margin-top:6px">Здесь будут уведомления о смене фазы, звуки фаз и разборы по Ликам. Названия фаз взяты у иерархий, но фазы считаются от твоего дня рождения.</div></div>' : '';
+  if (!ap) return topbar('Solar Matrix', { noClock: true }) + '<div class="card" style="margin-top:20px"><div class="body">Фаза года считается от твоего дня рождения. Создай профиль, чтобы увидеть её.</div><button class="btn btn-soft" data-action="create" style="margin-top:12px">СОЗДАТЬ ПРОФИЛЬ</button></div>' + lectures + note;
+  return topbar('Solar Matrix', { noClock: true }) + '<div class="note" style="margin-top:16px">Профиль: ' + esc(ap.name) + ' · ' + esc(ap.birthDate) + '</div><div id="solOut"></div>' + lectures + note;
+}
+function renderSolarOut() {
+  const out = document.getElementById('solOut'), ap = activeProfile();
+  if (!out || !ap) return;
+  const st = solarState(ap.birthDate);
+  if (!st) return;
+  const ph = SOL_PH[st.i], nx = SOL_PH[(st.i + 1) % 9];
+  const nextTxt = st.i === 8 ? 'Новый круг начнётся в день рождения, ' : 'Следующая фаза ' + ROMAN[st.i + 1] + ' начнётся ';
+  const sec = (t, x) => '<div class="dsec"><div class="label">' + t + '</div><div class="body">' + esc(x) + '</div></div>';
+  out.innerHTML = '<div class="sol-card"><div class="label">Фаза ' + ROMAN[st.i] + ' из IX</div><div class="sol-t">' + ph[0] + '</div><div class="sol-h">' + ph[1] + '</div>' +
+    '<div class="sol-day">День ' + st.inDay + ' из ' + st.len + '</div><div class="sol-bar"><i style="width:' + Math.round(st.inDay / st.len * 100) + '%"></i></div>' +
+    sec('Назначение', ph[2]) + sec('Телесный отклик', ph[3]) +
+    '<div class="body muted" style="margin-top:12px">' + nextTxt + st.nextStart.getDate() + ' ' + MONTHS_GEN[st.nextStart.getMonth()] + ' · через ' + st.daysToNext + ' дн.</div></div>' +
+    '<div class="section">Все девять фаз</div>' + SOL_PH.map((p, k) => {
+      const a = k === 0 ? 1 : SOL_END[k - 1] + 1;
+      return '<div class="sol-row' + (k === st.i ? ' now' : '') + '"><span class="sol-n">' + ROMAN[k] + '</span><span class="sol-nm">' + p[0] + '</span><span class="sol-rg">' + a + '–' + (k === 8 ? 365 : SOL_END[k]) + '</span></div>';
+    }).join('');
+}
+
+const CHANNEL_URL = '';
+function sanctuaryHTML() {
+  return topbar('Sanctuary', { noClock: true }) +
+    '<div class="card" style="margin-top:20px"><div class="body">Новости и материалы Lumina публикуются в Telegram-канале.</div>' +
+    (CHANNEL_URL ? '<button class="btn btn-ok" data-action="open-channel" style="margin-top:14px">ОТКРЫТЬ КАНАЛ</button>' : '<div class="note" style="margin-top:14px">Ссылка на канал появится позже.</div>') + '</div>' +
+    (S.settings.devNotes !== false && !CHANNEL_URL ? '<div class="devnote" style="margin:26px auto 0"><div class="label">Заметка разработчика</div><div class="body" style="margin-top:6px">Ссылка на канал задаётся в одном месте (CHANNEL_URL).</div></div>' : '');
+}
+
+const lockedRow = (t) => '<div class="lec off"><span class="lec-ic">' + ICON_LOCK + '</span><span class="lec-t">' + t + '</span><span class="lec-s">Скоро</span></div>';
+
+function tariffsHTML() {
+  const row = (name, price, text) => '<div class="tar-row"><div class="tar-h"><span class="tar-n">' + name + '</span><span class="tar-p">' + price + '</span></div><div class="body">' + text + '</div></div>';
+  return '<div class="section" style="margin-top:22px">Тарифы · демо</div>' +
+    row('Base', 'бесплатно', 'Текущее окно, ядро и вектор, Сигнал, Ритм дня, промо в Lectures, развёртки Лика I (регистры №1–8).') +
+    row('Pass', '$8 · 7 дней', 'Все 72 развёртки, разборы сочетаний и карта суток на неделю.') +
+    row('Pro', '$19 в месяц · $149 в год', 'Всё без ограничений, живой разбор раз в месяц, архив записей, Sanctuary, ранний доступ.') +
+    row('По отдельности', '$2,99–4,99 · пакет Лика $9,99', 'Один модуль или пакет из 8 регистров навсегда.') +
+    row('Живой разбор', '58 минут · $14,99–19,99', 'Раз в месяц. В Pro включён, остальные берут разовый билет или запись.') +
+    '<div class="note">Цены ориентировочные, оплата пока не подключена.</div>';
+}
 
 // ───────── Lectures: список и плеер промо ─────────
 const ICON_PLAY = SVG_OPEN + '<polygon points="8,5 19,12 8,19"/></svg>';
@@ -2973,17 +3176,54 @@ function seekLecture(e, el) {
 // ───────── «Сигнал»: страница, «Вижу знак», расшифровка числа ─────────
 function signalHTML() {
   return topbar('Сигнал', { noClock: true }) +
-    '<div class="sig-grid"><button class="rel-plate" data-action="open-sign">' + ICON_SIGNS + '<span>Вижу знак</span></button>' +
-    '<button class="rel-plate" data-action="open-listen">' + ICON_LISTEN + '<span>Слушай момент</span></button></div>' +
+    '<div class="sig-grid sig-one"><button class="rel-plate" data-action="open-listen">' + ICON_LISTEN + '<span>Слушай момент</span></button></div>' +
     '<div class="sig-beacon">' + beaconRowHTML(nextBeacon(new Date())) + '</div>';
 }
 
-const SGN = { stream: null };
+const SGN = { stream: null, track: null, text: '', zoom: 1, ptrs: {}, startDist: 0, startZoom: 1, zt: null };
+const PAD_KEYS = ['1', '2', '3', 'back', '4', '5', '6', '7', '8', '9', 'enter', ':', '0', '.'];
 function signHTML() {
+  const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '0', '.'].map((k) => '<button class="pad-k" data-action="pad" data-k="' + k + '">' + k + '</button>').join('');
   return topbar('Вижу знак', { noClock: true }) +
-    '<div class="sgn-cam" id="sgnCam" data-action="sgn-freeze"><video id="sgnVid" playsinline muted autoplay></video><div class="sgn-frame"></div>' +
-    '<div class="sgn-msg" id="sgnMsg">Включаю камеру…</div><div class="sgn-rec" id="sgnRec" style="display:none">камера включена</div></div>' +
-    '<div class="sgn-body"><input class="input" id="sgnNum" inputmode="numeric" maxlength="18" placeholder="Введи цифры, которые видишь" autocomplete="off"><div class="sgn-out" id="sgnOut"></div></div>';
+    '<div class="sgn-cam" id="sgnCam"><video id="sgnVid" playsinline muted autoplay></video><div class="sgn-frame"></div>' +
+    '<div class="sgn-msg" id="sgnMsg">Включаю камеру…</div><div class="sgn-rec" id="sgnRec" style="display:none">камера включена</div><div class="sgn-zoom" id="sgnZoom" style="display:none">×1.0</div></div>' +
+    '<button class="sgn-cap" id="sgnCap" data-action="sgn-capture">Зафиксировать</button>' +
+    '<div class="sgn-body"><div class="input sgn-input" id="sgnNum" data-action="sgn-open" tabindex="0"><span id="sgnVal" class="sgn-val">' + esc(SGN.text) + '</span><span class="sgn-ph" id="sgnPh"' + (SGN.text ? ' style="display:none"' : '') + '>Введи цифры, которые видишь</span></div><div class="sgn-out" id="sgnOut"></div></div>' +
+    '<div class="sgn-pad" id="sgnPad"><div class="pad-grid">' + keys + '<button class="pad-k pad-bs" data-action="pad" data-k="back">⌫</button><button class="pad-k pad-enter" data-action="pad-enter">Ввод</button></div></div>';
+}
+function sgnSet(text) {
+  SGN.text = text;
+  const v = document.getElementById('sgnVal'), ph = document.getElementById('sgnPh');
+  if (v) v.textContent = text;
+  if (ph) ph.style.display = text ? 'none' : '';
+  renderSignOut();
+}
+function openPad(on) {
+  const p = document.getElementById('sgnPad');
+  if (p) p.classList.toggle('open', on);
+  document.body.classList.toggle('padopen', on);
+  if (on) setTimeout(() => { const o = document.getElementById('sgnNum'); if (o) o.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 60);
+}
+function applyZoom(z) {
+  SGN.zoom = Math.max(1, Math.min(4, z));
+  const caps = SGN.track && SGN.track.getCapabilities ? SGN.track.getCapabilities() : {};
+  const v = document.getElementById('sgnVid');
+  if (caps.zoom) {
+    const zz = Math.max(caps.zoom.min, Math.min(caps.zoom.max, SGN.zoom * (caps.zoom.min || 1)));
+    SGN.track.applyConstraints({ advanced: [{ zoom: zz }] }).catch(() => {});
+    if (v) v.style.transform = '';
+  } else if (v) v.style.transform = 'scale(' + SGN.zoom.toFixed(2) + ')';
+  const zi = document.getElementById('sgnZoom');
+  if (zi) { zi.textContent = '×' + SGN.zoom.toFixed(1); zi.style.display = ''; clearTimeout(SGN.zt); SGN.zt = setTimeout(() => { zi.style.display = 'none'; }, 1200); }
+}
+function bindPinch(cam) {
+  if (!cam || cam.dataset.pinch) return;
+  cam.dataset.pinch = '1';
+  const dist = () => { const k = Object.keys(SGN.ptrs); if (k.length < 2) return 0; const a = SGN.ptrs[k[0]], b = SGN.ptrs[k[1]]; return Math.hypot(a.x - b.x, a.y - b.y); };
+  cam.addEventListener('pointerdown', (e) => { SGN.ptrs[e.pointerId] = { x: e.clientX, y: e.clientY }; if (Object.keys(SGN.ptrs).length === 2) { SGN.startDist = dist(); SGN.startZoom = SGN.zoom; } });
+  cam.addEventListener('pointermove', (e) => { if (!SGN.ptrs[e.pointerId]) return; SGN.ptrs[e.pointerId] = { x: e.clientX, y: e.clientY }; if (Object.keys(SGN.ptrs).length >= 2 && SGN.startDist > 0) applyZoom(SGN.startZoom * dist() / SGN.startDist); });
+  const up = (e) => { delete SGN.ptrs[e.pointerId]; };
+  cam.addEventListener('pointerup', up); cam.addEventListener('pointercancel', up); cam.addEventListener('pointerleave', up);
 }
 async function startCamera() {
   const vid = document.getElementById('sgnVid');
@@ -2991,7 +3231,8 @@ async function startCamera() {
   if (!vid) return;
   if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) { if (msg) msg.textContent = 'Камера недоступна. Введи цифры вручную.'; return; }
   try {
-    if (!SGN.stream) SGN.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+    if (!SGN.stream) { SGN.stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false }); SGN.track = SGN.stream.getVideoTracks()[0]; SGN.zoom = 1; }
+    bindPinch(document.getElementById('sgnCam'));
     const v = document.getElementById('sgnVid');
     if (!v) { stopCamera(); return; }
     v.srcObject = SGN.stream;
@@ -3020,13 +3261,12 @@ function decodeSign(raw) {
 }
 function renderSignOut() {
   const out = document.getElementById('sgnOut');
-  const inp = document.getElementById('sgnNum');
-  if (!out || !inp) return;
-  const d = decodeSign(inp.value);
+  if (!out) return;
+  const d = decodeSign(SGN.text);
   if (!d) { out.innerHTML = '<div class="note">Цифры можно ввести и без камеры: часы, номер машины, этаж.</div>'; return; }
   const reg = getRegister(d.reg), m = MATRIX[d.reg - 1], color = col(reg);
   out.innerHTML = '<div class="sgn-res" style="box-shadow:inset 0 0 0 1px ' + color + '66">' +
-    '<div class="label">' + (d.timePair ? 'Парное время ' + d.digits.slice(0, 2) + ':' + d.digits.slice(2) + ' · маяк' : 'Число ' + esc(d.digits)) + '</div>' +
+    '<div class="label">' + (d.timePair ? 'Парное время ' + d.digits.slice(0, 2) + ':' + d.digits.slice(2) + ' · маяк' : 'Число ' + esc(SGN.text)) + '</div>' +
     '<div class="sgn-reg">№' + reg.id + ' · ' + rname(reg) + ' <span class="tag" style="color:' + color + ';border-color:' + color + '">' + EL_RU[reg.element] + '</span></div>' +
     (d.flags.length ? '<div class="sgn-flags">' + d.flags.map((f) => '<span class="sgn-flag">' + f + '</span>').join('') + '</div>' : '') +
     '<div class="dsec"><div class="label">Суть</div><div class="body">' + esc(m[1]) + '</div></div>' +
@@ -3046,12 +3286,19 @@ function rhythmState(now) {
   return { wake: wake, awake: awake, third: third, t: t, night: night, phase: night ? -1 : Math.min(2, Math.floor(t / third)), left: night ? 1440 - t : awake - t };
 }
 function rhythmHTML() {
+  const ap = activeProfile();
+  const r = getRegister(getActiveRegisterId(new Date()));
+  const last = ap ? S.lastLog : (S.sessionLogs[0] || null);
   const note = S.settings.devNotes !== false
     ? '<div class="devnote" style="margin:30px auto 0"><div class="label">Заметка разработчика</div><div class="body" style="margin-top:6px">Здесь будут ритуалы утра, дня и вечера и напоминания. Фазы считаются от времени подъёма и отбоя.</div></div>' : '';
-  return topbar('Ритм дня', { noClock: true }) +
+  return topbar('Ритм дня') +
     '<div class="rh-times"><label class="rh-field"><span class="label">Подъём</span><input type="time" class="input" id="rhWake" value="' + S.rhythm.wake + '"></label>' +
     '<label class="rh-field"><span class="label">Отбой</span><input type="time" class="input" id="rhBed" value="' + S.rhythm.bed + '"></label></div>' +
-    '<div id="rhCard"></div>' + note;
+    '<div id="rhCard"></div>' + groundHTML(r) +
+    '<div class="section">Журнал действий</div>' + (ap ? '' : '<div class="note" style="margin:0 0 8px">Без профиля записи не сохраняются.</div>') +
+    lastLogHTML(last, !!(ap && last)) +
+    '<button class="btn btn-pro" data-action="soon" style="margin-top:12px"><span>АНАЛИЗИРОВАТЬ ЖУРНАЛ</span><span class="pro-badge">PRO</span></button>' +
+    '<div class="section">Разделы</div><div class="lec-list" style="margin-top:8px">' + lockedRow('Music') + lockedRow('Biohacking') + '</div>' + note;
 }
 function updateRhythmUI() {
   const el = document.getElementById('rhCard');
@@ -3078,10 +3325,11 @@ function cabinetHTML(route) {
     '<button class="btn btn-ghost" data-action="edit-profile" style="margin-top:12px">ИЗМЕНИТЬ</button></div>' +
     '<div class="section">Твой статус</div>' +
     LEVELS.map((l, i) => '<div class="lvl' + (i === 0 ? ' now' : '') + '"><div class="lvl-h"><span class="lvl-n">' + l[0] + '</span>' + (i === 0 ? '<span class="lvl-b">сейчас</span>' : '<span class="lvl-s">скоро</span>') + '</div><div class="body">' + l[1] + '</div></div>').join('') +
-    '<div class="note" style="text-align:center;margin-top:18px">Условия повышения статуса появятся позже.</div>';
+    '<div class="note" style="text-align:center;margin-top:18px">Условия повышения статуса появятся позже.</div>' +
+    '<button class="btn btn-ghost" data-action="ask-delete" data-id="' + p.id + '" style="margin-top:24px;color:#E08A8A">УДАЛИТЬ ПРОФИЛЬ</button>';
 }
 function showWelcome() {
-  if (S.welcomed) return;
+  if (S.welcomed || cur().name !== 'start') return;
   S.welcomed = true;
   const el = document.createElement('div');
   el.id = 'wel'; el.className = 'wel';
@@ -3098,7 +3346,6 @@ const hierOf = (id) => HIER.find((h) => id >= h[1] && id <= h[2])[0];
 document.addEventListener('input', (e) => {
   const t = e.target;
   if (!t) return;
-  if (t.id === 'sgnNum') renderSignOut();
   if (t.id === 'rhWake' || t.id === 'rhBed') {
     if (!t.value) return;
     if (t.id === 'rhWake') S.rhythm.wake = t.value; else S.rhythm.bed = t.value;
@@ -3106,7 +3353,6 @@ document.addEventListener('input', (e) => {
     updateRhythmUI();
   }
 });
-document.addEventListener('focusin', (e) => { if (e.target && e.target.id === 'sgnNum') { const c = document.getElementById('sgnCam'); if (c) c.classList.add('small'); } });
 
 // ───────── Демо Pro: разборы сочетаний стихий подгружаются из отдельного файла ─────────
 const DEV = { taps: 0 };
@@ -3202,6 +3448,7 @@ function proPentadHTML(ps) {
   try { const raw = await store.get(SETTINGS_KEY); if (raw) Object.assign(S.settings, JSON.parse(raw)); } catch (e) {}
   try { const rr = await store.get('lumina_rhythm'); if (rr) Object.assign(S.rhythm, JSON.parse(rr)); } catch (e) {}
   S.profiles = await loadProfiles();
+  try { const ap = activeProfile(); if (ap) { const all = await loadAllLogs(ap.id); S.lastLog = all.reduce((a, b) => (!a || b.timestamp > a.timestamp ? b : a), null); } } catch (e) {}
   armIntro();
   startIntro();
   render(true);
