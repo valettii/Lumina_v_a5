@@ -33,7 +33,6 @@ body::before{
 }
 .enter{animation:enter .28s cubic-bezier(.22,.61,.36,1) backwards}
 @keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-
 .topbar{display:flex;align-items:center;gap:12px;min-height:40px}
 .icon-btn{width:40px;height:40px;border-radius:50%;background:var(--surface);color:var(--accent);
   font-size:26px;line-height:1;display:flex;align-items:center;justify-content:center;padding-bottom:3px;flex:none}
@@ -41,16 +40,12 @@ body::before{
 .top-title{flex:1;text-align:center;font-size:11px;letter-spacing:.18em;color:var(--muted);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-transform:uppercase}
 .clock{font-size:16px;color:var(--muted);font-variant-numeric:tabular-nums;min-width:44px;text-align:right}
-
-.brand{font-size:46px;font-weight:200;letter-spacing:.26em;margin:22px 0 0}
-.brand-sub{color:var(--muted);font-size:13px;letter-spacing:.2em;margin-top:6px}
 .section{font-size:12px;letter-spacing:.22em;color:var(--muted);margin:26px 0 10px;text-transform:uppercase}
 .label{font-size:11px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase}
 .body{font-size:14px;line-height:1.55;color:rgba(226,232,240,.9)}
 .muted{color:var(--muted)}
 .error{color:#F87171;font-size:13px;margin-top:10px}
 .error:empty{display:none}
-
 .card{background:var(--surface);border-radius:20px;padding:18px}
 .btn{display:block;width:100%;border-radius:16px;padding:15px;font-size:13px;font-weight:800;letter-spacing:.2em;text-align:center;
   transition:transform .12s,opacity .12s}
@@ -60,64 +55,38 @@ body::before{
 .btn-ghost{color:var(--accent);font-size:12px;font-weight:700;letter-spacing:.18em;padding:14px;margin-top:8px}
 .btn-danger{background:rgba(239,68,68,.16);color:#F87171;font-weight:700;letter-spacing:.16em}
 .btn-cancel{background:var(--surface2);color:var(--accent);font-weight:700;letter-spacing:.16em}
-
 .input{width:100%;background:var(--surface2);border:0;border-radius:16px;color:var(--accent);font-size:16px;
   padding:14px 16px;outline:none;font-family:inherit;transition:box-shadow .15s}
 .input::placeholder{color:var(--muted)}
 .input:focus{box-shadow:0 0 0 1px rgba(226,232,240,.28)}
 .input.page{background:var(--surface)}
 .field-label{margin:0 0 10px}
-
-/* кольцо окна */
-.hero{display:block;margin:18px auto 0;cursor:pointer;width:min(calc(100vw - 56px),320px)}
 .ring{position:relative;width:100%;aspect-ratio:1/1}
 .ring svg{width:100%;height:100%;display:block}
 .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
-.ring-cap{font-size:10px;letter-spacing:.3em;color:var(--muted)}
 .ring-time{font-size:min(62px,17.5vw);font-weight:200;font-variant-numeric:tabular-nums;margin-top:6px;line-height:1.05}
 .ring-name{font-size:15px;font-weight:600;letter-spacing:.14em;margin-top:8px}
 .ring-int{font-size:12px;color:var(--muted);margin-top:4px;font-variant-numeric:tabular-nums}
-
 .brief{display:block;width:100%;cursor:pointer}
 .brief-title{font-size:26px;font-weight:600;margin:26px 0 0;line-height:1.2}
-.brief-text{color:var(--muted);font-size:15px;line-height:1.5;margin-top:8px}
 .ground{display:flex;gap:14px;margin-top:18px}
 .bar{width:3px;border-radius:2px;flex:none}
-.more{font-size:11px;letter-spacing:.2em;color:var(--muted);text-align:right;margin-top:12px}
-
-.tiles{display:flex;gap:12px}
 .tile{flex:1;background:var(--surface);border-radius:20px;padding:16px;cursor:pointer;min-width:0;transition:transform .12s}
 .tile:active{transform:scale(.98)}
-.tile-top{display:flex;justify-content:space-between;align-items:center}
 .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
 .tile-num{font-size:34px;font-weight:300;margin-top:10px}
 .tile-name{font-size:13px;letter-spacing:.16em;margin-top:2px}
 .tile-el{font-size:10px;font-weight:700;letter-spacing:.2em;margin-top:10px}
-
-.dial-wrap{display:flex;flex-direction:column;align-items:center;margin-top:4px}
 .dial{position:relative;width:220px;height:220px}
 .dial svg{width:100%;height:100%;display:block}
-.dial-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
-.dial-num{font-size:40px;font-weight:200}
 .legend{display:flex;flex-wrap:wrap;justify-content:center;margin-top:14px}
 .legend span{display:flex;align-items:center;margin:2px 8px;font-size:10px;letter-spacing:.2em;color:var(--muted)}
 .legend .dot{width:8px;height:8px;margin-right:6px}
-
 .log{display:flex;gap:12px;background:var(--surface);border-radius:16px;padding:14px;margin-top:8px}
 .log-bar{width:4px;border-radius:2px;flex:none}
 .log-text{font-size:14px;word-break:break-word}
 .log-meta{font-size:12px;color:var(--muted);margin-top:4px;font-variant-numeric:tabular-nums}
 .empty{color:var(--muted);font-size:13px;text-align:center;margin:10px 0 4px}
-
-.prow{display:flex;align-items:center;gap:14px;background:var(--surface);border-radius:20px;padding:16px;margin-bottom:10px;cursor:pointer;transition:transform .12s}
-.prow:active{transform:scale(.99)}
-.prow .pdot{width:10px;height:10px;border-radius:50%;flex:none}
-.prow-main{flex:1;min-width:0}
-.prow-name{font-size:16px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.prow-meta{font-size:12px;color:var(--muted);margin-top:4px;font-variant-numeric:tabular-nums}
-.prow-del{font-size:11px;letter-spacing:.18em;color:var(--muted);padding:8px}
-
-/* подробные экраны */
 .dcard{border-radius:20px;background:var(--surface);padding:20px;margin-top:10px}
 .dcard-top{display:flex;justify-content:space-between;align-items:center}
 .d-num{font-size:34px;font-weight:300}
@@ -129,20 +98,11 @@ body::before{
 .d-timer .big{font-size:48px;font-weight:200;font-variant-numeric:tabular-nums;margin-top:6px}
 .dsec{margin-top:20px}
 .dsec .label{margin-bottom:6px}
-.dsec-bar{display:flex;gap:14px}
-.wrow{display:flex;align-items:center;padding:8px 10px;border-radius:10px;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
-.wrow .dot{margin-right:10px;width:6px;height:6px}
-.wrow .t{width:108px;flex:none}
-.wrow.now{background:var(--surface);color:var(--accent);font-weight:700}
-
-/* журнал */
 .group-head{display:flex;justify-content:space-between;align-items:center;width:100%;background:var(--surface);
   border-radius:14px;padding:13px 14px;margin-top:10px;font-size:14px;font-weight:700}
 .group-head .cnt{font-size:12px;font-weight:400;color:var(--muted);white-space:nowrap;margin-left:8px}
 .group-head.month{box-shadow:inset 0 0 0 1px #2A2D38}
 .indent{margin-left:12px}
-
-/* окно подтверждения и уведомление */
 .backdrop{position:fixed;inset:0;background:rgba(0,0,0,.66);z-index:10;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s both}
 @keyframes fade{from{opacity:0}to{opacity:1}}
 .sheet{width:100%;max-width:520px;background:#14161D;border-radius:24px 24px 0 0;padding:24px 18px calc(max(var(--tg-safe-area-inset-bottom,0px),env(safe-area-inset-bottom,0px)) + 22px);
@@ -155,8 +115,6 @@ body::before{
   transform:translateX(-50%);background:#1F2230;color:var(--accent);padding:12px 18px;border-radius:14px;font-size:13px;z-index:20;
   opacity:0;pointer-events:none;transition:opacity .2s;max-width:86vw;text-align:center}
 .toast.show{opacity:1}
-
-/* пентада */
 .pent{display:flex;align-items:center;gap:16px;width:100%;background:var(--surface);border-radius:20px;padding:16px;cursor:pointer;transition:transform .12s}
 .pent:active{transform:scale(.99)}
 .pring{position:relative;width:96px;height:96px;flex:none}
@@ -169,8 +127,6 @@ body::before{
 .psign{font-size:12px;color:var(--muted);margin-top:5px}
 .ptitle{font-size:14px;margin-top:10px;color:rgba(226,232,240,.92);line-height:1.3}
 .chev{color:var(--muted);font-size:24px;flex:none}
-
-/* ───── правки v3 ───── */
 .section{font-size:13px;font-weight:700;letter-spacing:.14em;color:#F1F3F8;margin:26px 0 10px;text-transform:uppercase}
 .sec-row{display:flex;justify-content:space-between;align-items:center}
 .chev.sm{font-size:20px}
@@ -178,8 +134,6 @@ body::before{
 .top-cap{font-size:10px;letter-spacing:.24em;color:var(--muted);text-transform:uppercase}
 .top-name{font-size:17px;font-weight:700;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 .top-sub{font-size:12px;color:var(--muted);margin-top:2px;font-variant-numeric:tabular-nums}
-
-/* раскрывающиеся блоки */
 .acc{background:var(--surface);border-radius:20px;overflow:hidden}
 .acc-head{display:flex;align-items:center;gap:12px;width:100%;padding:16px;cursor:pointer}
 .acc-main{flex:1;min-width:0}
@@ -192,17 +146,12 @@ body::before{
 .acc.open > .acc-body{grid-template-rows:1fr}
 .acc-inner{min-height:0;overflow:hidden}
 .acc-pad{padding:0 16px 16px}
-.tiles.in-acc .tile{background:var(--surface2)}
-
-/* блок «окно» целиком нажимается */
 .blk{cursor:pointer;display:block}
 .blk .section{margin-bottom:0}
 .brief{display:block;width:100%}
 .log.tap{cursor:pointer;align-items:center}
 .log-main{flex:1;min-width:0}
 .log .chev{flex:none}
-
-/* Pro */
 .btn-pro{display:flex;align-items:center;justify-content:space-between;background:var(--surface);color:var(--accent);
   box-shadow:inset 0 0 0 1px rgba(226,232,240,.2);margin-top:12px;letter-spacing:.16em}
 .pro-badge{font-size:10px;font-weight:800;letter-spacing:.16em;color:var(--bg);background:var(--accent);border-radius:6px;padding:3px 7px;white-space:nowrap}
@@ -211,44 +160,25 @@ body::before{
 .prorow{margin-top:14px}
 .prorow.locked{opacity:.45}
 #quickAcc.open .acc-sub{display:none}
-
-/* ───── сутки ───── */
-.dial-wrap{display:flex;flex-direction:column;align-items:center;margin-top:6px}
 .dial{position:relative;width:var(--d,190px);height:var(--d,190px)}
 .dial svg{width:100%;height:100%;display:block}
-.dial-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
-.dial-num{font-size:calc(var(--d,190px) * .18);font-weight:200;line-height:1.1}
 .legend{display:flex;flex-wrap:wrap;justify-content:center;margin-top:12px}
 .legend span{display:flex;align-items:center;margin:2px 8px;font-size:10px;letter-spacing:.2em;color:var(--muted)}
 .legend .dot{width:8px;height:8px;margin-right:6px}
-.blkrow{display:flex;align-items:center;padding:11px 12px;border-radius:12px;background:var(--surface);margin-top:6px;font-size:14px;font-variant-numeric:tabular-nums}
-.blkrow .dot{margin-right:12px}
-.blkrow .t{width:116px;flex:none;color:var(--muted)}
-.blkrow .n{flex:1}
-.blkrow .r{color:var(--muted);font-size:12px}
-.blkrow.now .t,.blkrow.now .n{color:var(--accent);font-weight:700}
-
-/* ───── маяки ───── */
 .beacon-banner{display:flex;align-items:center;gap:12px;background:rgba(226,232,240,.08);border-radius:16px;padding:12px 14px;margin-top:14px;cursor:pointer;
   box-shadow:inset 0 0 0 1px rgba(226,232,240,.3);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:inset 0 0 0 1px rgba(226,232,240,.22)}50%{box-shadow:inset 0 0 0 1px rgba(226,232,240,.65)}}
 .bb-time{font-size:22px;font-weight:300;font-variant-numeric:tabular-nums}
 .bb-txt{flex:1;font-size:12px;font-weight:700;letter-spacing:.16em;color:#F1F3F8}
-.beacon-line{text-align:center;font-size:13px;color:var(--muted);margin-top:12px;font-variant-numeric:tabular-nums}
 .b-time{font-size:56px;font-weight:200;font-variant-numeric:tabular-nums;line-height:1}
 .brow{display:flex;align-items:center;padding:11px 12px;border-radius:12px;font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums;cursor:pointer}
 .brow .dot{margin-right:12px}
 .brow .t{width:62px;flex:none}
 .brow .n{flex:1}
 .brow.next{background:var(--surface2);color:var(--accent);font-weight:700}
-
-/* ───── заземление: три канала ───── */
 .gcards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .gcard{background:var(--surface);border-radius:20px;padding:14px 8px 12px;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0;transition:transform .12s}
 .gcard:active{transform:scale(.97)}
-.gicon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:#F1F3F8}
-.gicon svg{width:30px;height:30px}
-.gicon.art svg{width:44px;height:44px;border-radius:10px}
 .gtitle{font-size:11px;font-weight:700;letter-spacing:.12em;margin-top:10px}
 .gsub{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.3;min-height:28px}
 .gbtn{margin-top:10px;background:var(--accent);color:var(--bg);border-radius:12px;padding:9px 2px;font-size:10px;font-weight:800;letter-spacing:.05em;width:100%}
@@ -264,8 +194,6 @@ body::before{
 .mt-num{font-size:64px;font-weight:200;font-variant-numeric:tabular-nums}
 .mt-bar{height:3px;background:#1D1F27;border-radius:2px;margin-top:14px;overflow:hidden}
 .mt-bar i{display:block;height:100%;width:0;background:var(--accent)}
-
-/* резонанс */
 .res{position:fixed;inset:0;z-index:60;background:#05060A;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;animation:fade .3s both}
 .res-x{position:absolute;top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 14px);right:16px;width:40px;height:40px;border-radius:50%;background:var(--surface);font-size:24px;line-height:1;color:var(--accent);text-align:center}
 .res-cap{font-size:12px;letter-spacing:.3em;color:var(--muted);margin-bottom:26px}
@@ -282,8 +210,6 @@ body::before{
 .res-bar{position:absolute;left:24px;right:24px;bottom:calc(max(var(--tg-safe-area-inset-bottom,0px),env(safe-area-inset-bottom,0px)) + 28px);height:2px;background:#1D1F27;border-radius:2px;overflow:hidden}
 .res-bar i{display:block;height:100%;width:0;background:var(--accent);animation:bar 15s linear both}
 @keyframes bar{from{width:0}to{width:100%}}
-
-/* верхняя панель: действия и настройки */
 .top-actions{display:flex;gap:8px;align-items:center}
 .icon-btn.sm{width:36px;height:36px;padding-bottom:0}
 .icon-btn svg{width:18px;height:18px}
@@ -292,27 +218,14 @@ body::before{
 .sw i{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--accent);transition:transform .2s}
 .sw.on{background:#3B82F6}
 .sw.on i{transform:translateX(20px)}
-
-/* ───── старт, заглушки, подсказки ───── */
 .start-title{font-size:40px;font-weight:200;letter-spacing:.2em;text-align:center;margin-top:64px;white-space:nowrap}
 .start-title span{color:var(--muted)}
-.pills{display:flex;gap:10px;overflow-x:auto;margin:30px -16px 0;padding:2px 16px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
-.pills::-webkit-scrollbar{display:none}
-.pill{flex:none;background:var(--surface);color:var(--accent);border-radius:999px;padding:13px 20px;font-size:14px;font-weight:600;white-space:nowrap;display:flex;align-items:center;transition:transform .12s}
-.pill:active{transform:scale(.97)}
-.pill.main{background:var(--accent);color:var(--bg);font-weight:700}
 .soon{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center}
-.soon-text{font-size:18px;color:var(--muted);margin-top:16px;letter-spacing:.04em}
 .hint{font-size:12px;color:var(--muted);text-align:center;margin:2px 0 14px}
-
-/* ось с пентадой */
 .acc.center > .acc-head{justify-content:center;position:relative;text-align:center}
 .acc.center > .acc-head > .acc-main{flex:none;text-align:center}
 .acc.center > .acc-head > .chev{position:absolute;right:16px;top:50%;margin-top:-12px}
 .sub-label{margin:16px 0 8px}
-.in-acc .pent{background:var(--surface2)}
-
-/* сутки / 20 минут */
 .dual{position:relative;width:min(calc(100vw - 32px),340px);aspect-ratio:1/1;margin:10px auto 0}
 .dual-day{position:absolute;inset:0}
 .dual-day svg{width:100%;height:100%;display:block}
@@ -325,19 +238,9 @@ body::before{
 .blk .brief-title{margin:18px 0 0;font-size:22px;flex:none}
 .blk .legend{margin-top:20px}
 .beacon-row .chev{position:absolute;right:14px}
-
-/* ───── v8: старт, плашка, маяк, кнопки ───── */
 .start-bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.start-oct{position:absolute;left:50%;top:45%;width:min(120vw,520px);transform:translate(-50%,-50%)}
-.start-gridwrap{position:absolute;left:0;right:0;bottom:0;height:34vh;opacity:.2;
-  -webkit-mask-image:linear-gradient(to top,#000 0%,rgba(0,0,0,0) 100%);mask-image:linear-gradient(to top,#000 0%,rgba(0,0,0,0) 100%)}
-.start-gridwrap svg{width:100%;height:100%;display:block}
-.start-main{position:fixed;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px}
 .start-title{font-size:46px;font-weight:300;letter-spacing:.14em;text-align:center;margin:0;white-space:nowrap;text-shadow:0 0 30px rgba(59,130,246,.55),0 2px 0 rgba(255,255,255,.05)}
 .start-title span{color:#F1F3F8;font-weight:300}
-.start-btns{display:flex;flex-direction:column;gap:12px;margin-top:38px;width:min(290px,78vw)}
-.start-btns .pill{width:100%;justify-content:center;padding:15px 20px;font-size:15px}
-
 .plate{background:var(--surface2);border-radius:20px;padding:16px;cursor:pointer;transition:transform .12s}
 .plate:active{transform:scale(.99)}
 .plate-top{display:flex;justify-content:space-between;align-items:center}
@@ -346,63 +249,37 @@ body::before{
 .ph-cap{font-size:10px;letter-spacing:.18em;color:var(--muted);text-transform:uppercase;margin-top:8px}
 .plate-sep{width:1px;background:#2A2D38;margin:8px 14px}
 .plate .tile-num{font-size:32px;margin-top:6px}
-
 .beacon-row b{font-size:19px;font-weight:700;color:var(--accent);letter-spacing:.04em}
 .beacon-row .bico{flex:none;color:var(--accent)}
 .beacon-row .chev{position:absolute;right:16px}
-.btn-release{display:flex;align-items:center;justify-content:center;gap:10px;background:var(--surface2);color:var(--accent);
-  box-shadow:inset 0 0 0 1px rgba(226,232,240,.3);margin-top:14px;letter-spacing:.18em}
-
-/* ───── v9: орбиты и рамка маяка ───── */
 .dual-day{z-index:1}
 .dual-in{z-index:2}
 .blk .section,.blk .brief,.blk .legend{position:relative;z-index:2}
-
 .beacon-row{position:relative;display:block;width:100%;margin-top:20px;padding:0;border-radius:18px;background:transparent}
 .br-in{position:relative;display:flex;align-items:center;justify-content:center;gap:10px;background:var(--surface2);border-radius:18px;padding:19px 40px;min-height:78px;
   font-size:16px;color:#F1F3F8;font-variant-numeric:tabular-nums}
 .br-svg{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
 .br-svg rect{fill:none}
-.br-base{stroke:#3B82F6;stroke-opacity:.62;stroke-width:1.5}
-.br-glow{stroke:#60A5FA;stroke-opacity:.35;stroke-width:6;stroke-linecap:round;stroke-dasharray:14 86;animation:brrun 9s linear infinite}
-.br-run{stroke:#BFDBFE;stroke-width:2;stroke-linecap:round;stroke-dasharray:14 86;animation:brrun 9s linear infinite}
-@keyframes brrun{from{stroke-dashoffset:0}to{stroke-dashoffset:-100}}
-.beacon-row.near .br-base{animation:brpulse 1s ease-in-out infinite}
 .beacon-row.near .br-svg{animation:brglow 1s ease-in-out infinite}
 @keyframes brpulse{0%,100%{stroke-opacity:.5;stroke-width:1.5}50%{stroke-opacity:1;stroke-width:3.5;stroke:#60A5FA}}
 @keyframes brglow{0%,100%{filter:drop-shadow(0 0 0 rgba(59,130,246,0))}50%{filter:drop-shadow(0 0 9px rgba(96,165,250,.95))}}
-.beacon-row.now .br-base{stroke-opacity:1;stroke-width:3;stroke:#60A5FA}
 .beacon-row.now .br-svg{filter:drop-shadow(0 0 8px rgba(96,165,250,.85))}
-.beacon-row.now .br-run,.beacon-row.now .br-glow{animation-duration:4.5s}
-@media (prefers-reduced-motion:reduce){
-  .br-run,.br-glow{animation:none;display:none}
-  .beacon-row.near .br-base,.beacon-row.near .br-svg{animation:none}
-  .beacon-row.near .br-base{stroke-opacity:1;stroke-width:3}
-}
-
-/* ───── v9.1: правки по скриншоту ───── */
+@media (prefers-reduced-motion:reduce){.beacon-row.near .br-svg{animation:none}}
 .dual-in .ring{position:relative}
 .bl{display:flex;flex-direction:column;align-items:center;gap:4px;line-height:1.1}
 .bl-top{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:#F1F3F8}
 .bl-main{font-size:16px;color:#F1F3F8}
 .bl-main b{font-size:24px;font-weight:700;color:var(--accent);letter-spacing:.04em;margin-right:2px}
 .br-in{padding:14px 40px}
-
-/* ───── картинки автора ───── */
 .vimg{display:block;object-fit:contain;background:#05060A;border-radius:16px}
 .res-card .vimg{width:104px;height:104px;max-width:28vw;max-height:28vw;box-shadow:0 0 0 1px rgba(226,232,240,.14)}
 .res-art .vimg{width:min(80vw,320px);height:min(80vw,320px);border-radius:24px;box-shadow:0 0 60px rgba(29,63,191,.35)}
-.gicon.art .vimg{width:44px;height:44px;border-radius:10px}
 .log-thumb .vimg{width:44px;height:44px;border-radius:10px}
-
-/* ───── фото в карточках заземления ───── */
 .gphoto{width:100%;max-width:96px;aspect-ratio:1/1;border-radius:16px;overflow:hidden;position:relative;background:#05060A}
 .gphoto::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,0) 55%,rgba(10,10,12,.35));pointer-events:none}
 .gphoto img,.gphoto svg{width:100%;height:100%;display:block;object-fit:cover}
 .gphoto.gres img{object-fit:contain}
 .gphoto.gres .vimg{border-radius:0;width:100%;height:100%}
-
-/* ───── v12: окна заземления, комментарий, «Сбросить зажим» ───── */
 .gwin{position:fixed;inset:0;z-index:60;background:#05060A;display:flex;flex-direction:column;animation:fade .3s both}
 .gwin-scroll{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;width:100%;max-width:520px;margin:0 auto;
   padding:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 64px) 20px 20px}
@@ -417,17 +294,12 @@ body::before{
 .res-decision{position:absolute;left:24px;right:24px;bottom:calc(max(var(--tg-safe-area-inset-bottom,0px),env(safe-area-inset-bottom,0px)) + 22px);display:flex;gap:10px}
 .res-decision .btn{flex:1;margin-top:0;font-size:12px;letter-spacing:.1em;padding:15px 8px}
 .log-comment{font-size:13px;color:#F1F3F8;margin-top:6px;font-style:italic;word-break:break-word}
-
-.rel-wrap{min-height:64vh;display:flex;align-items:center;justify-content:center}
-.rel-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:340px}
 .rel-plate{background:var(--surface2);border-radius:22px;padding:28px 12px;display:flex;flex-direction:column;align-items:center;gap:14px;
   box-shadow:inset 0 0 0 1px rgba(226,232,240,.16);transition:transform .12s}
 .rel-plate:active{transform:scale(.97)}
 .rel-plate svg{width:38px;height:38px;color:#F1F3F8}
 .rel-plate span{font-size:17px;font-weight:700;letter-spacing:.06em}
 .devnote{margin-top:26px;border:1px dashed #3A4256;border-radius:14px;padding:12px 16px;max-width:300px;text-align:left}
-
-/* ───── «Слушай момент» ───── */
 .listen-wrap{min-height:68vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 .listen-stage{position:relative;width:236px;height:236px;display:flex;align-items:center;justify-content:center}
 .listen-ring{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);pointer-events:none}
@@ -442,25 +314,19 @@ body::before{
 .listen-time{margin-top:24px;font-size:34px;font-weight:200;font-variant-numeric:tabular-nums;min-height:44px}
 .listen-msg{margin-top:8px;font-size:13px;color:#F59E0B;min-height:18px;max-width:280px;line-height:1.4}
 @media (prefers-reduced-motion:reduce){.listen-btn.playing{animation:none}}
-
-/* ───────────── v16: общий фон, золото, новые экраны ───────────── */
 html,body{background:#050609}
 body::before{content:"";position:fixed;inset:0;height:auto;z-index:0;pointer-events:none;
   background:radial-gradient(120% 70% at 50% 0%,#0E1730 0%,#07090F 55%,#050609 100%)}
 body.is-start::before{background:#050609}
-.acc,.gcard,.log,.plate,.card,.beacon-row .br-in,.btn-half,.btn-pro,.lec,.lvl{background:rgba(12,14,22,.72)!important;box-shadow:inset 0 0 0 1px rgba(214,170,70,.26)!important}
+.acc,.gcard,.log,.plate,.card,.beacon-row .br-in,.btn-pro,.lec,.lvl{background:rgba(12,14,22,.72)!important;box-shadow:inset 0 0 0 1px rgba(214,170,70,.26)!important}
 .section,.label{color:#C9B27A!important}
 .icon-btn{background:rgba(12,14,22,.7)!important;box-shadow:inset 0 0 0 1px rgba(214,170,70,.38)!important;color:#EDE3C8!important}
 .gbtn{background:#E4D5A8!important;color:#15130C!important}
-
-/* верхняя панель: заголовок строго по центру экрана */
 .topbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,auto) minmax(0,1fr);align-items:center;gap:12px;min-height:40px}
 .topbar>:first-child{justify-self:start}
 .topbar>:last-child{justify-self:end}
 .top-title,.top-center{flex:none;max-width:100%}
 .top-status{font-size:11px;letter-spacing:.14em;color:#C9B27A;margin-top:3px}
-
-/* приветствие */
 .wel{position:fixed;inset:0;z-index:70;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(5,6,9,.4)}
 .wel.out{opacity:0;transition:opacity .45s}
 .wel-card{max-width:320px;text-align:center;padding:28px 24px;border-radius:24px;background:rgba(12,14,22,.94);
@@ -469,38 +335,16 @@ body.is-start::before{background:#050609}
 .wel-s{font-size:16px;margin-top:10px;color:#E6D9B0}
 .wel-x{font-size:12px;margin-top:14px;color:var(--muted);line-height:1.5}
 @keyframes welIn{from{opacity:0;transform:translate(32vw,-36vh) scale(.25)}to{opacity:1;transform:none}}
-
-/* ряд «Сигнал» и «Ритм дня» */
-.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
-.btn-half{display:flex;align-items:center;justify-content:center;gap:10px;border-radius:18px;padding:16px 8px;font-size:12px;font-weight:700;letter-spacing:.16em;color:var(--accent)}
-.btn-half svg{width:20px;height:20px;flex:none}
-
-/* стартовая страница */
 .start-cr{position:absolute;inset:0;width:100%;height:100%}
-.start-main{padding-top:0}
 .start-title{font-weight:300;font-size:44px;letter-spacing:.14em;color:#EAF0FF;text-shadow:0 0 28px #8A5A10}
 .start-title span{color:#F1F3F8}
 .start-sub{text-align:center;font-size:15px;letter-spacing:.32em;color:#F1F3F8;text-transform:uppercase;margin-top:10px}
-.start-btns{display:flex;flex-direction:column;gap:20px;width:min(310px,80vw);margin-top:44px}
-.srim{display:block;width:100%;padding:2px;border-radius:40px;background:linear-gradient(180deg,#6B5733,#C9B27A 55%,#6B5733);box-shadow:0 8px 20px rgba(0,0,0,.55);text-align:left}
-.srim:active{transform:scale(.98)}
-.sbtn{display:flex;align-items:center;height:70px;border-radius:38px;padding:0 20px;position:relative;
-  background:linear-gradient(180deg,#2A3652 0%,#18213A 45%,#0F1627 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 -8px 14px rgba(0,0,0,.35)}
-.sbtn svg{width:32px;height:32px;flex:none;stroke:#D8C9A3;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.ssep{width:1px;height:36px;background:rgba(160,180,230,.35);margin:0 18px;flex:none}
-.slbl{font-size:20px;color:#F1F5FF}
-.sbeta{margin-left:auto;font-size:9px;font-weight:800;letter-spacing:.14em;color:#0A0A0C;background:#D9C48F;border-radius:5px;padding:3px 6px}
 .spk{position:fixed;top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 14px);right:16px;z-index:5;width:40px;height:40px;border-radius:50%;
   background:rgba(12,14,22,.7);box-shadow:inset 0 0 0 1px rgba(214,170,70,.38);color:#EDE3C8;display:flex;align-items:center;justify-content:center}
 .spk svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-
-/* «Сигнал» */
 .sig-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:26px}
 .sig-grid .rel-plate{padding:24px 8px}
 .sig-grid .rel-plate span{font-size:15px;text-align:center}
-.sig-beacon{margin-top:20vh}
-
-/* «Вижу знак» */
 .sgn-cam{position:relative;height:40vh;min-height:230px;border-radius:22px;overflow:hidden;background:#05060A;margin-top:14px;box-shadow:inset 0 0 0 1px rgba(214,170,70,.3);transition:height .25s}
 .sgn-cam.small{height:96px;min-height:96px}
 .sgn-cam video{width:100%;height:100%;object-fit:cover;display:block}
@@ -513,8 +357,6 @@ body.is-start::before{background:#050609}
 .sgn-reg{font-size:19px;font-weight:700;margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .sgn-flags{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
 .sgn-flag{font-size:11px;letter-spacing:.08em;color:#E4D5A8;border:1px solid rgba(214,170,70,.4);border-radius:999px;padding:3px 10px}
-
-/* «Ритм дня» */
 .rh-times{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
 .rh-field{display:block}
 .rh-field .input{margin-top:8px;width:100%;text-align:center;font-size:20px}
@@ -526,8 +368,6 @@ body.is-start::before{background:#050609}
 .rh-t{font-size:12px;color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
 .rh-mark{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:#E4D5A8;box-shadow:0 0 12px rgba(228,213,168,.8)}
 .rh-cap{margin-top:18px;text-align:center;font-size:17px;color:#F1F5FF}
-
-/* личный кабинет */
 .cab-name{font-size:22px;font-weight:700;margin:6px 0}
 .lvl{border-radius:18px;padding:14px 16px;margin-top:10px}
 .lvl.now{box-shadow:inset 0 0 0 1px rgba(228,213,168,.7)!important}
@@ -535,8 +375,6 @@ body.is-start::before{background:#050609}
 .lvl-n{font-size:16px;font-weight:700;letter-spacing:.04em}
 .lvl-b{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0A0A0C;background:#E4D5A8;border-radius:999px;padding:3px 9px}
 .lvl-s{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-
-/* Lectures */
 .lec-list{margin-top:22px;display:flex;flex-direction:column;gap:12px}
 .lec{display:flex;align-items:center;gap:14px;width:100%;border-radius:18px;padding:18px 16px;text-align:left}
 .lec.off{opacity:.45}
@@ -552,32 +390,22 @@ body.is-start::before{background:#050609}
 .lec-bar i{position:absolute;left:0;top:9px;height:4px;border-radius:2px;background:#E4D5A8;width:0}
 .lec-times{width:100%;max-width:340px;display:flex;justify-content:space-between;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums;margin-top:6px}
 .lec-btn{display:flex;align-items:center;justify-content:center;text-align:center;padding:0 20px}
-
-/* «Ритм дня»: поля времени не должны выходить за экран (iOS даёт им свою минимальную ширину) */
 .rh-times{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 .rh-field{min-width:0}
 .rh-field .input{min-width:0;width:100%;max-width:100%;box-sizing:border-box;-webkit-appearance:none;appearance:none;text-align:center;display:block}
 input[type="time"]{min-width:0;max-width:100%}
-
-/* Pro: пентада по шагам и карта суток */
 .prorow.now{box-shadow:inset 0 0 0 1px rgba(228,213,168,.6)!important}
 .dm-row{padding:10px 12px;border-radius:14px;margin-top:8px;background:rgba(12,14,22,.5);box-shadow:inset 0 0 0 1px rgba(214,170,70,.18)}
 .dm-row.now{box-shadow:inset 0 0 0 1px rgba(228,213,168,.7)}
 .dm-h{display:flex;align-items:center;gap:10px;margin-bottom:4px}
 .dm-t{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
 .dm-now{margin-left:auto;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#0A0A0C;background:#E4D5A8;border-radius:999px;padding:3px 9px}
-
-/* значок звука на всех экранах */
 .top-right{display:flex;align-items:center;gap:8px}
 .spk-btn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-
-/* верхняя панель: при длинном имени ничего не накладывается */
 .topbar{grid-template-columns:minmax(40px,1fr) minmax(0,auto) minmax(92px,1fr)}
 .topbar.dash{grid-template-columns:minmax(40px,1fr) minmax(0,auto) minmax(124px,1fr)}
 .top-center,.top-title{min-width:0;max-width:100%}
 .top-name,.top-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
-/* ───────────── хаб: камень и четыре угла ───────────── */
 .hub{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;min-height:100vh;box-sizing:border-box;padding:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 30px) 14px 28px}
 .hub .start-title{margin-top:6px}
 .hub-stage{position:relative;width:100%;max-width:390px;flex:1;min-height:560px;margin-top:14px}
@@ -587,36 +415,26 @@ input[type="time"]{min-width:0;max-width:100%}
 .hb-ic{position:absolute;left:0;right:0;top:0;height:118px;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .hb-ic svg{width:46px;height:46px;fill:none;stroke:#E4C77A;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 .hb-lbl{font-size:15px;color:#EDE6D0;letter-spacing:.02em;text-align:center}
-.hb-tl{left:2%;top:0}.hb-tr{right:2%;top:0}.hb-bl{left:2%;bottom:0}.hb-br{right:2%;bottom:0}
+.hb-tl{left:2%;top:0}
+.hb-tr{right:2%;top:0}
+.hb-bl{left:2%;bottom:0}
+.hb-br{right:2%;bottom:0}
 .hgem{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:210px;display:flex;flex-direction:column;align-items:center;gap:10px;background:none;padding:0}
 .hgem svg{width:200px;height:200px;filter:drop-shadow(0 0 28px rgba(46,230,160,.55));animation:gemPulse 6s ease-in-out infinite}
 .hg-lbl{font-size:19px;color:#EDE6D0;letter-spacing:.06em}
 @keyframes gemPulse{0%,100%{transform:scale(.985);filter:drop-shadow(0 0 22px rgba(46,230,160,.4))}50%{transform:scale(1.03);filter:drop-shadow(0 0 40px rgba(46,230,160,.75))}}
 @media (prefers-reduced-motion:reduce){.hgem svg{animation:none}}
 .spk{z-index:6}
-
-/* Solar Matrix */
-.sol-chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.sol-chip{padding:7px 14px;border-radius:999px;background:rgba(12,14,22,.72);box-shadow:inset 0 0 0 1px rgba(214,170,70,.3);font-size:13px;color:#EDE3C8}
 .sol-card{margin-top:16px;border-radius:20px;padding:18px 16px;background:rgba(12,14,22,.72);box-shadow:inset 0 0 0 1px rgba(228,213,168,.5)}
 .sol-t{font-size:22px;font-weight:700;margin-top:6px}
 .sol-h{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#C9B27A;margin-top:2px}
 .sol-day{font-size:15px;margin-top:14px;font-variant-numeric:tabular-nums}
 .sol-bar{height:4px;border-radius:2px;background:rgba(214,170,70,.2);margin:8px 0 6px}
 .sol-bar i{display:block;height:100%;border-radius:2px;background:#E4D5A8}
-.sol-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;margin-top:6px;background:rgba(12,14,22,.5);box-shadow:inset 0 0 0 1px rgba(214,170,70,.14)}
-.sol-row.now{box-shadow:inset 0 0 0 1px rgba(228,213,168,.7)}
-.sol-n{width:34px;font-weight:700;color:#C9B27A}
-.sol-nm{flex:1;font-size:15px}
-.sol-rg{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-
-/* тарифы (демо) */
 .tar-row{padding:12px 14px;border-radius:14px;margin-top:8px;background:rgba(12,14,22,.5);box-shadow:inset 0 0 0 1px rgba(214,170,70,.2)}
 .tar-h{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:4px}
 .tar-n{font-weight:700;font-size:16px}
 .tar-p{font-size:13px;color:#E4D5A8;text-align:right}
-
-/* хаб строго в один экран */
 .hub{position:fixed;inset:0;min-height:0;overflow:hidden;--hb:clamp(84px,13.5vh,118px);--hg:clamp(150px,24vh,200px)}
 .hub-stage{min-height:0;margin-top:10px;margin-bottom:4px}
 .hbtn{width:var(--hb)}
@@ -625,9 +443,10 @@ input[type="time"]{min-width:0;max-width:100%}
 .hb-ic svg{width:calc(var(--hb) * .39);height:calc(var(--hb) * .39)}
 .hgem{width:calc(var(--hg) + 10px)}
 .hgem svg{width:var(--hg);height:var(--hg)}
-@media (max-height:720px){.hub .start-title{font-size:36px}.hub{padding-top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 18px)}.hb-lbl{font-size:13px}.hg-lbl{font-size:16px}}
-
-/* ───────────── v24: один профиль, первый экран, сканер ───────────── */
+@media (max-height:720px){.hub .start-title{font-size:36px}
+.hub{padding-top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 18px)}
+.hb-lbl{font-size:13px}
+.hg-lbl{font-size:16px}}
 .hub-top{position:fixed;top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 14px);right:16px;z-index:6;display:flex;gap:8px}
 .hub-tip{position:fixed;top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 62px);right:16px;z-index:6;padding:9px 14px;border-radius:14px;background:rgba(12,14,22,.92);
   box-shadow:inset 0 0 0 1px rgba(228,213,168,.55);color:#EDE3C8;font-size:13px;letter-spacing:.04em;animation:tipIn .7s .5s cubic-bezier(.22,.61,.36,1) both}
@@ -639,7 +458,6 @@ input[type="time"]{min-width:0;max-width:100%}
 .hsanc:active{transform:scale(.97)}
 .topbar.dash{grid-template-columns:minmax(40px,1fr) minmax(0,auto) minmax(40px,1fr)}
 .sig-grid.sig-one{grid-template-columns:minmax(0,210px);justify-content:center}
-
 .sgn-cam{touch-action:none}
 .sgn-cam video{transform-origin:center}
 .sgn-cam.flash{animation:camFlash .25s}
@@ -657,14 +475,15 @@ input[type="time"]{min-width:0;max-width:100%}
 .pad-bs{grid-column:4;grid-row:1/3}
 .pad-enter{grid-column:4;grid-row:3/5;background:#E4D5A8;color:#15130C;font-size:15px;font-weight:700}
 body.padopen .screen{padding-bottom:300px}
-
-/* заголовок первого экрана ниже ряда значков */
 .hub{padding-top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 92px)}
 @media (max-height:720px){.hub{padding-top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 96px)}}
-@media (max-height:700px){.hub{--hb:80px;--hg:136px}.hgem-wrap{gap:8px}.hsanc{padding:7px 22px;font-size:13px}.hg-lbl{font-size:15px}.hb-lbl{font-size:12px}}
-@media (max-height:620px){.hub{--hb:68px;--hg:116px}.hub .start-title{font-size:30px}}
-
-/* ───────────── v25: настоящие слои первого экрана и фон страниц (вариант C) ───────────── */
+@media (max-height:700px){.hub{--hb:80px;--hg:136px}
+.hgem-wrap{gap:8px}
+.hsanc{padding:7px 22px;font-size:13px}
+.hg-lbl{font-size:15px}
+.hb-lbl{font-size:12px}}
+@media (max-height:620px){.hub{--hb:68px;--hg:116px}
+.hub .start-title{font-size:30px}}
 .hub-photo{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.62) 0,rgba(0,0,0,0) 26%),url(hub_bg.webp) center/cover no-repeat}
 .hb-art{position:relative;display:block;width:var(--hb);height:var(--hb)}
 .hb-img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))}
@@ -681,29 +500,61 @@ body.padopen .screen{padding-bottom:300px}
 @media (max-height:700px){.hub{--hg:120px}}
 @media (max-height:620px){.hub{--hg:100px}}
 @media (prefers-reduced-motion:reduce){.gem-img{animation:none}}
-
-/* остальные страницы: мрамор с золотом, плашки без коробок, только линии */
 body::before{background:url(page_bg.webp) center/cover no-repeat,#050609!important;filter:none;transform:none}
 body.is-start::before{background:#050609!important}
 .screen{text-shadow:0 1px 8px rgba(0,0,0,.7)}
-.acc,.gcard,.log,.plate,.card,.btn-pro,.lec,.lvl,.tar-row,.dm-row,.prorow,.sol-card,.sol-row,.btn-half,.beacon-row .br-in,.dcard,.sgn-res,.rh-bar,.pent{background:transparent!important;box-shadow:none!important;border-radius:0!important;border-bottom:1px solid rgba(214,170,70,.28)}
+.acc,.gcard,.log,.plate,.card,.btn-pro,.lec,.lvl,.tar-row,.dm-row,.prorow,.sol-card,.beacon-row .br-in,.dcard,.sgn-res,.rh-bar,.pent{background:transparent!important;box-shadow:none!important;border-radius:0!important;border-bottom:1px solid rgba(214,170,70,.28)}
 .input{background:transparent!important;box-shadow:none!important;border-radius:0!important;border:0!important;border-bottom:1px solid rgba(214,170,70,.42)!important}
 .gwin .input,.res .input{background:rgba(8,10,16,.4)!important}
 .icon-btn{background:rgba(8,10,16,.35)!important}
 .rh-seg{background:transparent!important}
-
-/* ───────────── v26: рамки 10%, чёткий белый текст, фаза дня ───────────── */
 :root{--frame:rgba(240,230,200,.10)}
 .screen{text-shadow:0 1px 3px rgba(0,0,0,.85),0 0 12px rgba(0,0,0,.55);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-.acc,.gcard,.log,.plate,.card,.btn-pro,.lec,.lvl,.tar-row,.dm-row,.prorow,.sol-card,.sol-row,.btn-half,.beacon-row .br-in,.dcard,.sgn-res,.rh-bar,.pent,.rel-plate,.sgn-cap,.sgn-input{background:transparent!important;border:0!important;border-bottom:0!important;border-radius:14px!important;box-shadow:inset 0 0 0 1px var(--frame)!important}
+.acc,.gcard,.log,.plate,.card,.btn-pro,.lec,.lvl,.tar-row,.dm-row,.prorow,.sol-card,.beacon-row .br-in,.dcard,.sgn-res,.rh-bar,.pent,.rel-plate,.sgn-cap,.sgn-input{background:transparent!important;border:0!important;border-bottom:0!important;border-radius:14px!important;box-shadow:inset 0 0 0 1px var(--frame)!important}
 .input{background:transparent!important;border:0!important;border-radius:14px!important;box-shadow:inset 0 0 0 1px var(--frame)!important}
 .gwin .input,.res .input{background:rgba(8,10,16,.45)!important}
 .rh-bar{border-radius:14px!important;overflow:hidden}
 .rh-seg.on{background:rgba(6,8,14,.5)!important}
 .lec.off{opacity:.62}
-.hint,.note,.empty,.body.muted,.sol-rg,.log-meta,.lec-s,.acc-sub,.top-cap,.top-sub,.rh-t,.prow-meta{color:#F1F3F8}
+.hint,.note,.empty,.body.muted,.log-meta,.lec-s,.acc-sub,.top-cap,.top-sub,.rh-t{color:#F1F3F8}
 .pad-k{display:flex;align-items:center;justify-content:center;text-align:center;text-shadow:none}
-
+:root{--frame:rgba(228,213,168,.80)}
+.acc,.gcard,.log,.plate,.card,.btn-pro,.lec,.lvl,.tar-row,.dm-row,.prorow,.sol-card,.beacon-row .br-in,.dcard,.sgn-res,.rh-bar,.pent,.rel-plate,.sgn-cap,.sgn-input,.input,.icon-btn,.btn,.gbtn,.hsanc,.pad-k,.src-head{background:transparent!important;border:0!important;border-radius:14px!important;box-shadow:inset 0 0 0 2px var(--frame)!important;color:#F1F3F8}
+.icon-btn{border-radius:50%!important}
+.btn-danger{box-shadow:inset 0 0 0 2px rgba(248,113,113,.85)!important;color:#FCA5A5}
+.btn-ok,.gbtn,.pad-enter{background:rgba(228,213,168,.16)!important}
+.gwin .input,.res .input{background:rgba(8,10,16,.45)!important}
+.gwin,.res{background:linear-gradient(rgba(4,5,8,.38),rgba(4,5,8,.38)),url(page_bg.webp) center/cover,#05060A!important}
+.rh-bar{overflow:hidden}
+.rh-field .label{display:block;text-align:center}
+.rh-field .input{text-align:center}
+.beacon-row{position:relative;display:block;width:100%;margin-top:14px;padding:0;background:transparent}
+.beacon-row.near .br-in{animation:brpulse 1s ease-in-out infinite}
+.beacon-row.now .br-in{box-shadow:inset 0 0 0 3px #F4E3A3,0 0 16px rgba(228,213,168,.55)!important}
+@keyframes brpulse{0%,100%{box-shadow:inset 0 0 0 2px rgba(228,213,168,.55)}50%{box-shadow:inset 0 0 0 3.5px #F4E3A3,0 0 14px rgba(228,213,168,.6)}}
+.sgn-beacon{margin-top:6px}
+.sgn-res.compact{padding:12px 14px}
+#sgnOut{scroll-margin-bottom:240px}
+.tar-row{position:relative}
+.tar-li{margin:6px 0 4px;padding-left:18px;font-size:14px;line-height:1.55}
+.tar-soon{display:inline-block;margin-top:8px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#E4D5A8}
+.lvl.tapx{cursor:pointer}
+.src-head{font-weight:700;color:#E4D5A8;margin-top:12px}
+.hb-lbl b,.hg-lbl b,.hsanc b{display:block;font-weight:600}
+.hb-lbl b{font-size:13px;letter-spacing:.05em}
+.hb-lbl i,.hg-lbl i,.hsanc i{display:block;font-style:normal;color:#F1F3F8;opacity:.9;margin-top:1px}
+.hb-lbl i{font-size:11px}
+.hg-lbl b{font-size:19px;letter-spacing:.08em}
+.hg-lbl i{font-size:12px}
+.hsanc{padding:6px 24px;line-height:1.15}
+.hsanc b{font-size:14px;letter-spacing:.12em}
+.hsanc i{font-size:11px}
+.hub-tip i{right:101px}
+.hub-top{gap:8px}
+.group-head{background:transparent!important;border:0!important;border-radius:14px!important;box-shadow:inset 0 0 0 2px var(--frame)!important;color:#F1F3F8}
+.lec-t{color:#F1F3F8}
+.lec.off .lec-t{color:#F1F3F8}
+.gbtn,.btn-ok,.pad-enter,.btn-pro,.btn-soft,.btn-ghost,.btn-cancel{color:#F1F3F8!important}
 </style>
 </head>
 <body>
@@ -1500,7 +1351,6 @@ const PROFILES_KEY = 'lumina_profiles';
 const LOG_PREFIX = 'lumina_log_';
 const MAX_PROFILES = 12;
 const MAX_NAME = 24;
-const MAX_TEXT = 120;
 const MAX_BYTES = 3900; // лимит CloudStorage — 4096 байт на значение
 
 const cloud = inTG && atLeast('6.9') && tg.CloudStorage ? tg.CloudStorage : null;
@@ -1572,12 +1422,6 @@ async function saveProfiles(list) {
   if (byteLen(raw) > MAX_BYTES) throw new Error('limit');
   await store.set(PROFILES_KEY, raw);
 }
-async function loadDay(pid, d) {
-  try {
-    const raw = await store.get(logKey(pid, d));
-    return raw ? JSON.parse(raw).map((o) => toEntry(pid, o)) : [];
-  } catch (e) { return []; }
-}
 async function loadAllLogs(pid) {
   try {
     const keys = await store.keys(LOG_PREFIX + pid + '_');
@@ -1609,7 +1453,7 @@ async function deleteProfileData(pid) {
 }
 
 // ───────── Состояние и навигация ─────────
-const S = { profiles: [], lastLog: null, sessionLogs: [], journal: [], openGroups: {}, confirmId: null, quickOpen: false, axisOpen: false, winsOpen: false, beaconsOpen: false, settings: { sound: true, haptic: true, devNotes: true }, commentActive: false, restoreScroll: false, welcomed: false, rhythm: { wake: '07:00', bed: '23:00' } };
+const S = { profiles: [], lastLog: null, sessionLogs: [], journal: [], openGroups: {}, confirmId: null, axisOpen: false, settings: { sound: true, haptic: true, devNotes: true }, commentActive: false, restoreScroll: false, welcomed: false, rhythm: { wake: '07:00', bed: '23:00' } };
 const stack = [{ name: 'start' }];
 const cur = () => stack[stack.length - 1];
 function go(route) { cur().scroll = window.scrollY; stack.push(route); render(true); }
@@ -1796,14 +1640,11 @@ function beaconParts(nb) {
 function beaconRowHTML(nb) {
   const p = beaconParts(nb);
   const cls = nb.isNow ? ' now' : (nb.secTo <= 60 ? ' near' : '');
-  return '<button class="beacon-row' + cls + '" data-action="open-beacon" data-h="' + nb.h + '">' +
-    '<svg class="br-svg" aria-hidden="true"><rect class="br-base"/><rect class="br-glow" pathLength="100"/><rect class="br-run" pathLength="100"/></svg>' +
-    '<span class="br-in">' + BEACON_ICON +
+  return '<button class="beacon-row' + cls + '" data-action="open-beacon" data-h="' + nb.h + '"><span class="br-in">' + BEACON_ICON +
     '<span class="bl"><span class="bl-top" data-live="bl-a">' + p.a + '</span><span class="bl-main"><b data-live="bl-t">' + p.t + '</b><span data-live="bl-b">' + esc(p.b) + '</span></span></span>' +
     '<span class="chev sm">›</span></span></button>';
 }
 
-/** Подгоняет контур рамки маяка под реальный размер кнопки. */
 function fitBeaconRow() {
   const row = document.querySelector('.beacon-row');
   if (!row) return;
@@ -1819,10 +1660,6 @@ function fitBeaconRow() {
   });
 }
 window.addEventListener('resize', fitBeaconRow);
-
-function beaconLine(nb) {
-  return nb.isNow ? 'Маяк сейчас · ' + beaconTime(nb.h) : 'Следующий маяк ' + beaconTime(nb.h) + ' · через ' + fmtBeaconIn(nb.secTo);
-}
 
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const col = (reg) => EL_COLOR[reg.element];
@@ -1891,14 +1728,6 @@ function groundHTML(r) {
     card('m', '<img src="' + PHOTO_MOVE + '" alt="">', 'ДВИЖЕНИЕ', 'Физическое действие', 'СДЕЛАТЬ') +
     '<button class="gcard" data-action="ground" data-v="r"><div class="gphoto gres">' + visualHTML(ownVisual(r.id), 96) + '</div><div class="gtitle">РЕЗОНАНС</div>' +
     '<div class="gsub">Внутренний якорь</div><div class="gbtn">ЗАЗЕМЛИТЬСЯ</div></button></div>';
-}
-
-function tileHTML(label, id, kind) {
-  const reg = getRegister(id);
-  return '<div class="tile" data-action="open-detail" data-kind="' + kind + '">' +
-    '<div class="tile-top"><span class="label">' + label + '</span><span class="chev sm">›</span></div>' +
-    '<div class="tile-num">№' + reg.id + '</div><div class="tile-name">' + rname(reg) + '</div>' +
-    '<div class="tile-el" style="color:' + col(reg) + '">' + EL_RU[reg.element] + '</div></div>';
 }
 
 /** Одна плашка: ядро и вектор рядом, нажатие открывает общую страницу. */
@@ -1990,35 +1819,6 @@ function logRowHTML(l) {
 }
 
 // ───────── Экраны ─────────
-function soonHTML(route) {
-  return topbar(route.title, { noClock: true }) +
-    '<div class="soon"><span class="beta" style="margin:0">БЕТА</span><div class="soon-text">В процессе формирования</div></div>';
-}
-
-function homeHTML() {
-  const profiles = S.profiles.map((p) => {
-    const phys = getRegister(p.nPhys), evol = getRegister(p.nEvol);
-    return '<div class="prow" data-action="open-profile" data-id="' + p.id + '">' +
-      '<span class="pdot" style="background:' + col(phys) + '"></span>' +
-      '<div class="prow-main"><div class="prow-name">' + esc(p.name) + '</div>' +
-      '<div class="prow-meta">' + p.birthDate + ' · №' + phys.id + ' ' + rname(phys) + ' · №' + evol.id + ' ' + rname(evol) + '</div></div>' +
-      '</div>';
-  }).join('');
-  return topbar('', { noClock: true }) +
-    '<div class="brand" style="margin-top:14px">LUMINA</div><div class="brand-sub">// System Calibration</div>' +
-    '<div class="section" style="margin-top:28px">Быстрый расчёт</div>' +
-    '<div class="acc' + (S.quickOpen ? ' open' : '') + '" id="quickAcc">' +
-    '<button class="acc-head" data-action="toggle-quick"><div class="acc-main"><div class="acc-title">Дата рождения</div>' +
-    '<div class="acc-sub">Введи дату рождения</div></div><span class="chev">›</span></button>' +
-    '<div class="acc-body"><div class="acc-inner"><div class="acc-pad">' +
-    '<input class="input" id="quickDate" data-mask="date" inputmode="numeric" maxlength="10" placeholder="ДД.ММ.ГГГГ" autocomplete="off">' +
-    '<div class="error" id="quickErr"></div>' +
-    '<button class="btn btn-solid" data-action="quick">РАССЧИТАТЬ</button></div></div></div></div>' +
-    '<div class="section">Профили</div>' +
-    (S.profiles.length ? profiles + '<div class="hint">Удерживай профиль, чтобы удалить</div>' : '<div class="card"><div class="body">Профилей пока нет. Создай профиль, чтобы вести журнал заземлений.</div></div>') +
-    '<button class="btn btn-soft" data-action="create">+ СОЗДАТЬ ПРОФИЛЬ</button>';
-}
-
 function createHTML(route) {
   return topbar('Новый профиль', { noClock: true }) +
     '<div class="card" style="margin-top:20px">' +
@@ -2047,10 +1847,6 @@ function dashboardHTML(route) {
   if (nb.isNow) {
     html += '<div class="beacon-banner" data-action="open-beacon" data-h="' + nb.h + '"><span class="bb-time">' + beaconTime(nb.h) + '</span>' +
       '<span class="bb-txt">МАЯК · СВЕРКА</span><span class="chev sm">›</span></div>';
-  }
-  if (!isProfile) {
-    html += '<div class="card" style="margin-top:16px"><div class="body">Быстрый расчёт: записи журнала не сохраняются. Чтобы вести журнал, сохрани расчёт как профиль.</div>' +
-      '<button class="btn btn-ghost" data-action="save-as-profile" style="margin-top:8px">СОХРАНИТЬ КАК ПРОФИЛЬ ›</button></div>';
   }
   html += '<div style="margin-top:22px">' + axisHTML(nPhys, nEvol, ps) + '</div>' +
     '<div class="blk" data-action="open-detail" data-kind="window">' +
@@ -2200,7 +1996,7 @@ function proHTML(route) {
     '<div class="section" style="margin-top:20px">Что войдёт</div>' +
     info.items.map((x) => '<div class="proitem"><span class="check">✓</span><span class="body">' + x + '</span></div>').join('') + '</div>' +
     '<div class="card" style="margin-top:12px">' + sample + '</div>' +
-    (S.settings.proDemo ? tariffsHTML() : '') +
+    tariffsHTML(false) +
     '<div class="empty" style="margin-top:16px">' + (S.settings.proDemo ? 'Демо-режим: показан пример полного раздела. Оплаты пока нет.' : 'Pro пока в разработке: оплаты и закрытого контента нет. Это показ идеи.') + '</div>';
 }
 
@@ -2224,27 +2020,32 @@ function beaconHTML(route) {
     '<button class="btn btn-pro" data-action="open-pro"><span>ПОЛНАЯ РАЗВЁРТКА РЕГИСТРА</span><span class="pro-badge">PRO</span></button>';
 }
 
+const JSRC = [['f', 'Питание'], ['m', 'Движение'], ['r', 'Резонанс'], ['k', 'Знак'], ['x', 'Другое']];
 function journalHTML(route) {
   const prof = S.profiles.find((p) => p.id === route.id);
   const now = new Date();
   const todayKey = localDateKey(now);
-  const g = groupJournal(S.journal, now);
   const isOpen = (key, def) => (key in S.openGroups ? S.openGroups[key] : def);
-  const dayHTML = (d) => {
-    const def = d.key === todayKey;
-    const open = isOpen('d-' + d.key, def);
-    return '<div><button class="group-head" data-action="toggle" data-key="d-' + d.key + '" data-def="' + (def ? 1 : 0) + '"><span>' + esc(d.label) + '</span><span class="cnt">' +
+  const dayHTML = (k) => (d) => {
+    const key = 'd-' + k + '-' + d.key, def = d.key === todayKey, open = isOpen(key, def);
+    return '<div><button class="group-head" data-action="toggle" data-key="' + key + '" data-def="' + (def ? 1 : 0) + '"><span>' + esc(d.label) + '</span><span class="cnt">' +
       entriesWord(d.entries.length) + ' ' + (open ? '▾' : '▸') + '</span></button>' + (open ? d.entries.map(logRowHTML).join('') : '') + '</div>';
   };
-  const monthHTML = (m) => {
-    const open = isOpen('m-' + m.key, false);
-    return '<div><button class="group-head month" data-action="toggle" data-key="m-' + m.key + '" data-def="0"><span>' + esc(m.label) + '</span><span class="cnt">' +
-      entriesWord(m.count) + ' ' + (open ? '▾' : '▸') + '</span></button>' + (open ? '<div class="indent">' + m.days.map(dayHTML).join('') + '</div>' : '') + '</div>';
+  const monthHTML = (k) => (m) => {
+    const key = 'm-' + k + '-' + m.key, open = isOpen(key, false);
+    return '<div><button class="group-head month" data-action="toggle" data-key="' + key + '" data-def="0"><span>' + esc(m.label) + '</span><span class="cnt">' +
+      entriesWord(m.count) + ' ' + (open ? '▾' : '▸') + '</span></button>' + (open ? '<div class="indent">' + m.days.map(dayHTML(k)).join('') + '</div>' : '') + '</div>';
   };
-  let html = topbar('Журнал · ' + (prof ? prof.name : ''), { noClock: true });
+  const srcHTML = (src) => {
+    const k = src[0], list = S.journal.filter((l) => (l.kind || 'x') === k);
+    if (!list.length) return '';
+    const g = groupJournal(list, now), key = 's-' + k, open = isOpen(key, true);
+    return '<div class="src"><button class="group-head src-head" data-action="toggle" data-key="' + key + '" data-def="1"><span>' + src[1] + '</span><span class="cnt">' + entriesWord(list.length) + ' ' + (open ? '▾' : '▸') + '</span></button>' +
+      (open ? '<div class="indent">' + g.recent.map(dayHTML(k)).join('') + g.months.map(monthHTML(k)).join('') + '</div>' : '') + '</div>';
+  };
+  const html = topbar('Журнал · ' + (prof ? prof.name : ''), { noClock: true });
   if (!S.journal.length) return html + '<div class="empty" style="margin-top:28px">Записей пока нет.</div>';
-  html += '<div class="section">Всего: ' + entriesWord(S.journal.length) + '</div>' + g.recent.map(dayHTML).join('') + g.months.map(monthHTML).join('');
-  return html;
+  return html + '<div class="section">Всего: ' + entriesWord(S.journal.length) + '</div>' + JSRC.map(srcHTML).join('');
 }
 
 function sheetHTML() {
@@ -2258,7 +2059,7 @@ function sheetHTML() {
 }
 
 // ───────── Отрисовка и «живые» элементы ─────────
-const KEEP_IDS = ['quickDate', 'profName', 'profDate'];
+const KEEP_IDS = ['profName', 'profDate'];
 let liveTimer = null;
 let liveActive = null;
 let liveMeso = null;
@@ -2270,7 +2071,6 @@ function render(animate) {
   if (route.name !== 'lecture') stopLecture();
   if (route.name !== 'sign') stopCamera();
   if (animate) closeOverlay();
-  if (animate) { S.winsOpen = false; S.beaconsOpen = false; S.quickOpen = S.profiles.length === 0; }
   const kept = {};
   if (!animate) {
     KEEP_IDS.forEach((id) => {
@@ -2281,10 +2081,8 @@ function render(animate) {
   const scroll = window.scrollY;
   let body = '';
   if (route.name === 'start') body = startHTML();
-  else if (route.name === 'soon') body = soonHTML(route);
-  else if (route.name === 'home') body = homeHTML();
   else if (route.name === 'create') body = createHTML(route);
-  else if (route.name === 'quick' || route.name === 'profile') body = dashboardHTML(route);
+  else if (route.name === 'profile') body = dashboardHTML(route);
   else if (route.name === 'detail') body = detailHTML(route);
   else if (route.name === 'pro') body = proHTML(route);
   else if (route.name === 'beacon') body = beaconHTML(route);
@@ -2296,8 +2094,8 @@ function render(animate) {
   else if (route.name === 'lectures') body = lecturesHTML();
   else if (route.name === 'solar') body = solarHTML();
   else if (route.name === 'sanctuary') body = sanctuaryHTML();
+  else if (route.name === 'tariffs') body = tariffsPageHTML();
   else if (route.name === 'lecture') body = lectureHTML();
-  else if (route.name === 'dev') body = devHTML(route);
   else if (route.name === 'listen') body = listenHTML();
   else if (route.name === 'journal') body = journalHTML(route);
   $app.innerHTML = '<div class="screen' + (animate ? ' enter' : '') + '">' + body + '</div>' + sheetHTML();
@@ -2309,7 +2107,6 @@ function render(animate) {
   if (animate && S.restoreScroll) target = route.scroll || 0;
   S.restoreScroll = false;
   window.scrollTo(0, target);
-  fitBeaconRow();
   document.body.classList.toggle('is-start', route.name === 'start');
   if (route.name === 'listen') syncListenUI();
   if (route.name === 'lecture') syncLectureUI();
@@ -2327,7 +2124,7 @@ function startLive() {
   liveTimer = null;
   const route = cur();
   if (!document.querySelector('[data-live]')) return;
-  const isDash = route.name === 'quick' || route.name === 'profile';
+  const isDash = route.name === 'profile';
   const watchWin = isDash || route.name === 'rhythm' || (route.name === 'detail' && route.kind === 'window');
   const watchPent = isDash || (route.name === 'detail' && route.kind === 'meso');
   liveActive = getActiveRegisterId(new Date());
@@ -2381,16 +2178,6 @@ function maskDate(text) {
   return d;
 }
 
-function quickCalc() {
-  const v = val('quickDate');
-  const p = parseBirthDate(v);
-  if (!p) { setError('quickErr', 'Неверная дата. Формат: ДД.ММ.ГГГГ'); return; }
-  haptic('light');
-  S.sessionLogs = [];
-  S.axisOpen = false;
-  go({ name: 'quick', birthDate: v, nPhys: calculatePhysicalRegister(birthDateToUTC(p)), nEvol: calculateEvolutionaryRegister(p.year) });
-}
-
 async function saveProfile() {
   const name = val('profName').trim();
   const date = val('profDate');
@@ -2414,20 +2201,8 @@ async function saveProfile() {
 async function handle(action, el) {
   switch (action) {
     case 'back': haptic('light'); back(); break;
-    case 'quick': quickCalc(); break;
     case 'create': go({ name: 'create', initialDate: '' }); break;
-    case 'save-as-profile': go({ name: 'create', initialDate: cur().birthDate || '' }); break;
     case 'save-profile': await saveProfile(); break;
-    case 'toggle-quick': {
-      const acc = document.getElementById('quickAcc');
-      if (!acc) break;
-      const open = !acc.classList.contains('open');
-      acc.classList.toggle('open', open);
-      S.quickOpen = open;
-      if (open) { const inp = document.getElementById('quickDate'); if (inp) inp.focus(); }
-      haptic('light');
-      break;
-    }
     case 'toggle-axis': {
       const acc = document.getElementById('axisAcc');
       if (!acc) break;
@@ -2437,36 +2212,8 @@ async function handle(action, el) {
       haptic('light');
       break;
     }
-    case 'toggle-wins': {
-      const acc = document.getElementById('winsAcc');
-      if (!acc) break;
-      const open = !acc.classList.contains('open');
-      acc.classList.toggle('open', open);
-      S.winsOpen = open;
-      if (open) setTimeout(() => { const el = document.getElementById('winNow'); if (el) el.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 330);
-      haptic('light');
-      break;
-    }
     case 'open-pro': haptic('light'); go({ name: 'pro', kind: el.dataset.k || (cur().name === 'beacon' ? 'beacon' : cur().kind), ctx: cur().ctx, h: cur().h }); break;
     case 'open-beacon': haptic('light'); go({ name: 'beacon', h: parseInt(el.dataset.h, 10) }); break;
-    case 'toggle-beacons': {
-      const acc = document.getElementById('beaconsAcc');
-      if (!acc) break;
-      const open = !acc.classList.contains('open');
-      acc.classList.toggle('open', open);
-      S.beaconsOpen = open;
-      haptic('light');
-      break;
-    }
-    case 'open-profile': {
-      const id = el.dataset.id;
-      S.axisOpen = false;
-      const all = await loadAllLogs(id);
-      S.lastLog = all.reduce((a, b) => (!a || b.timestamp > a.timestamp ? b : a), null);
-      haptic('light');
-      go({ name: 'profile', id });
-      break;
-    }
     case 'open-detail': {
       const route = cur();
       const kind = el.dataset.kind;
@@ -2510,9 +2257,10 @@ async function handle(action, el) {
     }
     case 'soon': haptic('light'); openSoon(); break;
     case 'go-calib': { haptic('light'); const ap = activeProfile(); if (ap) { S.axisOpen = false; go({ name: 'profile', id: ap.id }); } else go({ name: 'create', initialDate: '' }); break; }
+    case 'toggle-levels': S.lvlOpen = !S.lvlOpen; render(false); break;
+    case 'open-tariffs': haptic('light'); go({ name: 'tariffs' }); break;
     case 'open-sanctuary': haptic('light'); go({ name: 'sanctuary' }); break;
     case 'open-channel': { const tg = window.Telegram && window.Telegram.WebApp; if (CHANNEL_URL) { if (tg && tg.openTelegramLink && /t\.me\//.test(CHANNEL_URL)) tg.openTelegramLink(CHANNEL_URL); else window.open(CHANNEL_URL, '_blank'); } break; }
-    case 'go-soon': haptic('light'); go({ name: 'soon', title: el.dataset.t || '' }); break;
     case 'ground': {
       const regId = getActiveRegisterId(new Date());
       haptic('light');
@@ -2537,7 +2285,7 @@ async function handle(action, el) {
     case 'sgn-capture': {
       const v = document.getElementById('sgnVid'), b = document.getElementById('sgnCap'), m = document.getElementById('sgnRec'), cm = document.getElementById('sgnCam');
       if (v && v.srcObject) {
-        if (v.paused) { v.play(); b.textContent = 'Зафиксировать'; if (m) m.textContent = 'камера включена'; }
+        if (v.paused) { v.play(); b.textContent = 'Зафиксировать кадр'; if (m) m.textContent = 'камера включена'; }
         else { v.pause(); b.textContent = 'Вернуть камеру'; if (m) m.textContent = 'кадр зафиксирован'; haptic('medium'); cm.classList.add('flash'); setTimeout(() => cm.classList.remove('flash'), 250); }
       }
       break;
@@ -2545,7 +2293,7 @@ async function handle(action, el) {
     case 'sgn-open': openPad(true); break;
     case 'pad': { const k = el.dataset.k; if (k === 'back') sgnSet(SGN.text.slice(0, -1)); else if (SGN.text.length < 18) sgnSet(SGN.text + k); haptic('light'); break; }
     case 'pad-enter': openPad(false); break;
-    case 'sign-save': { const r = parseInt(el.dataset.r, 10); haptic('medium'); await logGround('k', r, 0, ''); break; }
+    case 'sign-save': { const r = parseInt(el.dataset.r, 10); haptic('medium'); await logGround('k', r, 0, ''); sgnSet(''); break; }
     case 'mute-toggle': {
       S.settings.sound = S.settings.sound === false;
       if (!S.settings.sound) { muteIntro(); stopLecture(); } else startIntro();
@@ -2567,9 +2315,7 @@ async function handle(action, el) {
   }
 }
 
-let lpTimer = null, lpSuppress = false, lpStart = null;
 document.addEventListener('click', (e) => {
-  if (lpSuppress) { lpSuppress = false; return; }
   const el = e.target.closest('[data-action]');
   if (!el || el.dataset.action === 'noop') return;
   if (el.dataset.action === 'lec-seek') { seekLecture(e, el); return; }
@@ -2578,35 +2324,8 @@ document.addEventListener('click', (e) => {
 document.addEventListener('input', (e) => {
   const t = e.target;
   if (t && t.matches && t.matches('[data-mask="date"]')) { t.value = maskDate(t.value); }
-  if (t && t.id === 'quickDate') setError('quickErr', '');
   if (t && (t.id === 'profName' || t.id === 'profDate')) setError('createErr', '');
 });
-document.addEventListener('keydown', (e) => {
-  if (e.key !== 'Enter') return;
-  if (e.target.id === 'quickDate') { e.preventDefault(); quickCalc(); }
-});
-// Долгое нажатие на профиль открывает окно «Удалить / Отмена».
-const lpCancel = () => { if (lpTimer) { clearTimeout(lpTimer); lpTimer = null; } };
-document.addEventListener('pointerdown', (e) => {
-  const row = e.target.closest && e.target.closest('.prow');
-  if (!row) return;
-  lpStart = { x: e.clientX, y: e.clientY };
-  lpCancel();
-  lpTimer = setTimeout(() => {
-    lpTimer = null;
-    lpSuppress = true;
-    setTimeout(() => { lpSuppress = false; }, 450);
-    haptic('medium');
-    S.confirmId = row.dataset.id;
-    render(false);
-  }, 550);
-});
-document.addEventListener('pointermove', (e) => {
-  if (lpTimer && lpStart && (Math.abs(e.clientX - lpStart.x) > 10 || Math.abs(e.clientY - lpStart.y) > 10)) lpCancel();
-});
-['pointerup', 'pointercancel'].forEach((ev) => document.addEventListener(ev, lpCancel, true));
-window.addEventListener('scroll', lpCancel, true);
-document.addEventListener('contextmenu', (e) => { if (e.target.closest && e.target.closest('.prow')) e.preventDefault(); });
 
 document.addEventListener('focusin', (e) => {
   if (e.target && e.target.id === 'gComment') S.commentActive = true;
@@ -2651,9 +2370,6 @@ function visualHTML(a, size) {
 // ───────── Заземление: три канала (Питание, Движение, Резонанс) ─────────
 const SETTINGS_KEY = 'lumina_settings';
 const SVG_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">';
-const ICON_FOOD = SVG_OPEN + '<path d="M3 12h18a8 8 0 0 1-8 8h-2a8 8 0 0 1-8-8z"/><path d="M8 8c0-1.6 1-1.6 1-3.2M12 8c0-1.6 1-1.6 1-3.2M16 8c0-1.6 1-1.6 1-3.2"/></svg>';
-const ICON_MOVE = SVG_OPEN + '<circle cx="13.5" cy="4.5" r="1.7"/><path d="M9.5 21l2.2-6.2-2.7-2.3 2-4.5 3.6.2 2.4 3.3M11.7 14.8l2.6 1.9 1.2 4.3M10.5 8l-3 2.5"/></svg>';
-const ICON_PENCIL = SVG_OPEN + '<path d="M4 20h4L19 9l-4-4L4 16v4z"/><path d="M13.5 6.5l4 4"/></svg>';
 const ICON_GEAR = SVG_OPEN + '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>';
 
 const ov = { el: null, stop: null, pending: null };
@@ -2841,10 +2557,7 @@ function openSettings() {
     '<div class="sheet-row"><button class="btn btn-cancel" data-action="ov-close">ЗАКРЫТЬ</button></div>');
 }
 
-const ICON_SIGNS = SVG_OPEN + '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>';
 const ICON_LISTEN = SVG_OPEN + '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="14" width="4" height="6" rx="1.5"/><rect x="17.5" y="14" width="4" height="6" rx="1.5"/></svg>';
-const DEV_NOTES = { signs: 'Фича с фотографированием знаков', listen: 'Минутные аудио под 20-минутное окно' };
-
 /** Звук 15-секундного ритуала: готовая запись; если её не удалось проиграть, запасной синтезированный аккорд. */
 function fadeOutAudio(a) {
   try {
@@ -2925,19 +2638,6 @@ function listenHTML() {
     '<svg class="listen-ring" viewBox="0 0 200 200"><circle class="lr-track" cx="100" cy="100" r="92"/><circle id="listenArc" class="lr-arc" cx="100" cy="100" r="92"/></svg>' +
     '<button class="listen-btn" id="listenBtn" data-action="listen-toggle"><span id="listenLbl">Слушай момент</span></button></div>' +
     '<div class="listen-time" id="listenTime"></div><div class="listen-msg" id="listenMsg"></div>' + note + '</div>';
-}
-
-function releaseHTML() {
-  const plate = (k, icon, title) => '<button class="rel-plate" data-action="open-dev" data-k="' + k + '">' + icon + '<span>' + title + '</span></button>';
-  return topbar('Сбросить зажим', { noClock: true }) +
-    '<div class="rel-wrap"><div class="rel-grid">' + plate('signs', ICON_SIGNS, 'Знаки!') + plate('listen', ICON_LISTEN, 'Слушай') + '</div></div>';
-}
-
-function devHTML(route) {
-  const note = S.settings.devNotes !== false
-    ? '<div class="devnote"><div class="label">Заметка разработчика</div><div class="body" style="margin-top:6px">' + esc(DEV_NOTES[route.k] || '') + '</div></div>' : '';
-  return topbar(route.title || '', { noClock: true }) +
-    '<div class="soon"><span class="beta" style="margin:0">БЕТА</span><div class="soon-text">В разработке</div>' + note + '</div>';
 }
 
 function editHTML(route) {
@@ -3028,24 +2728,26 @@ const GEM_SVG = (function () {
     '<polygon points="' + pt(inn[0]) + ' ' + pt(inn[1]) + ' 100,100" fill="rgba(255,255,255,.22)"/></svg>';
 })();
 
+const ICON_TARIFF = SVG_OPEN + '<path d="M3 12V4h8l9 9-8 8z"/><circle cx="8" cy="8" r="1.6"/></svg>';
 function activeProfile() { return S.profiles.length ? S.profiles[S.profiles.length - 1] : null; }
 
 function startHTML() {
   const art = (name, icon) => '<span class="hb-art"><img class="hb-img" src="hub_btn_' + name + '.webp" alt="" onerror="this.parentNode.classList.add(\'nofile\')">' +
     '<span class="hb-vec">' + OCT_BTN_SVG + '<span class="hb-ic">' + HUB_ICONS[icon] + '</span></span></span>';
-  const corner = (pos, action, name, icon, label) => '<button class="hbtn hb-' + pos + '" data-action="' + action + '">' + art(name, icon) + '<span class="hb-lbl">' + label + '</span></button>';
+  const corner = (pos, action, name, icon, lat, ru) => '<button class="hbtn hb-' + pos + '" data-action="' + action + '">' + art(name, icon) + '<span class="hb-lbl"><b>' + lat + '</b><i>' + ru + '</i></span></button>';
   return HUB_DEFS + '<div class="start-bg">' + CRACKS_SVG + '<div class="hub-photo"></div></div>' +
     '<div class="hub-top"><button class="icon-btn sm spk-btn" data-action="mute-toggle" aria-label="Звук">' + (S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON) + '</button>' +
     '<button class="icon-btn sm" data-action="open-cabinet" aria-label="Личный кабинет">' + ICON_CABINET + '</button>' +
+    '<button class="icon-btn sm" data-action="open-tariffs" aria-label="Тарифы">' + ICON_TARIFF + '</button>' +
     '<button class="icon-btn sm" data-action="open-settings" aria-label="Настройки">' + ICON_GEAR + '</button></div>' +
     (activeProfile() ? '' : '<button class="hub-tip" data-action="open-cabinet">Создай профиль<i></i></button>') +
     '<div class="hub"><div class="start-title">LUMINA<span> OS</span></div><div class="start-sub">Core</div>' +
     '<div class="hub-stage">' +
-    corner('tl', 'open-solar', 'solar', 'solar', 'Solar Matrix') + corner('tr', 'open-rhythm', 'rhythm', 'rhythm', 'Rhythm') +
-    '<div class="hgem-wrap"><button class="hgem" data-action="go-calib" aria-label="Calibration"><span class="hgem-art"><img class="gem-img" src="hub_gem.webp" alt="" onerror="this.parentNode.classList.add(\'nofile\')">' +
-    '<span class="gem-vec">' + GEM_SVG + '</span></span><span class="hg-lbl">Calibration</span></button>' +
-    '<button class="hsanc" data-action="open-sanctuary">Sanctuary</button></div>' +
-    corner('bl', 'open-sign', 'scanner', 'scanner', 'Scanner') + corner('br', 'open-signal', 'signal', 'signal', 'Signal') +
+    corner('tl', 'open-solar', 'solar', 'solar', 'Matrix Solaris', 'Солнечная матрица') + corner('tr', 'open-rhythm', 'rhythm', 'rhythm', 'Rhythmus Diei', 'Ритм дня') +
+    '<div class="hgem-wrap"><button class="hgem" data-action="go-calib" aria-label="Libratio"><span class="hgem-art"><img class="gem-img" src="hub_gem.webp" alt="" onerror="this.parentNode.classList.add(\'nofile\')">' +
+    '<span class="gem-vec">' + GEM_SVG + '</span></span><span class="hg-lbl"><b>Libratio</b><i>Калибровка</i></span></button>' +
+    '<button class="hsanc" data-action="open-sanctuary"><b>Sanctuarium</b><i>Обитель</i></button></div>' +
+    corner('bl', 'open-sign', 'scanner', 'scanner', 'Lectio Signorum', 'Вижу знак') + corner('br', 'open-signal', 'signal', 'signal', 'Signum', 'Сигнал') +
     '</div></div>';
 }
 
@@ -3110,10 +2812,9 @@ function solarState(dateStr) {
 }
 function solarHTML() {
   const ap = activeProfile();
-  const lectures = '<div class="section">Раздел</div><div class="lec-list" style="margin-top:8px"><button class="lec on" data-action="go-lectures"><span class="lec-ic">' + ICON_PLAY + '</span><span class="lec-t">Lectures</span><span class="lec-s">Промо</span><span class="chev sm">›</span></button></div>';
-  const note = S.settings.devNotes !== false ? '<div class="devnote" style="margin:26px auto 0"><div class="label">Заметка разработчика</div><div class="body" style="margin-top:6px">Здесь будут уведомления о смене фазы, звуки фаз и разборы по Ликам. Названия фаз взяты у иерархий, но фазы считаются от твоего дня рождения.</div></div>' : '';
-  if (!ap) return topbar('Solar Matrix', { noClock: true }) + '<div class="card" style="margin-top:20px"><div class="body">Фаза года считается от твоего дня рождения. Создай профиль, чтобы увидеть её.</div><button class="btn btn-soft" data-action="create" style="margin-top:12px">СОЗДАТЬ ПРОФИЛЬ</button></div>' + lectures + note;
-  return topbar('Solar Matrix', { noClock: true }) + '<div class="note" style="margin-top:16px">Профиль: ' + esc(ap.name) + ' · ' + esc(ap.birthDate) + '</div><div id="solOut"></div>' + lectures + note;
+  const note = S.settings.devNotes !== false ? '<div class="devnote" style="margin:26px auto 0"><div class="label">Заметка разработчика</div><div class="body" style="margin-top:6px">Здесь будут уведомления о смене фазы и звуки фаз. Названия фаз взяты у иерархий, но фазы считаются от твоего дня рождения.</div></div>' : '';
+  if (!ap) return topbar('Solar Matrix', { noClock: true }) + '<div class="card" style="margin-top:20px"><div class="body">Фаза года считается от твоего дня рождения. Создай профиль, чтобы увидеть её.</div><button class="btn btn-soft" data-action="create" style="margin-top:12px">СОЗДАТЬ ПРОФИЛЬ</button></div>' + note;
+  return topbar('Solar Matrix', { noClock: true }) + '<div class="note" style="margin-top:16px">Профиль: ' + esc(ap.name) + ' · ' + esc(ap.birthDate) + '</div><div id="solOut"></div>' + note;
 }
 function renderSolarOut() {
   const out = document.getElementById('solOut'), ap = activeProfile();
@@ -3126,11 +2827,7 @@ function renderSolarOut() {
   out.innerHTML = '<div class="sol-card"><div class="label">Фаза ' + ROMAN[st.i] + ' из IX</div><div class="sol-t">' + ph[0] + '</div><div class="sol-h">' + ph[1] + '</div>' +
     '<div class="sol-day">День ' + st.inDay + ' из ' + st.len + '</div><div class="sol-bar"><i style="width:' + Math.round(st.inDay / st.len * 100) + '%"></i></div>' +
     sec('Назначение', ph[2]) + sec('Телесный отклик', ph[3]) +
-    '<div class="body muted" style="margin-top:12px">' + nextTxt + st.nextStart.getDate() + ' ' + MONTHS_GEN[st.nextStart.getMonth()] + ' · через ' + st.daysToNext + ' дн.</div></div>' +
-    '<div class="section">Все девять фаз</div>' + SOL_PH.map((p, k) => {
-      const a = k === 0 ? 1 : SOL_END[k - 1] + 1;
-      return '<div class="sol-row' + (k === st.i ? ' now' : '') + '"><span class="sol-n">' + ROMAN[k] + '</span><span class="sol-nm">' + p[0] + '</span><span class="sol-rg">' + a + '–' + (k === 8 ? 365 : SOL_END[k]) + '</span></div>';
-    }).join('');
+    '<div class="body muted" style="margin-top:12px">' + nextTxt + st.nextStart.getDate() + ' ' + MONTHS_GEN[st.nextStart.getMonth()] + ' · через ' + st.daysToNext + ' дн.</div></div>';
 }
 
 const CHANNEL_URL = '';
@@ -3141,18 +2838,20 @@ function sanctuaryHTML() {
     (S.settings.devNotes !== false && !CHANNEL_URL ? '<div class="devnote" style="margin:26px auto 0"><div class="label">Заметка разработчика</div><div class="body" style="margin-top:6px">Ссылка на канал задаётся в одном месте (CHANNEL_URL).</div></div>' : '');
 }
 
-const lockedRow = (t) => '<div class="lec off"><span class="lec-ic">' + ICON_LOCK + '</span><span class="lec-t">' + t + '</span><span class="lec-s">Скоро</span></div>';
 
-function tariffsHTML() {
-  const row = (name, price, text) => '<div class="tar-row"><div class="tar-h"><span class="tar-n">' + name + '</span><span class="tar-p">' + price + '</span></div><div class="body">' + text + '</div></div>';
-  return '<div class="section" style="margin-top:22px">Тарифы · демо</div>' +
-    row('Base', 'бесплатно', 'Текущее окно, ядро и вектор, Сигнал, Ритм дня, промо в Lectures, развёртки Лика I (регистры №1–8).') +
-    row('Pass', '$8 · 7 дней', 'Все 72 развёртки, разборы сочетаний и карта суток на неделю.') +
-    row('Pro', '$19 в месяц · $149 в год', 'Всё без ограничений, живой разбор раз в месяц, архив записей, Sanctuary, ранний доступ.') +
-    row('По отдельности', '$2,99–4,99 · пакет Лика $9,99', 'Один модуль или пакет из 8 регистров навсегда.') +
-    row('Живой разбор', '58 минут · $14,99–19,99', 'Раз в месяц. В Pro включён, остальные берут разовый билет или запись.') +
-    '<div class="note">Цены ориентировочные, оплата пока не подключена.</div>';
+const TARIFFS = [
+  ['Base', 'бесплатно', ['Текущее окно и суть регистра', 'Ядро и вектор, пентада, Solar Matrix', 'Сигнал: «Слушай момент», «Вижу знак», маяк', 'Ритм дня, заземление и журнал', 'Lectures: промо', 'Развёртки Лика I (регистры №1–8)']],
+  ['Pass', '$8 · 7 дней', ['Все 72 развёртки регистров', 'Разборы сочетаний ядра и вектора', 'Карта суток и пентада по шагам', 'Без автопродления']],
+  ['Pro', '$19 в месяц · $149 в год', ['Всё из Pass без ограничений', 'Живой разбор раз в месяц и архив записей', 'Sanctuary и ранний доступ', 'Анализ журнала']],
+  ['По отдельности', '$2,99–4,99 · пакет Лика $9,99', ['Один модуль: регистр или лекция', 'Пакет Лика: 8 регистров', 'Навсегда, пока существует сервис']],
+  ['Живой разбор', '58 минут · $14,99–19,99', ['Раз в месяц', 'В Pro включён', 'Остальным: разовый билет или запись']],
+];
+function tariffsHTML(detailed) {
+  return '<div class="section" style="margin-top:22px">Тарифы</div>' + TARIFFS.map((t) => '<div class="tar-row"><div class="tar-h"><span class="tar-n">' + t[0] + '</span><span class="tar-p">' + t[1] + '</span></div>' +
+    (detailed ? '<ul class="tar-li">' + t[2].map((x) => '<li>' + x + '</li>').join('') + '</ul>' : '<div class="body">' + t[2].slice(0, 2).join(' · ') + '</div>') + '<span class="tar-soon">скоро</span></div>').join('') +
+    '<div class="note">Цены ориентировочные, оплата пока не подключена. Часть возможностей появится позже.</div>';
 }
+function tariffsPageHTML() { return topbar('Тарифы', { noClock: true }) + tariffsHTML(true).replace('<div class="section" style="margin-top:22px">Тарифы</div>', '<div style="height:14px"></div>'); }
 
 // ───────── Lectures: список и плеер промо ─────────
 const ICON_PLAY = SVG_OPEN + '<polygon points="8,5 19,12 8,19"/></svg>';
@@ -3220,18 +2919,17 @@ function seekLecture(e, el) {
 function signalHTML() {
   return topbar('Сигнал', { noClock: true }) +
     '<div class="sig-grid sig-one"><button class="rel-plate" data-action="open-listen">' + ICON_LISTEN + '<span>Слушай момент</span></button></div>' +
-    '<div class="sig-beacon">' + beaconRowHTML(nextBeacon(new Date())) + '</div>';
+    '<div class="lec-list" style="margin-top:18px"><button class="lec on" data-action="go-lectures"><span class="lec-ic">' + ICON_PLAY + '</span><span class="lec-t">Lectures</span><span class="lec-s">Промо</span><span class="chev sm">›</span></button></div>';
 }
 
 const SGN = { stream: null, track: null, text: '', zoom: 1, ptrs: {}, startDist: 0, startZoom: 1, zt: null };
-const PAD_KEYS = ['1', '2', '3', 'back', '4', '5', '6', '7', '8', '9', 'enter', ':', '0', '.'];
 function signHTML() {
   const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '0', '.'].map((k) => '<button class="pad-k" data-action="pad" data-k="' + k + '">' + k + '</button>').join('');
   return topbar('Вижу знак', { noClock: true }) +
     '<div class="sgn-cam" id="sgnCam"><video id="sgnVid" playsinline muted autoplay></video><div class="sgn-frame"></div>' +
     '<div class="sgn-msg" id="sgnMsg">Включаю камеру…</div><div class="sgn-rec" id="sgnRec" style="display:none">камера включена</div><div class="sgn-zoom" id="sgnZoom" style="display:none">×1.0</div></div>' +
-    '<button class="sgn-cap" id="sgnCap" data-action="sgn-capture">Зафиксировать</button>' +
-    '<div class="sgn-body"><div class="input sgn-input" id="sgnNum" data-action="sgn-open" tabindex="0"><span id="sgnVal" class="sgn-val">' + esc(SGN.text) + '</span><span class="sgn-ph" id="sgnPh"' + (SGN.text ? ' style="display:none"' : '') + '>Введи цифры, которые видишь</span></div><div class="sgn-out" id="sgnOut"></div></div>' +
+    '<button class="sgn-cap" id="sgnCap" data-action="sgn-capture">Зафиксировать кадр</button>' +
+    '<div class="sgn-body"><div class="input sgn-input" id="sgnNum" data-action="sgn-open" tabindex="0"><span id="sgnVal" class="sgn-val">' + esc(SGN.text) + '</span><span class="sgn-ph" id="sgnPh"' + (SGN.text ? ' style="display:none"' : '') + '>Введи цифры, которые видишь</span></div><div class="sgn-out" id="sgnOut"></div><div class="sgn-beacon">' + beaconRowHTML(nextBeacon(new Date())) + '</div></div>' +
     '<div class="sgn-pad" id="sgnPad"><div class="pad-grid">' + keys + '<button class="pad-k pad-bs" data-action="pad" data-k="back">⌫</button><button class="pad-k pad-enter" data-action="pad-enter">Ввод</button></div></div>';
 }
 function sgnSet(text) {
@@ -3245,6 +2943,7 @@ function openPad(on) {
   const p = document.getElementById('sgnPad');
   if (p) p.classList.toggle('open', on);
   document.body.classList.toggle('padopen', on);
+  renderSignOut();
   if (on) setTimeout(() => { const o = document.getElementById('sgnNum'); if (o) o.scrollIntoView({ block: 'center', behavior: 'smooth' }); }, 60);
 }
 function applyZoom(z) {
@@ -3308,13 +3007,21 @@ function renderSignOut() {
   const d = decodeSign(SGN.text);
   if (!d) { out.innerHTML = '<div class="note">Цифры можно ввести и без камеры: часы, номер машины, этаж.</div>'; return; }
   const reg = getRegister(d.reg), m = MATRIX[d.reg - 1], color = col(reg);
-  out.innerHTML = '<div class="sgn-res" style="box-shadow:inset 0 0 0 1px ' + color + '66">' +
+  const padOpen = document.getElementById('sgnPad') && document.getElementById('sgnPad').classList.contains('open');
+  if (padOpen) {
+    out.innerHTML = '<div class="sgn-res compact"><div class="sgn-reg">№' + reg.id + ' · ' + rname(reg) + ' <span class="tag" style="color:' + color + ';border-color:' + color + '">' + EL_RU[reg.element] + '</span></div>' +
+      (d.flags.length ? '<div class="sgn-flags">' + d.flags.map((f) => '<span class="sgn-flag">' + f + '</span>').join('') + '</div>' : '') +
+      '<button class="btn btn-ok" data-action="sign-save" data-r="' + reg.id + '" style="margin-top:10px">ЗАПИСАТЬ В ЖУРНАЛ</button></div>';
+    out.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    return;
+  }
+  out.innerHTML = '<div class="sgn-res">' +
     '<div class="label">' + (d.timePair ? 'Парное время ' + d.digits.slice(0, 2) + ':' + d.digits.slice(2) + ' · маяк' : 'Число ' + esc(SGN.text)) + '</div>' +
     '<div class="sgn-reg">№' + reg.id + ' · ' + rname(reg) + ' <span class="tag" style="color:' + color + ';border-color:' + color + '">' + EL_RU[reg.element] + '</span></div>' +
     (d.flags.length ? '<div class="sgn-flags">' + d.flags.map((f) => '<span class="sgn-flag">' + f + '</span>').join('') + '</div>' : '') +
     '<div class="dsec"><div class="label">Суть</div><div class="body">' + esc(m[1]) + '</div></div>' +
     '<div class="dsec"><div class="label">Мысль</div><div class="body">' + esc(m[5]) + '</div></div>' +
-    '<button class="btn btn-ok" data-action="sign-save" data-r="' + reg.id + '" style="margin-top:14px">ЗАПИСАТЬ ЗНАК</button></div>';
+    '<button class="btn btn-ok" data-action="sign-save" data-r="' + reg.id + '" style="margin-top:14px">ЗАПИСАТЬ В ЖУРНАЛ</button></div>';
 }
 
 // ───────── «Ритм дня» ─────────
@@ -3341,7 +3048,7 @@ function rhythmHTML() {
     '<div class="section">Журнал действий</div>' + (ap ? '' : '<div class="note" style="margin:0 0 8px">Без профиля записи не сохраняются.</div>') +
     lastLogHTML(last, !!(ap && last)) +
     '<button class="btn btn-pro" data-action="soon" style="margin-top:12px"><span>АНАЛИЗИРОВАТЬ ЖУРНАЛ</span><span class="pro-badge">PRO</span></button>' +
-    '<div class="section">Разделы</div><div class="lec-list" style="margin-top:8px">' + lockedRow('Music') + lockedRow('Biohacking') + '</div>' + note;
+    note;
 }
 function updateRhythmUI() {
   const el = document.getElementById('rhCard');
@@ -3367,7 +3074,7 @@ function cabinetHTML(route) {
     '<div class="card cab-card" style="margin-top:18px"><div class="label">Профиль</div><div class="cab-name">' + esc(p.name) + '</div><div class="body">' + esc(p.birthDate) + '</div>' +
     '<button class="btn btn-ghost" data-action="edit-profile" style="margin-top:12px">ИЗМЕНИТЬ</button></div>' +
     '<div class="section">Твой статус</div>' +
-    LEVELS.map((l, i) => '<div class="lvl' + (i === 0 ? ' now' : '') + '"><div class="lvl-h"><span class="lvl-n">' + l[0] + '</span>' + (i === 0 ? '<span class="lvl-b">сейчас</span>' : '<span class="lvl-s">скоро</span>') + '</div><div class="body">' + l[1] + '</div></div>').join('') +
+    (S.lvlOpen ? LEVELS : LEVELS.slice(0, 1)).map((l, i) => '<div class="lvl' + (i === 0 ? ' now tapx" data-action="toggle-levels' : '') + '"><div class="lvl-h"><span class="lvl-n">' + l[0] + '</span>' + (i === 0 ? '<span class="lvl-b">сейчас ' + (S.lvlOpen ? '▾' : '▸') + '</span>' : '<span class="lvl-s">скоро</span>') + '</div><div class="body">' + l[1] + '</div></div>').join('') +
     '<div class="note" style="text-align:center;margin-top:18px">Условия повышения статуса появятся позже.</div>' +
     '<button class="btn btn-ghost" data-action="ask-delete" data-id="' + p.id + '" style="margin-top:24px;color:#E08A8A">УДАЛИТЬ ПРОФИЛЬ</button>';
 }
@@ -3450,18 +3157,11 @@ const ELEM_PAIR = {
   Air: { Air: 'same', Fire: 'support', Water: 'neutral', Earth: 'contrast' }, Water: { Water: 'same', Earth: 'support', Air: 'neutral', Fire: 'contrast' },
 };
 function proDayMapHTML(core) {
-  const nowId = getActiveRegisterId(new Date());
-  const rows = [];
-  for (let b = 0; b < 12; b++) {
-    const first = getRegister(b * 6 + 1), last = getRegister(b * 6 + 6), e = first.element, rel = ELEM_PAIR[core.element][e];
-    const on = nowId >= b * 6 + 1 && nowId <= b * 6 + 6;
-    rows.push('<div class="dm-row' + (on ? ' now' : '') + '"><div class="dm-h"><span class="dm-t">' + first.time_window_start + '–' + last.time_window_end + '</span>' +
-      '<span class="tag" style="color:' + col(first) + ';border-color:' + col(first) + '">' + EL_RU[e] + '</span>' + (on ? '<span class="dm-now">сейчас</span>' : '') + '</div>' +
-      '<div class="body">' + ELEM_REL[rel] + ' Хорошо для: ' + ELEM_ACT[e] + '.</div></div>');
-  }
-  const con = Object.keys(ELEM_PAIR[core.element]).find((k) => ELEM_PAIR[core.element][k] === 'contrast');
-  return '<div class="label">Демо Pro · карта суток</div><div class="body" style="margin:8px 0 10px">Ядро ' + EL_NAME[core.element] + ': твои окна ' + elementRuns(core.element).join(' · ') +
-    '. В окнах стихии «' + EL_NAME[con] + '» (' + elementRuns(con).join(' · ') + ') сбавляй темп.</div>' + rows.join('') + '<div class="note">Это ориентиры, а не расписание.</div>';
+  const nowId = getActiveRegisterId(new Date()), b = Math.floor((nowId - 1) / 6);
+  const first = getRegister(b * 6 + 1), last = getRegister(b * 6 + 6), e = first.element, rel = ELEM_PAIR[core.element][e];
+  return '<div class="label">Демо Pro · карта суток</div><div class="dm-row now" style="margin-top:8px"><div class="dm-h"><span class="dm-t">' + first.time_window_start + '–' + last.time_window_end + '</span>' +
+    '<span class="tag" style="color:' + col(first) + ';border-color:' + col(first) + '">' + EL_RU[e] + '</span><span class="dm-now">сейчас</span></div>' +
+    '<div class="body">' + ELEM_REL[rel] + ' Хорошо для: ' + ELEM_ACT[e] + '.</div></div>';
 }
 function proPentadHTML(ps) {
   if (PRO_REG.state === 'idle') loadProRegs();
