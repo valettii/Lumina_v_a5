@@ -664,6 +664,34 @@ body.padopen .screen{padding-bottom:300px}
 @media (max-height:700px){.hub{--hb:80px;--hg:136px}.hgem-wrap{gap:8px}.hsanc{padding:7px 22px;font-size:13px}.hg-lbl{font-size:15px}.hb-lbl{font-size:12px}}
 @media (max-height:620px){.hub{--hb:68px;--hg:116px}.hub .start-title{font-size:30px}}
 
+/* ───────────── v25: настоящие слои первого экрана и фон страниц (вариант C) ───────────── */
+.hub-photo{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.62) 0,rgba(0,0,0,0) 26%),url(hub_bg.webp) center/cover no-repeat}
+.hb-art{position:relative;display:block;width:var(--hb);height:var(--hb)}
+.hb-img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 8px 14px rgba(0,0,0,.6))}
+.hb-vec{display:none;position:relative;width:var(--hb);height:var(--hb)}
+.hb-art.nofile .hb-img{display:none}
+.hb-art.nofile .hb-vec{display:block}
+.hgem-art{display:block;position:relative;width:var(--hg);height:var(--hg)}
+.gem-img{width:100%;height:100%;display:block;filter:drop-shadow(0 0 22px rgba(46,230,160,.5));animation:gemPulse 6s ease-in-out infinite}
+.gem-vec{display:none;width:100%;height:100%}
+.gem-vec svg{width:100%;height:100%}
+.hgem-art.nofile .gem-img{display:none}
+.hgem-art.nofile .gem-vec{display:block}
+.hub{--hg:clamp(118px,19.5vh,165px)}
+@media (max-height:700px){.hub{--hg:120px}}
+@media (max-height:620px){.hub{--hg:100px}}
+@media (prefers-reduced-motion:reduce){.gem-img{animation:none}}
+
+/* остальные страницы: мрамор с золотом, плашки без коробок, только линии */
+body::before{background:url(page_bg.webp) center/cover no-repeat,#050609!important;filter:none;transform:none}
+body.is-start::before{background:#050609!important}
+.screen{text-shadow:0 1px 8px rgba(0,0,0,.7)}
+.acc,.gcard,.log,.plate,.card,.btn-pro,.lec,.lvl,.tar-row,.dm-row,.prorow,.sol-card,.sol-row,.btn-half,.beacon-row .br-in,.dcard,.sgn-res,.rh-bar,.pent{background:transparent!important;box-shadow:none!important;border-radius:0!important;border-bottom:1px solid rgba(214,170,70,.28)}
+.input{background:transparent!important;box-shadow:none!important;border-radius:0!important;border:0!important;border-bottom:1px solid rgba(214,170,70,.42)!important}
+.gwin .input,.res .input{background:rgba(8,10,16,.4)!important}
+.icon-btn{background:rgba(8,10,16,.35)!important}
+.rh-seg{background:transparent!important}
+
 </style>
 </head>
 <body>
@@ -2991,18 +3019,21 @@ const GEM_SVG = (function () {
 function activeProfile() { return S.profiles.length ? S.profiles[S.profiles.length - 1] : null; }
 
 function startHTML() {
-  const corner = (pos, action, icon, label) => '<button class="hbtn hb-' + pos + '" data-action="' + action + '">' + OCT_BTN_SVG + '<span class="hb-ic">' + HUB_ICONS[icon] + '</span><span class="hb-lbl">' + label + '</span></button>';
-  return HUB_DEFS + '<div class="start-bg">' + CRACKS_SVG + '</div>' +
+  const art = (name, icon) => '<span class="hb-art"><img class="hb-img" src="hub_btn_' + name + '.webp" alt="" onerror="this.parentNode.classList.add(\'nofile\')">' +
+    '<span class="hb-vec">' + OCT_BTN_SVG + '<span class="hb-ic">' + HUB_ICONS[icon] + '</span></span></span>';
+  const corner = (pos, action, name, icon, label) => '<button class="hbtn hb-' + pos + '" data-action="' + action + '">' + art(name, icon) + '<span class="hb-lbl">' + label + '</span></button>';
+  return HUB_DEFS + '<div class="start-bg">' + CRACKS_SVG + '<div class="hub-photo"></div></div>' +
     '<div class="hub-top"><button class="icon-btn sm spk-btn" data-action="mute-toggle" aria-label="Звук">' + (S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON) + '</button>' +
     '<button class="icon-btn sm" data-action="open-cabinet" aria-label="Личный кабинет">' + ICON_CABINET + '</button>' +
     '<button class="icon-btn sm" data-action="open-settings" aria-label="Настройки">' + ICON_GEAR + '</button></div>' +
     (activeProfile() ? '' : '<button class="hub-tip" data-action="open-cabinet">Создай профиль<i></i></button>') +
     '<div class="hub"><div class="start-title">LUMINA<span> OS</span></div><div class="start-sub">Core</div>' +
     '<div class="hub-stage">' +
-    corner('tl', 'open-solar', 'solar', 'Solar Matrix') + corner('tr', 'open-rhythm', 'rhythm', 'Rhythm') +
-    '<div class="hgem-wrap"><button class="hgem" data-action="go-calib" aria-label="Calibration">' + GEM_SVG + '<span class="hg-lbl">Calibration</span></button>' +
+    corner('tl', 'open-solar', 'solar', 'solar', 'Solar Matrix') + corner('tr', 'open-rhythm', 'rhythm', 'rhythm', 'Rhythm') +
+    '<div class="hgem-wrap"><button class="hgem" data-action="go-calib" aria-label="Calibration"><span class="hgem-art"><img class="gem-img" src="hub_gem.webp" alt="" onerror="this.parentNode.classList.add(\'nofile\')">' +
+    '<span class="gem-vec">' + GEM_SVG + '</span></span><span class="hg-lbl">Calibration</span></button>' +
     '<button class="hsanc" data-action="open-sanctuary">Sanctuary</button></div>' +
-    corner('bl', 'open-sign', 'scanner', 'Scanner') + corner('br', 'open-signal', 'signal', 'Signal') +
+    corner('bl', 'open-sign', 'scanner', 'scanner', 'Scanner') + corner('br', 'open-signal', 'signal', 'signal', 'Signal') +
     '</div></div>';
 }
 
