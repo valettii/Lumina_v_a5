@@ -623,6 +623,17 @@ body.is-start::before{background:#050609!important}
 .hb-lbl{white-space:nowrap}
 .hb-lbl b{font-size:12px;letter-spacing:.03em}
 .hb-lbl i{font-size:10.5px}
+.hub{padding-top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 60px)}
+.hub.notip{padding-top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 92px)}
+@media (max-height:720px){.hub{padding-top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 62px)}
+.hub.notip{padding-top:calc(max(var(--app-top,0px),env(safe-area-inset-top,0px)) + 96px)}}
+.hgem-wrap{top:50%;transform:translate(-50%,calc(var(--hg) * -0.5))}
+.hsanc{display:flex;flex-direction:column;align-items:center;text-align:center}
+.hgem-wrap{transform:translate(-50%,calc(var(--hg) * -0.5 - 16px))}
+@media (min-height:701px){.hub{--hb:clamp(84px,13.5vh,106px)}}
+.hb-tl,.hb-bl{left:0}
+.hb-tr,.hb-br{right:0}
+.hsanc{padding:6px 18px}
 </style>
 </head>
 <body>
@@ -2700,7 +2711,7 @@ const ICON_SPK_OFF = SVG_OPEN + '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5
 const HUB_ICONS = {
   solar: '<svg viewBox="0 0 48 48"><path d="M24 6l15 9v18l-15 9-15-9V15z"/><path d="M24 6v36M9 15l30 18M39 15L9 33"/></svg>',
   rhythm: '<svg viewBox="0 0 48 48"><path d="M32 9a15 15 0 1 0 8 26 12 12 0 0 1-8-26z"/><circle cx="14" cy="14" r="4"/><path d="M14 5v2M14 21v2M5 14h2M21 14h2"/></svg>',
-  scanner: '<svg viewBox="0 0 48 48"><rect x="6" y="14" width="36" height="25" rx="4"/><circle cx="24" cy="26" r="7"/><path d="M17 14l3-5h8l3 5"/></svg>',
+  scanner: '<svg viewBox="0 0 48 48"><path d="M24 5L45 42H3Z"/><path d="M10 31Q24 20 38 31Q24 41 10 31Z"/><circle cx="24" cy="31" r="3.6"/></svg>',
   signal: '<svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="3"/><path d="M15 15a13 13 0 0 0 0 18M33 15a13 13 0 0 1 0 18M9 9a21 21 0 0 0 0 30M39 9a21 21 0 0 1 0 30"/></svg>',
 };
 // ───────── Тариф (демо для показа): что открыто на каком уровне ─────────
@@ -2744,7 +2755,7 @@ function startHTML() {
     tierPill() +
     '<button class="icon-btn sm" data-action="open-settings" aria-label="Настройки">' + ICON_GEAR + '</button></div>' +
     (activeProfile() ? '' : '<button class="hub-tip" data-action="open-cabinet">Создай профиль<i></i></button>') +
-    '<div class="hub"><div class="start-title">LUMINA<span> OS</span></div><div class="start-sub">Core</div>' +
+    '<div class="hub' + (activeProfile() ? '' : ' notip') + '"><div class="start-title">LUMINA<span> OS</span></div><div class="start-sub">Core</div>' +
     '<div class="hub-stage">' +
     corner('tl', 'open-solar', 'solar', 'solar', 'Matrix Solaris', 'Солнечная матрица') + corner('tr', 'open-rhythm', 'rhythm', 'rhythm', 'Rhythmus Diei', 'Ритм дня') +
     '<div class="hgem-wrap"><button class="hgem" data-action="go-calib" aria-label="Libratio"><span class="hgem-art">' +
