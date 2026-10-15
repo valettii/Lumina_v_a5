@@ -520,7 +520,7 @@ body.is-start::before{background:#050609!important}
 .lg-item{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:12px;background:rgba(5,7,12,.42);box-shadow:inset 0 0 0 2px var(--frame);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#F1F3F8}
 .lg-item .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
 .lik{margin-top:8px}
-.lik-head,.lik-reg,.lik-chip{background:rgba(5,7,12,.42)!important;border:0!important;border-radius:14px!important;box-shadow:inset 0 0 0 2px var(--frame)!important;color:#F1F3F8}
+.lik-head,.lik-reg{background:rgba(5,7,12,.42)!important;border:0!important;border-radius:14px!important;box-shadow:inset 0 0 0 2px var(--frame)!important;color:#F1F3F8}
 .lik-head{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;text-align:left}
 .lik-n{width:34px;font-weight:700;color:#E4D5A8}
 .lik-t{flex:1;font-size:15px;font-weight:600}
@@ -531,9 +531,6 @@ body.is-start::before{background:#050609!important}
 .lik-rn{width:44px;color:#E4D5A8;font-variant-numeric:tabular-nums}
 .lik-rt{flex:1}
 .lik-rs svg{width:16px;height:16px}
-.lik-chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 6px}
-.lik-chip{min-width:40px;height:34px;padding:0 10px;font-weight:700}
-.lik-chip.on{background:#E4D5A8!important;color:#15130C!important}
 .an-row{display:flex;align-items:center;gap:10px;padding:5px 0}
 .an-l{width:104px;font-size:13px}
 .an-b{flex:1;height:8px;border-radius:4px;background:rgba(228,213,168,.18);overflow:hidden}
@@ -591,6 +588,10 @@ body.is-start::before{background:#050609!important}
 .core-skt{position:absolute;text-align:center;font-size:calc(var(--px) * 22);line-height:1.2;color:#E3C985;text-shadow:0 1px 4px rgba(0,0,0,.8)}
 @media (prefers-reduced-motion:reduce){.core-gem{animation:none}}
 .hub-canvas{display:flow-root}
+.tier-pill.tier-keys,.screen .tier-pill.tier-keys{background:rgba(228,213,168,.34)!important}
+.tier-pill.tier-pass,.screen .tier-pill.tier-pass{background:#E4D5A8!important;color:#15130C!important}
+.core-lb{bottom:calc(var(--px) * 4.5);font-size:calc(var(--px) * 14);line-height:1}
+.lock-btns{display:flex;flex-direction:column;gap:8px;margin-top:12px}
 </style>
 </head>
 <body>
@@ -1968,8 +1969,12 @@ const PRO_INFO = {
   window: { title: 'Полная развёртка', items: ['Развёртка окна и маяка: суть, перекос и чистая фаза, движение на 15 секунд и на минуту, дыхание, питание, вопросы для журнала', 'Вопросы для журнала и связка окна с твоим ядром и текущей пентадой', 'Карта суток под твою стихию: когда включаться, а когда восстанавливаться', 'Ядро и вектор: разбор их сочетания', 'Пентада по шагам: фокус и практика на пять дней', 'Анализ журнала: какие каналы чаще, в какие часы'] }
 };
 
-function lockedCard(label, need) {
-  return '<div class="card lockedcard" style="margin-top:12px"><div class="lock-h">' + ICON_LOCK + '<span>' + label + '</span></div><div class="body" style="margin-top:6px">' + need + '</div></div>';
+function lockedCard(label, keyId, withPersonal) {
+  const k = KEY_INFO[keyId];
+  return '<div class="card lockedcard" style="margin-top:12px"><div class="lock-h">' + ICON_LOCK + '<span>' + label + '</span></div>' +
+    '<div class="body" style="margin-top:6px">Контур заперт. Для открытия проводимости требуется активация ключа.</div>' +
+    (DEMO_KEYS ? '<div class="lock-btns">' + (withPersonal ? '<button class="btn" data-action="open-keys">ЛИЧНЫЙ РАЗБОР · $4,99</button>' : '') +
+      '<button class="btn btn-ok" data-action="open-keys">КЛЮЧ ' + k[0] + ' · ' + k[1] + '</button><button class="btn" data-action="open-keys">FULL PASS</button></div>' : '') + '</div>';
 }
 function proHTML(route) {
   const info = PRO_INFO[route.kind];
@@ -1977,24 +1982,23 @@ function proHTML(route) {
   const core = getRegister(ctx.nPhys || 1);
   let blocks;
   if (route.kind === 'phys' || route.kind === 'evol' || route.kind === 'axis') {
-    blocks = [[pairOpen(), () => proPairHTML(core, getRegister(ctx.nEvol || 1)), 'Разбор сочетания', 'Открывается в Pass, Pro или с «Личным разбором».']];
+    blocks = [[pairOpen(), () => proPairHTML(core, getRegister(ctx.nEvol || 1)), 'Разбор сочетания', 'solaris', true]];
   } else if (route.kind === 'meso') {
     const ps = pentadState(new Date());
-    blocks = [[unfoldOpen(ps.id), () => proPentadHTML(ps), 'Пентада по шагам', 'Открывается в Pass, Pro, с пакетом Лика или «Личным разбором».']];
+    blocks = [[unfoldOpen(ps.id), () => proPentadHTML(ps), 'Пентада по шагам', 'solaris', false]];
   } else if (route.kind === 'beacon') {
     const rid = beaconReg(route.h || 0);
-    blocks = [[unfoldOpen(rid), () => proRegHTML(rid), 'Развёртка регистра', 'Открывается в Pass, Pro, с пакетом Лика или «Личным разбором».']];
+    blocks = [[unfoldOpen(rid), () => proRegHTML(rid), 'Развёртка регистра', 'solaris', false]];
   } else {
     const rid = getActiveRegisterId(new Date());
-    blocks = [[unfoldOpen(rid), () => proRegHTML(rid), 'Развёртка регистра', 'Открывается в Pass, Pro, с пакетом Лика или «Личным разбором».'],
-      [dayMapOpen(), () => proDayMapHTML(core), 'Карта суток', 'Открывается в Pass и Pro.']];
+    blocks = [[unfoldOpen(rid), () => proRegHTML(rid), 'Развёртка регистра', 'solaris', false],
+      [dayMapOpen(), () => proDayMapHTML(core), 'Карта суток', 'solaris', false]];
   }
-  const anyOpen = blocks.some((x) => x[0]), anyClosed = blocks.some((x) => !x[0]);
+  const anyOpen = blocks.some((x) => x[0]);
   return topbar('Полная развёртка', { noClock: true }) +
     '<div class="dcard"><div class="dcard-top"><div class="d-vec" style="margin:0">' + info.title + '</div><span class="pro-badge">' + proBadge() + '</span></div>' +
     (anyOpen ? '' : '<div class="section" style="margin-top:20px">Что войдёт</div>' + info.items.map((x) => '<div class="proitem"><span class="check">✓</span><span class="body">' + x + '</span></div>').join('')) + '</div>' +
-    blocks.map((x) => (x[0] ? '<div class="card" style="margin-top:12px">' + x[1]() + '</div>' : lockedCard(x[2], x[3]))).join('') +
-    (anyClosed && DEMO_TARIFFS ? '<button class="btn btn-soft" data-action="open-tariffs" style="margin-top:16px">ТАРИФЫ</button>' : '') + '\n';
+    blocks.map((x) => (x[0] ? '<div class="card" style="margin-top:12px">' + x[1]() + '</div>' : lockedCard(x[2], x[3], x[4]))).join('') + '\n';
 }
 
 function beaconHTML(route) {
@@ -2022,6 +2026,8 @@ function journalHTML(route) {
   const prof = S.profiles.find((p) => p.id === route.id);
   const now = new Date();
   const todayKey = localDateKey(now);
+  const JL = hasKey('ritual') ? S.journal : S.journal.filter((l) => new Date(l.timestamp).getTime() >= now.getTime() - 7 * 86400000);
+  const hiddenN = S.journal.length - JL.length;
   const isOpen = (key, def) => (key in S.openGroups ? S.openGroups[key] : def);
   const dayHTML = (k) => (d) => {
     const key = 'd-' + k + '-' + d.key, def = d.key === todayKey, open = isOpen(key, def);
@@ -2034,7 +2040,7 @@ function journalHTML(route) {
       entriesWord(m.count) + ' ' + (open ? '▾' : '▸') + '</span></button>' + (open ? '<div class="indent">' + m.days.map(dayHTML(k)).join('') + '</div>' : '') + '</div>';
   };
   const srcHTML = (src) => {
-    const k = src[0], list = S.journal.filter((l) => (l.kind || 'x') === k);
+    const k = src[0], list = JL.filter((l) => (l.kind || 'x') === k);
     if (!list.length) return '';
     const g = groupJournal(list, now), key = 's-' + k, open = isOpen(key, true);
     return '<div class="src"><button class="group-head src-head" data-action="toggle" data-key="' + key + '" data-def="1"><span>' + src[1] + '</span><span class="cnt">' + entriesWord(list.length) + ' ' + (open ? '▾' : '▸') + '</span></button>' +
@@ -2042,7 +2048,8 @@ function journalHTML(route) {
   };
   const html = topbar('Журнал · ' + (prof ? prof.name : ''), { noClock: true });
   if (!S.journal.length) return html + '<div class="empty" style="margin-top:28px">Записей пока нет.</div>';
-  return html + '<div class="section">Всего: ' + entriesWord(S.journal.length) + '</div>' + JSRC.map(srcHTML).join('');
+  return html + '<div class="section">' + (hiddenN ? 'За 7 дней: ' : 'Всего: ') + entriesWord(JL.length) + '</div>' + (JL.length ? JSRC.map(srcHTML).join('') : '<div class="empty">За последние 7 дней записей нет.</div>') +
+    (hiddenN ? lockedCard('Записи старше 7 дней: ' + hiddenN, 'ritual') : '');
 }
 
 function sheetHTML() {
@@ -2091,11 +2098,11 @@ function render(animate) {
   else if (route.name === 'lectures') body = lecturesHTML();
   else if (route.name === 'solar') body = solarHTML();
   else if (route.name === 'sanctuary') body = sanctuaryHTML();
-  else if (route.name === 'tariffs') body = tariffsPageHTML();
+  else if (route.name === 'keys') body = keysPageHTML();
   else if (route.name === 'hospitium') body = hospitiumHTML();
   else if (route.name === 'analysis') body = analysisHTML();
   else if (route.name === 'reg') body = regHTML(route);
-  else if (route.name === 'lecture') body = lectureHTML();
+  else if (route.name === 'lecture') body = lectureHTML(route);
   else if (route.name === 'listen') body = listenHTML();
   else if (route.name === 'journal') body = journalHTML(route);
   $app.innerHTML = '<div class="screen' + (animate ? ' enter' : '') + '">' + body + '</div>' + sheetHTML();
@@ -2250,13 +2257,11 @@ async function handle(action, el) {
       break;
     }
     case 'go-calib': { const ap = activeProfile(); if (ap) { S.axisOpen = false; go({ name: 'profile', id: ap.id }); } else go({ name: 'create', initialDate: '' }); break; }
-    case 'set-tier': TIER.id = el.dataset.t; if (TIER.id === 'pass') TIER.passUntil = Date.now() + 7 * 86400000; render(false); break;
-    case 'toggle-addon': TIER.addons[el.dataset.a] = !TIER.addons[el.dataset.a]; render(false); break;
+    case 'toggle-key': KEYS[el.dataset.k] = !KEYS[el.dataset.k]; render(false); break;
     case 'toggle-levels': S.lvlOpen = !S.lvlOpen; render(false); break;
-    case 'open-tariffs': go({ name: 'tariffs' }); break;
+    case 'open-keys': go({ name: 'keys' }); break;
     case 'open-analysis': await openAnalysis(); break;
     case 'open-reg': go({ name: 'reg', id: parseInt(el.dataset.r, 10) }); break;
-    case 'toggle-lik': TIER.liks[parseInt(el.dataset.i, 10)] = !TIER.liks[parseInt(el.dataset.i, 10)]; render(false); break;
     case 'toggle-lik-open': { const i = parseInt(el.dataset.i, 10); S.likOpen = S.likOpen === i ? -1 : i; render(false); break; }
     case 'open-hospitium': go({ name: 'hospitium' }); break;
     case 'coming-soon': toast('Скоро'); break;
@@ -2280,7 +2285,7 @@ async function handle(action, el) {
     case 'open-cabinet': { const ap = activeProfile(); if (ap) go({ name: 'cabinet', id: ap.id }); else go({ name: 'create', initialDate: '' }); break; }
     case 'open-solar': go({ name: 'solar' }); break;
     case 'go-lectures': go({ name: 'lectures' }); break;
-    case 'open-lecture': go({ name: 'lecture' }); break;
+    case 'open-lecture': go({ name: 'lecture', n: parseInt(el.dataset.n || '1', 10) }); break;
     case 'lec-toggle': await toggleLecture(); break;
     case 'sgn-capture': {
       const v = document.getElementById('sgnVid'), b = document.getElementById('sgnCap'), m = document.getElementById('sgnRec'), cm = document.getElementById('sgnCam');
@@ -2367,8 +2372,6 @@ function visualHTML(a, size) {
 // ───────── Заземление: три канала (Питание, Движение, Резонанс) ─────────
 const SETTINGS_KEY = 'lumina_settings';
 const SVG_OPEN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">';
-const ICON_GEAR = SVG_OPEN + '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>';
-
 const ov = { el: null, stop: null, pending: null };
 function ovEl() {
   if (!ov.el) { ov.el = document.createElement('div'); ov.el.id = 'ov'; document.body.appendChild(ov.el); }
@@ -2668,26 +2671,23 @@ const ICON_SPK_ON = SVG_OPEN + '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M16.5 8.
 const ICON_SPK_OFF = SVG_OPEN + '<path d="M4 9v6h4l5 4V5L8 9z"/><path d="M17 9l5 6M22 9l-5 6"/></svg>';
 
 // ───────── Хаб: центральный камень и четыре угла ─────────
-// ───────── Тариф (демо для показа): что открыто на каком уровне ─────────
-const DEMO_TARIFFS = true;                    // в публичной версии false, проверка оплаты идёт через сервер
-const TIER = { id: 'base', passUntil: 0, liks: {}, addons: { personal: false, live: false } };
-const TIER_NAME = { base: 'BASE', pass: 'PASS', pro: 'PRO' };
-const depthAll = () => TIER.id !== 'base';
+// ───────── Ключи (демо для показа): что открыто ─────────
+const DEMO_KEYS = true;                       // в публичной версии false, проверка оплаты идёт через сервер
+const KEYS = { solaris: false, scan: false, ritual: false, signum: false, pass: false, personal: false };
+const hasKey = (k) => KEYS.pass || !!KEYS[k];
+const keyCount = () => ['solaris', 'scan', 'ritual', 'signum'].filter((k) => KEYS[k]).length;
 function unfoldOpen(regId) {
-  if (depthAll()) return true;
+  if (hasKey('solaris')) return true;
   const p = activeProfile();
-  return !!TIER.liks[Math.floor((regId - 1) / 8)] || !!(TIER.addons.personal && p && (regId === p.nPhys || regId === p.nEvol));
+  return !!(KEYS.personal && p && (regId === p.nPhys || regId === p.nEvol));
 }
-const pairOpen = () => depthAll() || TIER.addons.personal;
-const dayMapOpen = () => depthAll();
-const lecturesOpen = () => TIER.id === 'pro';
-const liveOpen = () => TIER.id === 'pro' || TIER.addons.live;
-const proBadge = () => (depthAll() ? 'ОТКРЫТО' : 'PASS · PRO');
-const tierPill = () => (DEMO_TARIFFS ? '<button class="tier-pill tier-' + TIER.id + '" data-action="open-tariffs" aria-label="Тарифы">' + TIER_NAME[TIER.id] + '</button>' : '');
-function passLeft() {
-  const ms = Math.max(0, TIER.passUntil - Date.now()), d = Math.floor(ms / 86400000), h = Math.floor((ms % 86400000) / 3600000);
-  return d + ' дн ' + h + ' ч';
-}
+const pairOpen = () => hasKey('solaris') || KEYS.personal;
+const dayMapOpen = () => hasKey('solaris');
+const proBadge = () => (hasKey('solaris') ? 'ОТКРЫТО' : 'КЛЮЧ');
+const keysState = () => (KEYS.pass ? 'pass' : keyCount() ? 'keys' : 'free');
+const keysLabel = () => (KEYS.pass ? 'PASS' : keyCount() ? 'KEYS ' + keyCount() : 'FREE');
+const tierPill = () => (DEMO_KEYS ? '<button class="tier-pill tier-' + keysState() + '" data-action="open-keys" aria-label="Ключи">' + keysLabel() + '</button>' : '');
+const KEY_INFO = { solaris: ['Matrix Solaris', '$8,88'], scan: ['Matrix Scan', '$8,88'], ritual: ['अनुष्ठान', '$8,88'], signum: ['प्रतिध्वनि', '$5,55'] };
 const LINE = 'fill="none" stroke="#F1F3F8" stroke-linejoin="round" stroke-linecap="round"';
 const oct8 = (r, cx, cy, rot) => Array.from({ length: 8 }, (_, k) => [cx + r * Math.cos((rot + 45 * k) * Math.PI / 180), cy + r * Math.sin((rot + 45 * k) * Math.PI / 180)]);
 const pts8 = (a) => a.map((p) => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
@@ -2738,13 +2738,11 @@ function startHTML() {
   };
   return '<div class="start-bg"><div class="hub-photo"></div></div>' +
     '<div class="hub-top"><button class="icon-btn sm spk-btn" data-action="mute-toggle" aria-label="Звук">' + (S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON) + '</button>' +
-    '<button class="icon-btn sm" data-action="open-cabinet" aria-label="Личный кабинет">' + ICON_CABINET + '</button>' +
-    tierPill() +
-    '<button class="icon-btn sm" data-action="open-settings" aria-label="Настройки">' + ICON_GEAR + '</button></div>' +
-    (activeProfile() ? '' : '<button class="hub-tip" data-action="open-cabinet">Создай профиль<i></i></button>') +
+    tierPill() + '</div>' +
+    (activeProfile() ? '' : '<button class="hub-tip" data-action="open-cabinet">Создай профиль</button>') +
     '<div class="hub' + (activeProfile() ? '' : ' notip') + '"><div class="hub-canvas"><div class="hub-title">LUMINA<span> OS</span></div>' +
     '<div class="hub-stage2">' + OCTS.map(oct).join('') +
-    '<button class="core" data-action="go-calib" aria-label="CORE" style="left:' + u(108.8) + ';top:' + u(153.2) + ';width:' + u(172) + ';height:' + u(172) + '">' + octFrame(8, 'rgba(3,5,8,.5)') +
+    '<button class="core" data-action="go-calib" aria-label="CORE" style="left:' + u(108.8) + ';top:' + u(153.2) + ';width:' + u(172) + ';height:' + u(172) + '">' + octFrame(11.5, 'rgba(3,5,8,.5)') +
     '<img class="core-gem" src="hub_gem.webp" alt="" onerror="this.parentNode.classList.add(\'nofile\')"><span class="core-vec">' + GEM_SVG + '</span><span class="core-lb">CORE</span></button>' +
     '<div class="core-skt" style="left:' + u(108.8) + ';top:' + u(332.2) + ';width:' + u(172) + '">अभ्यन्तर</div>' +
     '</div></div></div>';
@@ -2755,16 +2753,22 @@ function hospitiumHTML() {
   const row = (act, t, sub) => '<button class="lec on" data-action="' + act + '"><span class="lec-t">' + t + '</span><span class="lec-s">' + sub + '</span><span class="chev sm">›</span></button>';
   return topbar('Hospitium', { noClock: true }) + '<div class="lec-list" style="margin-top:18px">' +
     row('open-cabinet', 'Личный кабинет', ap ? esc(ap.name) : 'создать профиль') + row('open-sanctuary', 'Sanctuary', 'канал') +
-    row('open-tariffs', 'Тарифы', TIER_NAME[TIER.id]) + row('open-settings', 'Настройки', '') + '</div>';
+    row('open-keys', 'Ключи', keysLabel()) + row('open-settings', 'Настройки', '') + '</div>';
 }
 
 // ───────── Вступление: полный трек играет в фоне до конца ─────────
-const INTRO = { audio: null, armed: false, done: false, dead: false, hold: false };
+const INTRO_TRACKS = ['intro_full.mp3', 'intro2.mp3'];
+const INTRO = { audio: null, armed: false, done: false, dead: false, hold: false, i: 0 };
 function introAudio() {
   if (!INTRO.audio) {
-    const a = new Audio('intro_full.mp3');
+    const a = new Audio(INTRO_TRACKS[0]);
     a.preload = 'auto';
-    a.addEventListener('ended', () => { INTRO.done = true; });
+    a.addEventListener('ended', () => {
+      if (INTRO.i < INTRO_TRACKS.length - 1 && !INTRO.dead) {
+        INTRO.i++; a.src = INTRO_TRACKS[INTRO.i];
+        if (S.settings.sound !== false && !INTRO.hold) { try { const p = a.play(); if (p && p.catch) p.catch(() => {}); } catch (e) {} }
+      } else INTRO.done = true;
+    });
     INTRO.audio = a;
   }
   return INTRO.audio;
@@ -2842,42 +2846,25 @@ function sanctuaryHTML() {
   return topbar('Sanctuary', { noClock: true }) +
     '<div class="card" style="margin-top:20px"><div class="body">Новости и материалы Lumina публикуются в Telegram-канале.</div>' +
     (CHANNEL_URL ? '<button class="btn btn-ok" data-action="open-channel" style="margin-top:14px">ОТКРЫТЬ КАНАЛ</button>' : '<div class="note" style="margin-top:14px">Ссылка на канал появится позже.</div>') + '</div>' +
-    '<div class="card" style="margin-top:12px"><div class="label">Живой разбор · 58 минут раз в месяц</div><div class="body" style="margin-top:6px">' + (liveOpen() ? 'Доступ есть. Ближайший разбор появится здесь.' : 'Доступно в Pro или по разовому билету.') + '</div>' + (liveOpen() || !DEMO_TARIFFS ? '' : '<button class="btn btn-soft" data-action="open-tariffs" style="margin-top:12px">ТАРИФЫ</button>') + '</div>' +
     (S.settings.devNotes !== false && !CHANNEL_URL ? '<div class="devnote" style="margin:26px auto 0"><div class="label">Заметка разработчика</div><div class="body" style="margin-top:6px">Ссылка на канал задаётся в одном месте (CHANNEL_URL).</div></div>' : '');
 }
 
 
-const TARIFFS = {
-  base: ['Base', 'бесплатно', ['Текущее окно: суть и мысль регистра', 'Ядро и вектор, пентада, Solar Matrix (кратко)', 'Лики: описания и список регистров, развёртки закрыты', 'Сигнал: «Слушай момент», «Вижу знак», маяк', 'Ритм дня, заземление и журнал', 'Lectures: промо']],
-  pass: ['Pass', '$8 · 7 дней', ['Развёртка регистра: «Полная развёртка» в окне суток, на экране маяка и в пентаде', 'Все 72 регистра: раздел «Лики» в Solar Matrix', 'Разбор сочетания: «Ядро и вектор» → «Полная развёртка»', 'Пентада по шагам и карта суток: «Полная развёртка»', 'Без лекций, архива и живых разборов', 'Без автопродления']],
-  pro: ['Pro', '$19 в месяц · $149 в год', ['Всё из Pass без ограничений', 'Лекции: Сигнал → Lectures', 'Живой разбор и архив: Sanctuary', 'Анализ журнала: Ритм дня → «Анализировать журнал»', 'Ранний доступ']],
-  personal: ['Личный разбор', '$4,99 · один раз', ['Твои ядро и вектор развёрнуто: «Ядро и вектор» → «Полная развёртка» и раздел «Лики»', 'Разбор их сочетания там же', 'Навсегда, без подписки']],
-  lik: ['Пакет Лика', '$9,99 · навсегда', ['Каждый Лик открывает 8 регистров', 'Где: раздел «Лики» в Solar Matrix и «Полная развёртка», когда окно, маяк или пентада в этом Лике', 'Навсегда, пока существует сервис']],
-  live: ['Билет на живой разбор', '$14,99–19,99', ['58 минут, раз в месяц', 'Где: Sanctuary', 'В Pro включён']],
-};
-function tariffsPageHTML() {
+const KEY_ROWS = [
+  ['solaris', 'Matrix Solaris', '$8,88 · навсегда', ['Все развёртки регистров: «Полная развёртка» в окне суток, на экране маяка и в пентаде', 'Карта суток и пентада по шагам', 'Раздел «Лики» в Solar Matrix: девять иерархий, 72 регистра', 'Разбор сочетания ядра и вектора']],
+  ['scan', 'Matrix Scan', '$8,88 · навсегда', ['Якоря сумм в «Вижу знак» (60.60, 12.12, 100.00 и другие)', 'Расшифровка числа бесплатна']],
+  ['ritual', 'अनुष्ठान', '$8,88 · навсегда', ['Журнал за всё время (бесплатно за последние 7 дней)', 'Анализ журнала: «Ритм дня» → «Анализировать журнал»', 'Утренний и вечерний ритуал (скоро)']],
+  ['signum', 'प्रतिध्वनि', '$5,55 · навсегда', ['Аудио-слои и музыка с голосом (скоро)', '«Слушай момент» бесплатно']],
+];
+function keysPageHTML() {
   const li = (a) => '<ul class="tar-li">' + a.map((x) => '<li>' + x + '</li>').join('') + '</ul>';
-  const lvl = (id) => {
-    const t = TARIFFS[id], on = TIER.id === id;
-    return '<button class="tar-row tar-pick' + (on ? ' act' : '') + '" data-action="set-tier" data-t="' + id + '"><div class="tar-h"><span class="tar-n">' + t[0] + '</span><span class="tar-p">' + t[1] + '</span></div>' + li(t[2]) +
-      '<span class="tar-tag">' + (on ? 'АКТИВ' + (id === 'pass' ? ' · осталось ' + passLeft() : '') : 'ВКЛЮЧИТЬ') + '</span></button>';
-  };
-  const add = (id) => {
-    const t = TARIFFS[id], on = TIER.addons[id];
-    return '<button class="tar-row tar-pick' + (on ? ' act' : '') + '" data-action="toggle-addon" data-a="' + id + '"><div class="tar-h"><span class="tar-n">' + t[0] + '</span><span class="tar-p">' + t[1] + '</span></div>' + li(t[2]) +
-      '<span class="tar-tag">' + (on ? 'КУПЛЕНО' : 'КУПИТЬ · ДЕМО') + '</span></button>';
-  };
-  const pack = () => {
-    const t = TARIFFS.lik, n = Object.keys(TIER.liks).filter((k) => TIER.liks[k]).length;
-    return '<div class="tar-row tar-pick' + (n ? ' act' : '') + '"><div class="tar-h"><span class="tar-n">' + t[0] + '</span><span class="tar-p">' + t[1] + '</span></div>' + li(t[2]) +
-      '<div class="lik-chips">' + SOL_PH.map((p, i) => '<button class="lik-chip' + (TIER.liks[i] ? ' on' : '') + '" data-action="toggle-lik" data-i="' + i + '">' + ROMAN[i] + '</button>').join('') + '</div>' +
-      '<span class="tar-tag">' + (n ? 'КУПЛЕНО: ' + n + ' ИЗ 9' : 'ВЫБЕРИ ЛИКИ · ДЕМО') + '</span></div>';
-  };
-  return topbar('Тарифы', { noClock: true }) +
-    '<div class="note" style="margin-top:14px">Демо: нажми на тариф, и всё приложение покажет, что в нём доступно. При запуске всегда Base.</div>' +
-    '<div class="section">Тариф</div>' + ['base', 'pass', 'pro'].map(lvl).join('') +
-    '<div class="section">Отдельные покупки</div>' + add('personal') + pack() + add('live') +
-    '<div class="tar-row"><div class="tar-h"><span class="tar-n">Лекции и аудио по отдельности</span><span class="tar-p">$2,99–4,99</span></div><span class="tar-tag">скоро</span></div>' +
+  const row = (id, name, price, items, tagOn, tagOff, open) => '<button class="tar-row tar-pick' + (open ? ' act' : '') + '" data-action="toggle-key" data-k="' + id + '"><div class="tar-h"><span class="tar-n">' + name + '</span><span class="tar-p">' + price + '</span></div>' + li(items) +
+    '<span class="tar-tag">' + (open ? tagOn : tagOff) + '</span></button>';
+  return topbar('Ключи', { noClock: true }) +
+    '<div class="note" style="margin-top:14px">Демо: включай ключи, и приложение покажет, что каждый открывает. Бесплатное остаётся доступным всегда. При запуске всё закрыто.</div>' +
+    '<div class="section">Ключи октагонов</div>' + KEY_ROWS.map((r) => row(r[0], r[1], r[2], r[3], KEYS[r[0]] ? 'ОТКРЫТ' : 'ОТКРЫТ · FULL PASS', 'ОТКРЫТЬ · ДЕМО', hasKey(r[0]))).join('') +
+    '<div class="section">Full Pass</div>' + row('pass', 'Full Pass', '$18,88 в месяц · $168 в год', ['Все ключи сразу', 'Обновления и новые функции'], 'АКТИВЕН', 'ВКЛЮЧИТЬ · ДЕМО', KEYS.pass) +
+    '<div class="section">Внутри CORE</div>' + row('personal', 'Личный разбор', '$4,99 · один раз', ['Твои ядро и вектор развёрнуто: «Ядро и вектор» → «Полная развёртка»', 'Разбор их сочетания', 'Навсегда, без подписки'], 'КУПЛЕНО', 'КУПИТЬ · ДЕМО', KEYS.personal) +
     '<div class="note">Цены ориентировочные, оплата пока не подключена.</div>';
 }
 
@@ -2893,7 +2880,7 @@ function anRow(label, n, max, extra) {
 }
 function analysisHTML() {
   const head = topbar('Анализ журнала', { noClock: true });
-  if (TIER.id !== 'pro') return head + lockedCard('Анализ журнала', 'Открывается в Pro.') + (DEMO_TARIFFS ? '<button class="btn btn-soft" data-action="open-tariffs" style="margin-top:16px">ТАРИФЫ</button>' : '');
+  if (!hasKey('ritual')) return head + lockedCard('Анализ журнала', 'ritual');
   const L = S.journal || [];
   if (!L.length) return head + '<div class="empty" style="margin-top:28px">Записей пока нет. Сделай несколько действий в «Ритме дня» или запиши знак.</div>';
   const bySrc = {}, byBand = [0, 0, 0, 0], byReg = {}, words = {}, days = {};
@@ -2920,7 +2907,7 @@ function regHTML(route) {
   const r = route.id, g = getRegister(r);
   return topbar('№' + r + ' · ' + rname(g), { noClock: true }) + (unfoldOpen(r)
     ? '<div class="card" style="margin-top:14px">' + proRegHTML(r) + '</div>'
-    : lockedCard('Развёртка регистра', 'Открывается в Pass, Pro, с пакетом этого Лика или «Личным разбором».') + (DEMO_TARIFFS ? '<button class="btn btn-soft" data-action="open-tariffs" style="margin-top:16px">ТАРИФЫ</button>' : ''));
+    : lockedCard('Развёртка регистра', 'solaris', true));
 }
 function liksHTML() {
   const ap = activeProfile(), st = ap ? solarState(ap.birthDate) : null, curI = st ? st.i : -1;
@@ -2938,35 +2925,37 @@ function liksHTML() {
 const ICON_PLAY = SVG_OPEN + '<polygon points="8,5 19,12 8,19"/></svg>';
 const ICON_LOCK = SVG_OPEN + '<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
 function lecturesHTML() {
-  const off = (n) => '<div class="lec off"><span class="lec-ic">' + ICON_LOCK + '</span><span class="lec-t">Лекция ' + n + '</span><span class="lec-s">' + (lecturesOpen() ? 'Скоро' : 'Pro') + '</span></div>';
-  return topbar('Lectures', { noClock: true }) + '<div class="lec-list">' +
-    '<button class="lec on" data-action="open-lecture"><span class="lec-ic">' + ICON_PLAY + '</span><span class="lec-t">Промо</span><span class="lec-s">4:20</span><span class="chev sm">›</span></button>' +
-    [2, 3, 4, 5].map(off).join('') + '</div>';
+  const off = (n) => '<div class="lec off"><span class="lec-ic">' + ICON_LOCK + '</span><span class="lec-t">Лекция ' + n + '</span><span class="lec-s">Скоро</span></div>';
+  const promo = (n, t, d) => '<button class="lec on" data-action="open-lecture" data-n="' + n + '"><span class="lec-ic">' + ICON_PLAY + '</span><span class="lec-t">' + t + '</span><span class="lec-s">' + d + '</span><span class="chev sm">›</span></button>';
+  return topbar('Lectures', { noClock: true }) + '<div class="lec-list">' + promo(1, 'Промо', '4:20') + promo(2, 'Промо 2', '5:17') + [3, 4, 5].map(off).join('') + '</div>';
 }
 
-const LEC = { audio: null, state: 'idle' };   // idle | loading | playing | paused | error
+const LEC = { audio: null, state: 'idle', n: 1 };   // idle | loading | playing | paused | error
+const LEC_TRACKS = { 1: ['intro_full.mp3', 'Промо', '4:20', 259.7], 2: ['intro2.mp3', 'Промо 2', '5:17', 317.3] };
 function stopLecture() {
   if (LEC.audio) { try { LEC.audio.pause(); LEC.audio.currentTime = 0; } catch (e) {} }
   if (LEC.state !== 'error') LEC.state = 'idle';
 }
-function lectureHTML() {
-  return topbar('Промо', { noClock: true }) +
+function lectureHTML(route) {
+  const n = (route && route.n) || 1, T = LEC_TRACKS[n];
+  if (LEC.n !== n || (LEC.audio && LEC.audio.src.slice(-T[0].length) !== T[0])) { stopLecture(); LEC.audio = null; LEC.state = 'idle'; LEC.n = n; }
+  return topbar(T[1], { noClock: true }) +
     '<div class="lec-stage"><button class="lec-btn" id="lecBtn" data-action="lec-toggle"><span id="lecLbl">Играть</span></button>' +
     '<div class="lec-bar" id="lecBar" data-action="lec-seek"><i id="lecFill"></i></div>' +
-    '<div class="lec-times"><span id="lecCur">0:00</span><span id="lecDur">4:20</span></div><div class="listen-msg" id="lecMsg"></div></div>';
+    '<div class="lec-times"><span id="lecCur">0:00</span><span id="lecDur">' + T[2] + '</span></div><div class="listen-msg" id="lecMsg"></div></div>';
 }
 function syncLectureUI() {
   const btn = document.getElementById('lecBtn');
   if (!btn) return;
   const a = LEC.audio;
-  const dur = a && isFinite(a.duration) && a.duration > 0 ? a.duration : 259.7;
+  const dur = a && isFinite(a.duration) && a.duration > 0 ? a.duration : LEC_TRACKS[LEC.n][3];
   const t = a ? a.currentTime : 0;
   document.getElementById('lecLbl').textContent = LEC.state === 'playing' ? 'Пауза' : LEC.state === 'loading' ? 'Загрузка…' : (t > 1 ? 'Продолжить' : 'Играть');
   document.getElementById('lecFill').style.width = (Math.min(1, t / dur) * 100).toFixed(1) + '%';
   document.getElementById('lecCur').textContent = fmtMS(t);
   document.getElementById('lecDur').textContent = fmtMS(dur);
   document.getElementById('lecMsg').textContent = LEC.state === 'error'
-    ? 'Запись пока недоступна.' + (S.settings.devNotes !== false ? ' Проверь, что файл intro_full.mp3 лежит рядом с index.html.' : '') : '';
+    ? 'Запись пока недоступна.' + (S.settings.devNotes !== false ? ' Проверь, что файл ' + LEC_TRACKS[LEC.n][0] + ' лежит рядом с index.html.' : '') : '';
 }
 async function toggleLecture() {
   if (LEC.state === 'loading') return;
@@ -2980,7 +2969,7 @@ async function toggleLecture() {
     a.addEventListener('loadedmetadata', syncLectureUI);
     a.addEventListener('ended', () => { LEC.state = 'idle'; try { a.currentTime = 0; } catch (e) {} syncLectureUI(); });
     a.addEventListener('error', () => { LEC.state = 'error'; syncLectureUI(); });
-    a.src = 'intro_full.mp3';
+    a.src = LEC_TRACKS[LEC.n][0];
     LEC.audio = a;
   }
   LEC.state = 'loading';
@@ -3080,7 +3069,7 @@ function sumInfo(int, dec) {
 }
 function sumAnchorHTML(d) {
   if (!d.sum || !d.sum.kind) return '';
-  if (TIER.id !== 'pro') return '<div class="note" style="margin-top:12px">Якорь суммы: открывается в Pro.</div>';
+  if (!hasKey('scan')) return '<div class="note" style="margin-top:12px">Якорь суммы: контур заперт. Для открытия проводимости требуется активация ключа.</div>' + (DEMO_KEYS ? '<button class="btn btn-soft" data-action="open-keys" style="margin-top:10px">КЛЮЧ MATRIX SCAN · $8,88</button>' : '');
   if (!d.sum.is6060) return '<div class="note" style="margin-top:12px">Якорь суммы: информация скоро.</div>';
   const sec = (t, x) => '<div class="dsec"><div class="label">' + t + '</div><div class="body">' + x + '</div></div>';
   return '<div class="sgn-anchor"><div class="label">Код структуры · 60 . 60</div>' + sec('Состояние', 'Полный баланс / Ровный калибр.') +
@@ -3147,7 +3136,7 @@ function rhythmHTML() {
     '<div id="rhCard"></div>' + groundHTML(r) +
     '<div class="section">Журнал действий</div>' + (ap ? '' : '<div class="note" style="margin:0 0 8px">Без профиля записи не сохраняются.</div>') +
     lastLogHTML(last, !!(ap && last)) +
-    '<button class="btn btn-pro" data-action="open-analysis" style="margin-top:12px"><span>АНАЛИЗИРОВАТЬ ЖУРНАЛ</span><span class="pro-badge">PRO</span></button>' +
+    '<button class="btn btn-pro" data-action="open-analysis" style="margin-top:12px"><span>АНАЛИЗИРОВАТЬ ЖУРНАЛ</span><span class="pro-badge">' + (hasKey('ritual') ? 'ОТКРЫТО' : 'КЛЮЧ') + '</span></button>' +
     note;
 }
 function updateRhythmUI() {
