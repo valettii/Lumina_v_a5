@@ -570,8 +570,8 @@ body.is-start::before{background:#050609!important}
 .tier-pill{display:inline-flex;align-items:center;justify-content:center}
 .rings{position:absolute;left:50%;top:50%;width:calc(var(--hg) * 1.731);height:calc(var(--hg) * 1.731);margin:calc(var(--hg) * -0.8655) 0 0 calc(var(--hg) * -0.8655);pointer-events:none}
 .rings-spin{display:block;width:100%;height:100%;animation:ringspin 140s linear infinite}
-.rings-img{width:100%;height:100%;display:block;animation:ringbeat .9375s ease-in-out .05s infinite}
-.gem-img{animation:heart .9375s ease-in-out infinite;position:relative}
+.rings-img{width:100%;height:100%;display:block;animation:ringbeat 1s ease-in-out .05s infinite}
+.gem-img{animation:heart 1s ease-in-out infinite;position:relative}
 @keyframes ringspin{to{transform:rotate(360deg)}}
 @keyframes heart{0%{transform:scale(1);filter:drop-shadow(0 0 16px rgba(46,230,160,.35))}8%{transform:scale(1.05);filter:drop-shadow(0 0 28px rgba(46,230,160,.7))}16%{transform:scale(1);filter:drop-shadow(0 0 18px rgba(46,230,160,.4))}26%{transform:scale(1.075);filter:drop-shadow(0 0 34px rgba(46,230,160,.85))}40%,100%{transform:scale(1);filter:drop-shadow(0 0 16px rgba(46,230,160,.35))}}
 @keyframes ringbeat{0%{transform:scale(1);opacity:.8}10%{transform:scale(1.025);opacity:1}28%{transform:scale(1.06);opacity:1}55%,100%{transform:scale(1);opacity:.8}}
@@ -611,6 +611,15 @@ body.is-start::before{background:#050609!important}
 .legend{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .lg-item{justify-content:center;padding:7px 4px;font-size:9.5px;letter-spacing:.05em;gap:5px;white-space:nowrap}
 .lg-item .dot{width:8px;height:8px}
+.rh-seg{background:rgba(228,213,168,.16)!important}
+.rh-seg.on{box-shadow:inset 0 0 0 3px #F4E3A3,inset 0 0 22px rgba(244,227,163,.45)!important}
+.lik.now .lik-head{box-shadow:inset 0 0 0 3px #F4E3A3!important}
+.rh-seg{background:rgba(228,213,168,.16)!important}
+.rh-seg.on{box-shadow:inset 0 0 0 3px #F4E3A3,inset 0 0 22px rgba(244,227,163,.45)!important}
+.rh-now{margin-top:6px;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#F4E3A3;font-weight:700}
+.lik.now .lik-head{box-shadow:inset 0 0 0 3px #F4E3A3!important}
+.lik-now{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#15130C;background:#E4D5A8;padding:3px 9px;border-radius:999px;font-weight:700;margin-right:6px}
+.sgn-anchor{margin-top:14px;padding-top:12px;border-top:2px solid var(--frame)}
 </style>
 </head>
 <body>
@@ -2909,13 +2918,14 @@ function regHTML(route) {
     : lockedCard('Развёртка регистра', 'Открывается в Pass, Pro, с пакетом этого Лика или «Личным разбором».') + (DEMO_TARIFFS ? '<button class="btn btn-soft" data-action="open-tariffs" style="margin-top:16px">ТАРИФЫ</button>' : ''));
 }
 function liksHTML() {
+  const ap = activeProfile(), st = ap ? solarState(ap.birthDate) : null, curI = st ? st.i : -1;
   return '<div class="section">Лики</div>' + SOL_PH.map((p, i) => {
     const open = S.likOpen === i;
     const regs = open ? '<div class="lik-body"><div class="body">' + esc(p[2]) + '</div>' + [1, 2, 3, 4, 5, 6, 7, 8].map((k) => {
       const r = i * 8 + k, g = getRegister(r), ok = unfoldOpen(r);
       return '<button class="lik-reg" data-action="open-reg" data-r="' + r + '"><span class="lik-rn">№' + r + '</span><span class="lik-rt">' + rname(g) + '</span><span class="lik-rs">' + (ok ? '›' : ICON_LOCK) + '</span></button>';
     }).join('') + '</div>' : '';
-    return '<div class="lik"><button class="lik-head" data-action="toggle-lik-open" data-i="' + i + '"><span class="lik-n">' + ROMAN[i] + '</span><span class="lik-t">' + p[0] + '<i>' + p[1] + '</i></span><span class="lik-s">' + (open ? '▾' : '▸') + '</span></button>' + regs + '</div>';
+    return '<div class="lik' + (i === curI ? ' now' : '') + '"><button class="lik-head" data-action="toggle-lik-open" data-i="' + i + '"><span class="lik-n">' + ROMAN[i] + '</span><span class="lik-t">' + p[0] + '<i>' + p[1] + '</i></span>' + (i === curI ? '<span class="lik-now">сейчас</span>' : '') + '<span class="lik-s">' + (open ? '▾' : '▸') + '</span></button>' + regs + '</div>';
   }).join('');
 }
 
@@ -3054,17 +3064,37 @@ async function startCamera() {
 function stopCamera() {
   if (SGN.stream) { try { SGN.stream.getTracks().forEach((t) => t.stop()); } catch (e) {} SGN.stream = null; }
 }
+function sumInfo(int, dec) {
+  const dg = int + dec;
+  let kind = '';
+  if (dg.length >= 4 && /^(\d)\1+$/.test(dg)) kind = 'rep';
+  else if (int.length <= 2 && int.padStart(2, '0') === dec) kind = 'sym';
+  else if (dec === '00' && +int >= 100 && +int % 100 === 0) kind = 'round';
+  else if (dg.length >= 4 && dg === dg.split('').reverse().join('')) kind = 'mirror';
+  return { kind: kind, is6060: int === '60' && dec === '60' };
+}
+function sumAnchorHTML(d) {
+  if (!d.sum || !d.sum.kind) return '';
+  if (TIER.id !== 'pro') return '<div class="note" style="margin-top:12px">Якорь суммы: открывается в Pro.</div>';
+  if (!d.sum.is6060) return '<div class="note" style="margin-top:12px">Якорь суммы: информация скоро.</div>';
+  const sec = (t, x) => '<div class="dsec"><div class="label">' + t + '</div><div class="body">' + x + '</div></div>';
+  return '<div class="sgn-anchor"><div class="label">Код структуры · 60 . 60</div>' + sec('Состояние', 'Полный баланс / Ровный калибр.') +
+    sec('Импульс', 'Попробуй замедлить пульс до ровного ритма.') +
+    sec('Инструкция', 'Сделай глубокий выдох в низ живота. Эта покупка заземлена. В твоем дне ничего не изменилось, ресурс просто перешел в форму материи. Продолжай движение из центра.') + '</div>';
+}
 function decodeSign(raw) {
   const digits = (raw || '').replace(/\D/g, '');
   if (!digits) return null;
   let reg = 0, timePair = false;
-  if (digits.length === 4) { const hh = +digits.slice(0, 2), mm = +digits.slice(2); if (hh === mm && hh <= 23) { reg = hh === 0 ? 72 : hh; timePair = true; } }
+  if (digits.length === 4 && !/[.,]/.test(raw)) { const hh = +digits.slice(0, 2), mm = +digits.slice(2); if (hh === mm && hh <= 23) { reg = hh === 0 ? 72 : hh; timePair = true; } }
   if (!reg) { let m = 0; for (let i = 0; i < digits.length; i++) m = (m * 10 + (digits.charCodeAt(i) - 48)) % 72; reg = m === 0 ? 72 : m; }
+  const am = /^(\d{1,9})[.,](\d{2})$/.exec((raw || '').trim());
   const flags = [];
+  if (am) flags.push('сумма');
   if (digits.length >= 2 && /^(\d)\1+$/.test(digits)) flags.push('повтор одной цифры');
   else if (digits.length % 2 === 0 && digits.slice(0, digits.length / 2) === digits.slice(digits.length / 2)) flags.push('парное число');
   if (digits.length >= 3 && digits === digits.split('').reverse().join('')) flags.push('зеркальное число');
-  return { digits: digits, reg: reg, timePair: timePair, flags: flags };
+  return { digits: digits, reg: reg, timePair: timePair, flags: flags, sum: am ? sumInfo(am[1], am[2]) : null };
 }
 function renderSignOut() {
   const out = document.getElementById('sgnOut');
@@ -3081,11 +3111,11 @@ function renderSignOut() {
     return;
   }
   out.innerHTML = '<div class="sgn-res">' +
-    '<div class="label">' + (d.timePair ? 'Парное время ' + d.digits.slice(0, 2) + ':' + d.digits.slice(2) + ' · маяк' : 'Число ' + esc(SGN.text)) + '</div>' +
+    '<div class="label">' + (d.timePair ? 'Парное время ' + d.digits.slice(0, 2) + ':' + d.digits.slice(2) + ' · маяк' : (d.sum ? 'Сумма ' : 'Число ') + esc(SGN.text)) + '</div>' +
     '<div class="sgn-reg">№' + reg.id + ' · ' + rname(reg) + ' <span class="tag" style="color:' + color + ';border-color:' + color + '">' + EL_RU[reg.element] + '</span></div>' +
     (d.flags.length ? '<div class="sgn-flags">' + d.flags.map((f) => '<span class="sgn-flag">' + f + '</span>').join('') + '</div>' : '') +
     '<div class="dsec"><div class="label">Суть</div><div class="body">' + esc(m[1]) + '</div></div>' +
-    '<div class="dsec"><div class="label">Мысль</div><div class="body">' + esc(m[5]) + '</div></div>' +
+    '<div class="dsec"><div class="label">Мысль</div><div class="body">' + esc(m[5]) + '</div></div>' + sumAnchorHTML(d) +
     '<button class="btn btn-ok" data-action="sign-save" data-r="' + reg.id + '" style="margin-top:14px">ЗАПИСАТЬ В ЖУРНАЛ</button></div>';
 }
 
@@ -3120,7 +3150,7 @@ function updateRhythmUI() {
   if (!el) return;
   const st = rhythmState(new Date());
   const names = ['Утро', 'День', 'Вечер'];
-  const seg = names.map((n, i) => '<div class="rh-seg' + (st.phase === i ? ' on' : '') + '"><div class="rh-n">' + n + '</div><div class="rh-t">' + fmtHM(st.wake + i * st.third) + '–' + fmtHM(st.wake + (i + 1) * st.third) + '</div></div>').join('');
+  const seg = names.map((n, i) => '<div class="rh-seg' + (st.phase === i ? ' on' : '') + '"><div class="rh-n">' + n + '</div><div class="rh-t">' + fmtHM(st.wake + i * st.third) + '–' + fmtHM(st.wake + (i + 1) * st.third) + '</div>' + (st.phase === i ? '<div class="rh-now">сейчас</div>' : '') + '</div>').join('');
   const pos = st.night ? null : (st.t / st.awake) * 100;
   const cap = st.night ? 'Сейчас ночь. До подъёма ' + fmtDur(st.left) : names[st.phase] + '. До отбоя ' + fmtDur(st.left);
   el.innerHTML = '<div class="rh-bar">' + seg + (pos === null ? '' : '<i class="rh-mark" style="left:' + pos.toFixed(1) + '%"></i>') + '</div><div class="rh-cap">' + esc(cap) + '</div>';
