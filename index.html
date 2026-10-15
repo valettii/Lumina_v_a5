@@ -592,6 +592,10 @@ body.is-start::before{background:#050609!important}
 .tier-pill.tier-pass,.screen .tier-pill.tier-pass{background:#E4D5A8!important;color:#15130C!important}
 .core-lb{bottom:calc(var(--px) * 4.5);font-size:calc(var(--px) * 14);line-height:1}
 .lock-btns{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.sgn-mode{display:flex;gap:8px;margin-bottom:10px}
+.sgn-chip{flex:1;height:34px;border-radius:12px!important;border:0!important;background:rgba(5,7,12,.32)!important;box-shadow:inset 0 0 0 2px var(--frame)!important;color:#F1F3F8;font-size:13px;letter-spacing:.06em}
+.sgn-chip.on{background:#E4D5A8!important;color:#15130C!important}
+.sgn-chip{display:flex;align-items:center;justify-content:center;text-align:center;padding:0}
 </style>
 </head>
 <body>
@@ -2260,6 +2264,7 @@ async function handle(action, el) {
     case 'toggle-key': KEYS[el.dataset.k] = !KEYS[el.dataset.k]; render(false); break;
     case 'toggle-levels': S.lvlOpen = !S.lvlOpen; render(false); break;
     case 'open-keys': go({ name: 'keys' }); break;
+    case 'sgn-mode': SGN.mode = el.dataset.m; syncSgnMode(); renderSignOut(); break;
     case 'open-analysis': await openAnalysis(); break;
     case 'open-reg': go({ name: 'reg', id: parseInt(el.dataset.r, 10) }); break;
     case 'toggle-lik-open': { const i = parseInt(el.dataset.i, 10); S.likOpen = S.likOpen === i ? -1 : i; render(false); break; }
@@ -2991,18 +2996,20 @@ function signalHTML() {
     '<div class="lec-list" style="margin-top:18px"><button class="lec on" data-action="go-lectures"><span class="lec-ic">' + ICON_PLAY + '</span><span class="lec-t">Lectures</span><span class="lec-s">Промо</span><span class="chev sm">›</span></button></div>';
 }
 
-const SGN = { stream: null, track: null, text: '', zoom: 1, ptrs: {}, startDist: 0, startZoom: 1, zt: null };
+const SGN = { stream: null, track: null, text: '', mode: null, zoom: 1, ptrs: {}, startDist: 0, startZoom: 1, zt: null };
 function signHTML() {
   const keys = ['1', '2', '3', '4', '5', '6', '7', '8', '9', ':', '0', '.'].map((k) => '<button class="pad-k" data-action="pad" data-k="' + k + '">' + k + '</button>').join('');
   return topbar('Вижу знак', { noClock: true }) +
     '<div class="sgn-cam" id="sgnCam"><video id="sgnVid" playsinline muted autoplay></video><div class="sgn-frame"></div>' +
     '<div class="sgn-msg" id="sgnMsg">Включаю камеру…</div><div class="sgn-rec" id="sgnRec" style="display:none">камера включена</div><div class="sgn-zoom" id="sgnZoom" style="display:none">×1.0</div></div>' +
     '<button class="sgn-cap" id="sgnCap" data-action="sgn-capture">Зафиксировать кадр</button>' +
-    '<div class="sgn-body"><div class="input sgn-input" id="sgnNum" data-action="sgn-open" tabindex="0"><span id="sgnVal" class="sgn-val">' + esc(SGN.text) + '</span><span class="sgn-ph" id="sgnPh"' + (SGN.text ? ' style="display:none"' : '') + '>Введи цифры, которые видишь</span></div><div class="sgn-out" id="sgnOut"></div><div class="sgn-beacon">' + beaconRowHTML(nextBeacon(new Date())) + '</div></div>' +
+    '<div class="sgn-body">' + sgnChips() + '<div class="input sgn-input" id="sgnNum" data-action="sgn-open" tabindex="0"><span id="sgnVal" class="sgn-val">' + esc(SGN.text) + '</span><span class="sgn-ph" id="sgnPh"' + (SGN.text ? ' style="display:none"' : '') + '>Введи цифры, которые видишь</span></div><div class="sgn-out" id="sgnOut"></div><div class="sgn-beacon">' + beaconRowHTML(nextBeacon(new Date())) + '</div></div>' +
     '<div class="sgn-pad" id="sgnPad"><div class="pad-grid">' + keys + '<button class="pad-k pad-bs" data-action="pad" data-k="back">⌫</button><button class="pad-k pad-enter" data-action="pad-enter">Ввод</button></div></div>';
 }
 function sgnSet(text) {
   SGN.text = text;
+  if (!text) SGN.mode = null;
+  syncSgnMode();
   const v = document.getElementById('sgnVal'), ph = document.getElementById('sgnPh');
   if (v) v.textContent = text;
   if (ph) ph.style.display = text ? 'none' : '';
@@ -3058,37 +3065,112 @@ async function startCamera() {
 function stopCamera() {
   if (SGN.stream) { try { SGN.stream.getTracks().forEach((t) => t.stop()); } catch (e) {} SGN.stream = null; }
 }
-function sumInfo(int, dec) {
-  const dg = int + dec;
-  let kind = '';
-  if (dg.length >= 4 && /^(\d)\1+$/.test(dg)) kind = 'rep';
-  else if (int.length <= 2 && int.padStart(2, '0') === dec) kind = 'sym';
-  else if (dec === '00' && +int >= 100 && +int % 100 === 0) kind = 'round';
-  else if (dg.length >= 4 && dg === dg.split('').reverse().join('')) kind = 'mirror';
-  return { kind: kind, is6060: int === '60' && dec === '60' };
+// ───────── Якоря сумм: таблица автора и правила для любых сумм ─────────
+// Таблица (строки автора): ключ «целая.копейки» → [название, текст]
+const SUM_TABLE = {
+  '60.00': ['Эталонный Пульс', 'Покупка заземлена. Сделай выдох в низ живота — ресурс перешел в форму материи.'],
+  '12.12': ['Симметрия Базы', 'Контур сомкнулся. Внешнее и внутреннее уравновешены, продолжай движение из центра.'],
+  '15.15': ['Параллель', 'Ритм ровный. Фиксируй опору в стопах, импульс потрачен без потери устойчивости.'],
+  '18.18': ['Синхрон', 'Вес удерживается легко. Расправь плечи и сохрани покой нервной системы.'],
+  '22.22': ['Удвоение Силы', 'Фундамент незыблем. Внимание в тело — ресурс оседает плотным слоем.'],
+  '33.33': ['Тройной Повтор', 'Плотная сборка. Никакой суеты, ты находишься строго в своем текущем кадре.'],
+  '44.44': ['Квадрат Структуры', 'Стенки контура прочны. Трата закрывает физическую потребность без утечек.'],
+  '100.00': ['Опора Массива', 'Ровная сотня. Базовый объем зафиксирован, пульс тихий.'],
+  '500.00': ['Плотный Ресурс', 'Крупный вес зашел в материю. Удерживай центр и чувствуй тяжесть в тазу.'],
+  '1000.00': ['Монумент', 'Масштаб не жмет. Твое состояние не меняется от размера цифр на экране.'],
+  '12.21': ['Зеркало Входа', 'Вход равен выходу. Что отдано в материю, возвращается тихим покоем.'],
+  '14.41': ['Зеркало Вектора', 'Ось зафиксирована. Верни внимание из мыслей к дыханию и поверхности земли.'],
+  '21.12': ['Зеркало Баланса', 'Полный сброс давления. Проведи внимание по позвоночнику сверху вниз.'],
+  '12.34': ['Шкала Порядка', 'Шаг за шагом. Простые монотонные действия выстраивают нерушимую структуру.'],
+  '10.01': ['Возврат к Истоку', 'Цикл завершен. База закрыта, продолжай жить в своем естественном ритме.'],
+  '0.00': ['Чистый Ноль', 'Ресурс принят без долга. Ощути чистое присутствие и полноту текущей секунды.'],
+  '5.05': ['Микро-Контур', 'Капля в фундамент. Мелочи собирают целостность, сохраняй расслабление.'],
+  '88.88': ['Высокий Регистр', 'Большая проводимость. Держи ноги укорененными, не давай уму разгонять суету.'],
+  // примеры из системного промпта автора
+  '121.21': ['Двойной Контур', 'Двойной контур сомкнулся. Внешнее и внутреннее уравновешены, продолжай движение из центра.'],
+  '84.12': ['Чётный Финал', 'Импульс закрыт в текущем кадре. Сохраняй тихий пульс и чувствуй опору под ногами.'],
+  '13.37': ['Нечётный Импульс', 'Импульс точечно задействован. Расправь плечи, твой фундамент остается незыблемым.'],
+  '184.90': ['Чётный Финал', 'Ресурс переведен в материю дня. Верни внимание из мыслей к ровному дыханию.'],
+  '77.77': ['Высокий Регистр', 'Высокая проводимость. Удерживай ноги укорененными и не давай уму разгонять суету.'],
+};
+// Правила для остальных сумм (порядок проверки сверху вниз): [название, зачин, инструкции]
+const SUM_RULES = {
+  sym: ['Симметрия', ['Контур сомкнулся.', 'Ритм ровный.', 'Вес удерживается легко.'], ['Внешнее и внутреннее уравновешены, продолжай движение из центра.', 'Фиксируй опору в стопах, импульс потрачен без потери устойчивости.', 'Расправь плечи и сохрани покой нервной системы.']],
+  mirror: ['Зеркало', ['Вход равен выходу.', 'Ось зафиксирована.', 'Давление сброшено.'], ['Что отдано в материю, возвращается тихим покоем.', 'Верни внимание из мыслей к дыханию и поверхности земли.', 'Проведи внимание по позвоночнику сверху вниз.']],
+  asc: ['Шкала Порядка', ['Шаг за шагом.'], ['Простые монотонные действия выстраивают нерушимую структуру.', 'Один ровный шаг за другим фиксирует опору в стопах.']],
+  desc: ['Сжатие до Ядра', ['Лишнее сброшено.'], ['Сожми внимание до чистого ядра и сделай ровный выдох.', 'Остаётся только опора: стопы, дыхание, текущий кадр.']],
+  round: ['Круглый Вес', ['Ровный вес.', 'Плотный монолит.'], ['Масштаб без суеты: стопы укоренены, тепло и тяжесть внизу живота.', 'Твое состояние не меняется от размера цифр на экране.']],
+  even: ['Чётный Финал', ['Импульс закрыт в текущем кадре.', 'Трата вписана в текущий кадр.'], ['Сохраняй тихий пульс и чувствуй опору под ногами.', 'Верни внимание из мыслей к ровному дыханию.']],
+  odd: ['Нечётный Импульс', ['Импульс точечно задействован.', 'Трата вписана в текущий кадр.'], ['Расправь плечи, твой фундамент остается незыблемым.', 'Верни внимание в стопы и сделай ровный вдох.']],
+};
+function sumKind(int, dec) {
+  const dg = int + dec, run = (st) => dg.length >= 4 && dg.split('').every((c, i) => i === 0 || +c - +dg[i - 1] === st);
+  if (dg.length >= 4 && /^(\d)\1+$/.test(dg)) return 'sym';
+  if (int.length <= 2 && int.padStart(2, '0') === dec) return 'sym';
+  if (int.length === 2 && int[0] === int[1] && dec[0] === dec[1]) return 'sym';
+  if (dg.length >= 4 && dg === dg.split('').reverse().join('')) return 'mirror';
+  if (run(1)) return 'asc';
+  if (run(-1)) return 'desc';
+  if (dec === '00' && +int >= 10 && +int % 10 === 0) return 'round';
+  return +dec[1] % 2 === 0 ? 'even' : 'odd';
+}
+function sumInfo(am) {
+  const key = String(+am.int) + '.' + am.dec;
+  return { int: am.int, dec: am.dec, key: key, is6060: key === '60.60' };
+}
+function anchorFor(sum) {
+  if (SUM_TABLE[sum.key]) return SUM_TABLE[sum.key];
+  const r = SUM_RULES[sumKind(sum.int, sum.dec)], seed = (sum.int + sum.dec).split('').reduce((a, c) => a + +c, 0);
+  return [r[0], r[1][seed % r[1].length] + ' ' + r[2][(seed + 1) % r[2].length]];
+}
+function parseAmount(raw) {
+  const t = String(raw || '').replace(/[\s\u00A0]/g, '').replace(/:/g, '.');
+  if (!/\d/.test(t)) return null;
+  const last = Math.max(t.lastIndexOf('.'), t.lastIndexOf(','));
+  let int, dec = '00';
+  if (last >= 0) {
+    const after = t.slice(last + 1).replace(/\D/g, ''), before = t.slice(0, last).replace(/\D/g, '');
+    if (after.length === 3) int = before + after;
+    else { int = before || '0'; dec = (after + '00').slice(0, 2); }
+  } else int = t.replace(/\D/g, '');
+  int = int.replace(/^0+(?=\d)/, '') || '0';
+  if (int.length > 9) int = int.slice(-9);
+  return { int: int, dec: dec };
+}
+const sgnMode = (raw) => SGN.mode || (/^\d{1,9}[.,]\d{2}$/.test(String(raw || '').trim()) ? 'sum' : 'num');
+function sgnChips() {
+  const m = sgnMode(SGN.text);
+  return '<div class="sgn-mode" id="sgnMode"><button class="sgn-chip' + (m === 'num' ? ' on' : '') + '" data-action="sgn-mode" data-m="num">Число</button><button class="sgn-chip' + (m === 'sum' ? ' on' : '') + '" data-action="sgn-mode" data-m="sum">Сумма</button></div>';
+}
+function syncSgnMode() {
+  const m = sgnMode(SGN.text);
+  document.querySelectorAll('#sgnMode .sgn-chip').forEach((b) => b.classList.toggle('on', b.dataset.m === m));
 }
 function sumAnchorHTML(d) {
-  if (!d.sum || !d.sum.kind) return '';
+  if (!d.sum) return '';
   if (!hasKey('scan')) return '<div class="note" style="margin-top:12px">Якорь суммы: контур заперт. Для открытия проводимости требуется активация ключа.</div>' + (DEMO_KEYS ? '<button class="btn btn-soft" data-action="open-keys" style="margin-top:10px">КЛЮЧ MATRIX SCAN · $8,88</button>' : '');
-  if (!d.sum.is6060) return '<div class="note" style="margin-top:12px">Якорь суммы: информация скоро.</div>';
-  const sec = (t, x) => '<div class="dsec"><div class="label">' + t + '</div><div class="body">' + x + '</div></div>';
-  return '<div class="sgn-anchor"><div class="label">Код структуры · 60 . 60</div>' + sec('Состояние', 'Полный баланс / Ровный калибр.') +
-    sec('Импульс', 'Попробуй замедлить пульс до ровного ритма.') +
-    sec('Инструкция', 'Сделай глубокий выдох в низ живота. Эта покупка заземлена. В твоем дне ничего не изменилось, ресурс просто перешел в форму материи. Продолжай движение из центра.') + '</div>';
+  if (d.sum.is6060) {
+    const sec = (t, x) => '<div class="dsec"><div class="label">' + t + '</div><div class="body">' + x + '</div></div>';
+    return '<div class="sgn-anchor"><div class="label">Код структуры · 60 . 60</div>' + sec('Состояние', 'Полный баланс / Ровный калибр.') +
+      sec('Импульс', 'Попробуй замедлить пульс до ровного ритма.') +
+      sec('Инструкция', 'Сделай глубокий выдох в низ живота. Эта покупка заземлена. В твоем дне ничего не изменилось, ресурс просто перешел в форму материи. Продолжай движение из центра.') + '</div>';
+  }
+  const a = anchorFor(d.sum);
+  return '<div class="sgn-anchor"><div class="label">Код · ' + esc(a[0]) + '</div><div class="body">' + esc(a[1]) + '</div></div>';
 }
 function decodeSign(raw) {
-  const digits = (raw || '').replace(/\D/g, '');
+  const am = sgnMode(raw) === 'sum' ? parseAmount(raw) : null;
+  const digits = am ? am.int + am.dec : (raw || '').replace(/\D/g, '');
   if (!digits) return null;
   let reg = 0, timePair = false;
-  if (digits.length === 4 && !/[.,]/.test(raw)) { const hh = +digits.slice(0, 2), mm = +digits.slice(2); if (hh === mm && hh <= 23) { reg = hh === 0 ? 72 : hh; timePair = true; } }
+  if (!am && digits.length === 4 && !/[.,]/.test(raw)) { const hh = +digits.slice(0, 2), mm = +digits.slice(2); if (hh === mm && hh <= 23) { reg = hh === 0 ? 72 : hh; timePair = true; } }
   if (!reg) { let m = 0; for (let i = 0; i < digits.length; i++) m = (m * 10 + (digits.charCodeAt(i) - 48)) % 72; reg = m === 0 ? 72 : m; }
-  const am = /^(\d{1,9})[.,](\d{2})$/.exec((raw || '').trim());
   const flags = [];
   if (am) flags.push('сумма');
   if (digits.length >= 2 && /^(\d)\1+$/.test(digits)) flags.push('повтор одной цифры');
   else if (digits.length % 2 === 0 && digits.slice(0, digits.length / 2) === digits.slice(digits.length / 2)) flags.push('парное число');
   if (digits.length >= 3 && digits === digits.split('').reverse().join('')) flags.push('зеркальное число');
-  return { digits: digits, reg: reg, timePair: timePair, flags: flags, sum: am ? sumInfo(am[1], am[2]) : null };
+  return { digits: digits, reg: reg, timePair: timePair, flags: flags, sum: am ? sumInfo(am) : null };
 }
 function renderSignOut() {
   const out = document.getElementById('sgnOut');
@@ -3105,7 +3187,7 @@ function renderSignOut() {
     return;
   }
   out.innerHTML = '<div class="sgn-res">' +
-    '<div class="label">' + (d.timePair ? 'Парное время ' + d.digits.slice(0, 2) + ':' + d.digits.slice(2) + ' · маяк' : (d.sum ? 'Сумма ' : 'Число ') + esc(SGN.text)) + '</div>' +
+    '<div class="label">' + (d.timePair ? 'Парное время ' + d.digits.slice(0, 2) + ':' + d.digits.slice(2) + ' · маяк' : (d.sum ? 'Сумма ' + d.sum.int + '.' + d.sum.dec : 'Число ' + esc(SGN.text))) + '</div>' +
     '<div class="sgn-reg">№' + reg.id + ' · ' + rname(reg) + ' <span class="tag" style="color:' + color + ';border-color:' + color + '">' + EL_RU[reg.element] + '</span></div>' +
     (d.flags.length ? '<div class="sgn-flags">' + d.flags.map((f) => '<span class="sgn-flag">' + f + '</span>').join('') + '</div>' : '') +
     '<div class="dsec"><div class="label">Суть</div><div class="body">' + esc(m[1]) + '</div></div>' +
