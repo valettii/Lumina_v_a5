@@ -1,0 +1,165 @@
+{
+ "version": 1,
+ "pairs": [
+  {
+   "core": "Огонь",
+   "vector": "Огонь",
+   "together": "Both lines set the impulse. You launch processes quickly and rarely wait for outside permission: there is usually more energy for starting than for following through.",
+   "strength": "A fast start, readiness to take the initiative and to light others up for action.",
+   "friction": "Overheating: much begun, little closed. The pace grows faster than the ability to hold it.",
+   "early": "You speed up your speech and steps and take on new things without finishing the previous ones.",
+   "practice": "Pick one started task and bring it to the end before launching a new one. Before every new start take a pause of one exhale.",
+   "question": "What of what I started remains unfinished, and what of it is really needed?"
+  },
+  {
+   "core": "Огонь",
+   "vector": "Земля",
+   "together": "The core launches, the vector shapes. The impulse gets support: ideas do not dissolve if you give them a form in advance: a deadline, a place, the size of a step.",
+   "strength": "The ability to bring an impulse to a result when there is a plan and deadlines.",
+   "friction": "The core hurries, the vector demands order. Hence irritation at the \"slow\", or, on the contrary, the clamp of \"not ready yet\".",
+   "early": "Impatience appears toward a \"too detailed\" plan, or the start is postponed because of incomplete preparation.",
+   "practice": "Before starting write three points: what you do, by when, and what the first fifteen-minute step is. Without this note, put the start off.",
+   "question": "What form does my impulse need in order to live to see a result?"
+  },
+  {
+   "core": "Огонь",
+   "vector": "Воздух",
+   "together": "The core gives energy, the vector gives clarity of direction. A thought is quickly tested by action, and an action quickly gets its wording.",
+   "strength": "Fast learning by practice and the ability to find words for action and allies.",
+   "friction": "Many options and high speed: decisions are made on the fly and revised. The result is scattered focus instead of depth.",
+   "early": "More tasks and tabs are open than you can keep in your head.",
+   "practice": "Limit the number of active directions to three. Write a new idea down first, and act on it after the current step is finished.",
+   "question": "Which three directions are the main ones for me now?"
+  },
+  {
+   "core": "Огонь",
+   "vector": "Вода",
+   "together": "The core acts, the vector feels. The combination can join determination with attention to your state as long as they do not get in each other's way.",
+   "strength": "You feel when to act and when to wait, and you act exactly as the situation requires.",
+   "friction": "Sharp switches: a burst, then a drop. Will presses on the state, and the state brakes the will.",
+   "early": "Irritation or apathy for no visible reason after a period of high activity.",
+   "practice": "Plan your load in waves: a short burst, then a deliberate pause of the same length. Notice the signal of fatigue before it becomes a stop.",
+   "question": "Which signal of fatigue do I miss most often?"
+  },
+  {
+   "core": "Земля",
+   "vector": "Огонь",
+   "together": "The core gives support, the vector gives the launch. You hold the form reliably, and the vector nudges you to change it when it has grown old.",
+   "strength": "Stability together with readiness to renew: you change without destroying the base.",
+   "friction": "Habit argues with impulse: \"it is fine as it is\" against \"time to move\". The decision is postponed until the pressure grows.",
+   "early": "You keep saying \"later\" although you understand that you are putting things off.",
+   "practice": "Once a week choose one habitual order and consciously change one detail in it. Judge the result without haste.",
+   "question": "What am I keeping out of habit, not out of meaning?"
+  },
+  {
+   "core": "Земля",
+   "vector": "Земля",
+   "together": "Both lines are about stability, order and density. You build and maintain well; reliability is your main resource.",
+   "strength": "Reliability, patience, the ability to do work consistently and well.",
+   "friction": "Stagnation: preserving becomes more important than developing. Changes are felt as a threat to the structure.",
+   "early": "Refusing the new before the details have been considered.",
+   "practice": "Add one small new action to your week that is not in your usual structure, and assess it after seven days.",
+   "question": "What in my structure has not been reviewed for a long time?"
+  },
+  {
+   "core": "Земля",
+   "vector": "Воздух",
+   "together": "The core gives form, the vector gives the structure of thought. Ideas quickly become plans: you know how to turn understanding into order.",
+   "strength": "Clear structure and consistency: understanding turns into a working system.",
+   "friction": "More plans than actions: the quality of preparation replaces the start.",
+   "early": "You edit the plan instead of starting.",
+   "practice": "Limit preparation by time (for example, twenty minutes) and take the first step even if the plan is incomplete.",
+   "question": "Which first step am I putting off under the guise of preparation?"
+  },
+  {
+   "core": "Земля",
+   "vector": "Вода",
+   "together": "The core gives support, the vector gives recovery and flexibility. A firm base allows you to feel and to rebuild safely.",
+   "strength": "Calm endurance and the ability to recover without losing the base.",
+   "friction": "Heaviness: when the load exceeds the support, the system slides into viscosity, slowness and postponing.",
+   "early": "Tasks are put off \"until a better state\".",
+   "practice": "Choose one anchor habit, a simple ritual, and keep it regardless of mood. Plan the rest flexibly.",
+   "question": "Which one habit holds me when everything else is unstable?"
+  },
+  {
+   "core": "Воздух",
+   "vector": "Огонь",
+   "together": "The core gives clarity and connections, the vector gives the launch. You see what to do and know how to begin: wording and action quickly find each other.",
+   "strength": "You quickly formulate a goal and involve others.",
+   "friction": "Words run ahead of deeds: discussion and explanation take energy that later is missing for execution.",
+   "early": "The thought of the task comes more often than the task itself.",
+   "practice": "After every important conversation or decision formulate one action you will take today and take it before the next discussion.",
+   "question": "What do I talk about more than I do?"
+  },
+  {
+   "core": "Воздух",
+   "vector": "Земля",
+   "together": "The core gives the structure of thought, the vector gives form and order. Clear ideas get a carrier: a document, a schedule, a rule.",
+   "strength": "Logic and order: the complex becomes understandable and applicable.",
+   "friction": "Rigidity: the structure is built before live information appears, and the plan is hard to change for new data.",
+   "early": "Irritation when reality does not match the plan.",
+   "practice": "Set a review point: in a week check the structure against the facts and change one part of it.",
+   "question": "Which of my rules is due to be checked against the facts?"
+  },
+  {
+   "core": "Воздух",
+   "vector": "Воздух",
+   "together": "Both lines are about clarity, connections and structure. You quickly see patterns and know how to explain.",
+   "strength": "Speed of understanding, breadth of connections, the ability to explain.",
+   "friction": "The head is ahead of the body: much analysis, little support. The thought circles while the state does not change.",
+   "early": "Many thoughts, little movement: the body stays in one position for long.",
+   "practice": "Every day turn one conclusion into a bodily action: movement, water, a minute of silence. A thought is fixed by action.",
+   "question": "Which of my latest conclusions has not turned into action?"
+  },
+  {
+   "core": "Воздух",
+   "vector": "Вода",
+   "together": "The core gives clarity, the vector gives feeling and recovery. The combination can understand yourself and others and find words for a state.",
+   "strength": "The ability to understand a state and find exact words for it.",
+   "friction": "Analysis of feelings instead of living them: explaining a state becomes more important than changing anything in it.",
+   "early": "You reread and rewrite the description of your state.",
+   "practice": "When you notice tension, first do one bodily action for fifteen seconds and only then formulate what is happening.",
+   "question": "What do I feel now, without naming the reasons yet?"
+  },
+  {
+   "core": "Вода",
+   "vector": "Огонь",
+   "together": "The core gives sensitivity and recovery, the vector gives the launch. You sense the moment precisely and know how to begin when it has ripened.",
+   "strength": "Precise choice of the moment: you feel when it is time and act decisively.",
+   "friction": "Hesitation before the start: sensitivity to your state slows the decision, and then the impulse breaks through in a jerk.",
+   "early": "The start is postponed until it \"gets easier\".",
+   "practice": "Choose a fixed time to start an important task and begin regardless of mood, but with a minimal step.",
+   "question": "What minimal step can I take today regardless of my state?"
+  },
+  {
+   "core": "Вода",
+   "vector": "Земля",
+   "together": "The core gives flow and recovery, the vector gives form. Sensitivity gets a frame: states do not spread but fit into an order.",
+   "strength": "Emotional stability when there is order.",
+   "friction": "The frame can press: order becomes a way of avoiding the state instead of helping it.",
+   "early": "The routine starts to \"press\" even though you built it yourself.",
+   "practice": "Leave one unstructured stretch of time in your schedule and do not fill it with tasks.",
+   "question": "Where does order help me, and where does it hide my state?"
+  },
+  {
+   "core": "Вода",
+   "vector": "Воздух",
+   "together": "The core gives perception and recovery, the vector gives clarity and structure. You feel and know how to describe what is happening.",
+   "strength": "Depth of perception together with the ability to express it.",
+   "friction": "Too many words around the state: it is hard to stop the analysis.",
+   "early": "Every sensation wants to be explained with one more sentence.",
+   "practice": "Keep the journal in short phrases: one state, one action, no more than two lines.",
+   "question": "Which state can I simply note now, without explaining it?"
+  },
+  {
+   "core": "Вода",
+   "vector": "Вода",
+   "together": "Both lines are about perception, sensitivity and recovery. You read the environment well and know how to recover.",
+   "strength": "Sensitivity, the ability to read the environment and to recover.",
+   "friction": "Blurred boundaries: other people's states and circumstances take up a lot of room, and it is hard to hold your course.",
+   "early": "Your mood starts to depend on other people's mood.",
+   "practice": "Once a day mark one boundary: what you accept and what you leave outside. Say it to yourself in one phrase.",
+   "question": "What of what is happening around me is not mine?"
+  }
+ ]
+}

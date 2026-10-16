@@ -573,7 +573,7 @@ body.is-start::before{background:#050609!important}
 .oc.nolb .oc-ic{left:25%;top:25%;width:50%;height:50%}
 .oc-img{display:none;position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .oc-art.hasimg .oc-img{display:block}
-.oc-art.hasimg .oc-vec{display:none}
+.oc-art.hasimg .oc-frame polygon:first-child{fill:rgba(0,0,0,0)}
 .oc-lb{position:absolute;left:0;right:0;top:60%;text-align:center;color:#E3C985;font-size:calc(var(--px) * 12.5);line-height:1.12;letter-spacing:.02em;white-space:nowrap;text-shadow:0 1px 4px rgba(0,0,0,.8)}
 .oc-lb.two{top:48.5%}
 .oc-lb.skr,.core-skt{font-family:"Noto Serif Devanagari","Kohinoor Devanagari","Devanagari Sangam MN",FreeSerif,serif;letter-spacing:0}
@@ -596,6 +596,20 @@ body.is-start::before{background:#050609!important}
 .sgn-chip{flex:1;height:34px;border-radius:12px!important;border:0!important;background:rgba(5,7,12,.32)!important;box-shadow:inset 0 0 0 2px var(--frame)!important;color:#F1F3F8;font-size:13px;letter-spacing:.06em}
 .sgn-chip.on{background:#E4D5A8!important;color:#15130C!important}
 .sgn-chip{display:flex;align-items:center;justify-content:center;text-align:center;padding:0}
+.langsw{display:flex;gap:8px}
+.lsb{min-width:48px;height:34px;border-radius:12px!important;border:0!important;background:rgba(5,7,12,.32)!important;box-shadow:inset 0 0 0 2px var(--frame)!important;color:#F1F3F8;font-size:13px;letter-spacing:.06em;padding:0 10px}
+.lsb.on{background:#E4D5A8!important;color:#15130C!important}
+.linkrow{width:100%;text-align:left;background:none;border:0;color:#F1F3F8;font-size:14px;padding:6px 0;text-decoration:underline;text-decoration-color:rgba(228,213,168,.5)}
+.legal{margin-top:14px;padding-bottom:30px;color:#D9DCE6;font-size:14px;line-height:1.55}
+.legal h2{font-size:18px;margin:6px 0 12px;color:#F1F3F8}
+.legal h3{font-size:14px;letter-spacing:.04em;margin:18px 0 6px;color:#E3C985}
+.legal p{margin:0 0 10px}
+.core-stone{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;z-index:0}
+.core.hasstone .oc-frame polygon:first-child{fill:rgba(0,0,0,0)}
+.soon{display:flex;flex-direction:column;align-items:center;text-align:center;padding:26px 8px 40px}
+.soon-oct{position:relative;width:200px;height:200px;--px:1.35;margin:10px auto 26px}
+.soon-t{font-size:20px;color:#F1F3F8;letter-spacing:.04em;margin-bottom:8px}
+.soon-s{font-size:14px;color:#B9BECB;line-height:1.5;max-width:280px;margin-bottom:30px}
 </style>
 </head>
 <body>
@@ -1076,83 +1090,6 @@ function groupJournal(logs            , now      )                              
   return { recent, months };
 }
 
-
-
-// [ключевое качество, глубокий смысл, сбой и чистая фаза, инструмент заземления] — черновик по традиционным атрибутам регистров
-const REG_FULL = [
-  ['Воля, начало, энергия импульса', 'Точка запуска: способность начать действие из ясной воли, а не из суеты.', 'Сбой: рывок без цели или промедление. Чистая фаза: ясное намерение и первый шаг без лишних слов.', 'Назвать одну цель и сделать первый физический шаг.'],
-  ['Согласие, привязанность, примирение', 'Восстановление связи и договорённости там, где возникло напряжение.', 'Сбой: ревность, зажим, затяжка конфликта. Чистая фаза: мягкий контакт и готовность к примирению.', 'Сказать одному человеку простую фразу, снимающую напряжение.'],
-  ['Опора, построение, защита', 'Строительство основы: надёжная конструкция проекта или распорядка, которая защищает от рассеивания.', 'Сбой: стройка без плана, зависимость от обстоятельств. Чистая фаза: чёткая структура и чувство защищённости.', 'Зафиксировать три шага плана на бумаге.'],
-  ['Внутренняя сила, преодоление, скрытое', 'Выход из тупика: преодоление препятствия через внутреннюю опору и трезвый взгляд на скрытые причины.', 'Сбой: застревание, самообман. Чистая фаза: спокойное преодоление без драмы.', 'Назвать причину застоя одним предложением и сделать один обходной шаг.'],
-  ['Исправление, гармония, обучение', 'Корректировка курса без самоедства: исправление ошибки и усвоение урока.', 'Сбой: самокритика или отрицание ошибки. Чистая фаза: спокойное исправление и вывод.', 'Записать ошибку фактом и одно исправляющее действие.'],
-  ['Ясность, свет понимания, восстановление', 'Прояснение: способность увидеть ситуацию без искажений и вернуть себе лёгкость.', 'Сбой: туман, перегруз деталями. Чистая фаза: простота и ясность мотива.', 'Убрать лишнее с экрана и оставить один рабочий объект.'],
-  ['Терпение, внимательность, раскрытие', 'Работа в длинном темпе: терпеливое выращивание результата без форсирования.', 'Сбой: нетерпение, рывки. Чистая фаза: ровное движение и наблюдение.', 'Выбрать порцию работы на 20 минут и остановиться по таймеру.'],
-  ['Благодарность, плодородие, поддержка', 'Закрепление урожая: признание ресурса и поддержка того, что уже работает.', 'Сбой: ожидание большего, обесценивание имеющегося. Чистая фаза: спокойное принятие и рост на достигнутом.', 'Записать три вещи, которые уже работают.'],
-  ['Милосердие, прощение, дружба', 'Смягчение: снятие накопленной претензии и восстановление доброжелательности.', 'Сбой: обида, жёсткий счёт. Чистая фаза: великодушие без потери границ.', 'Отпустить одну претензию: записать её и отложить лист.'],
-  ['Милость, восстановление, поддержка', 'Исцеление через принятие: возвращение себе права начать заново без вины.', 'Сбой: вина, затяжка самонаказания. Чистая фаза: лёгкость нового начала.', 'Сделать паузу на три минуты и назвать одно действие на сегодня.'],
-  ['Победа, признание, лёгкость успеха', 'Закрепление результата: честное признание достигнутого и перенос его в следующий шаг.', 'Сбой: гонка за признанием или обесценивание успеха. Чистая фаза: спокойная уверенность.', 'Закрыть одно дело и вычеркнуть его.'],
-  ['Защита, убежище, покой', 'Безопасное пространство: создание условий, где можно восстановиться без давления.', 'Сбой: тревожность, открытость любым нагрузкам. Чистая фаза: ощущение укрытия и тишины.', 'Отключить уведомления на 20 минут.'],
-  ['Гармония, верность, объединение, точные связи', 'Синхронизация и выравнивание: идеальная стыковка элементов — взаимопонимание между людьми, объединение идеи и формы, баланс внутреннего состояния с внешним.', 'Сбой: суета, сомнения, разрыв связей, попытка додумать за другого. Чистая фаза: лёгкость коммуникации, моментальное прояснение смыслов, порядок в делах.', 'Зафиксировать форму через слово или точную договорённость; признать, что все части системы уже на своих местах.'],
-  ['Правда, свобода, очищение', 'Освобождение от зажимов: честное признание фактов и снятие давления того, что больше не служит.', 'Сбой: самообман, ощущение несправедливости. Чистая фаза: прямота и облегчение.', 'Назвать факт без оценок и вычеркнуть одно ненужное обязательство.'],
-  ['Очищение, истина, ясность убеждений', 'Очистка основания: отбор того, что действительно твоё, от навязанного.', 'Сбой: догматизм или растерянность. Чистая фаза: ясное личное убеждение.', 'Из двух вариантов выбрать один и записать причину.'],
-  ['Верность, лидерство, поддержка', 'Ответственное лидерство: стойкость в обязательствах и надёжность перед людьми.', 'Сбой: власть ради власти или уход от ответственности. Чистая фаза: спокойная надёжность.', 'Сказать вслух «Мой следующий шаг — …» и выполнить его.'],
-  ['Открытие, победа, вдохновение', 'Прорыв: ясное решение или идея, приходящая после паузы.', 'Сбой: застревание, шум в голове. Чистая фаза: лёгкое озарение и подъём.', 'Выйти на 5 минут без телефона и записать первую пришедшую мысль.'],
-  ['Справедливость, правда, честность', 'Сверка по фактам: честное сравнение слов и действий, восстановление справедливости.', 'Сбой: обвинение, перекос оценок. Чистая фаза: беспристрастность.', 'Записать три факта вместо оценок.'],
-  ['Память, ум, терпение', 'Опора на опыт: вспомнить уже работавшие решения и применить их.', 'Сбой: забывчивость, повторение ошибок. Чистая фаза: ясная память и спокойный ум.', 'Записать одно решение, которое уже сработало раньше.'],
-  ['Призвание, смысл, чистота намерения', 'Сверка с призванием: проверка, служит ли текущее дело главной линии.', 'Сбой: распыление на чужие цели. Чистая фаза: ощущение своего дела.', 'Назвать главную цель дня одной фразой.'],
-  ['Знание, любознательность, защита от клеветы', 'Углубление: тяга к знанию и способность не поддаваться чужим искажениям.', 'Сбой: информационный шум, сплетни. Чистая фаза: ясные источники и твёрдая позиция.', 'Проверить одно утверждение по первоисточнику.'],
-  ['Известность, путь, защита в движении', 'Движение с опорой: безопасно двигаться вперёд, не теряя себя в процессе.', 'Сбой: суета ради видимости. Чистая фаза: спокойный шаг и признание от результата.', 'Пройти 5 минут быстрым шагом без телефона.'],
-  ['Восстановление, природа, защита в пути', 'Возврат к естественному ритму: тело, сон, питание, природа.', 'Сбой: рассинхрон режима. Чистая фаза: лёгкость и тонус.', 'Выпить воды и сделать минуту растяжки.'],
-  ['Милосердие, защита, прощение', 'Бережность к себе и другим: защита уязвимых точек и мягкое возвращение к делу.', 'Сбой: жёсткость, самокритика. Чистая фаза: мягкая устойчивость.', 'Сказать себе одну поддерживающую фразу и вернуться к задаче.'],
-  ['Мудрость, глубина, знание скрытого', 'Осмысленное знание: умение разглядеть закономерность за событиями.', 'Сбой: поверхностность или уход в домыслы. Чистая фаза: глубина без драмы.', 'Записать закономерность, которую ты заметил за день.'],
-  ['Дипломатия, договорённости, скрытое', 'Тонкие переговоры: умение договориться и ясно держать позицию.', 'Сбой: манипуляции, недосказанность. Чистая фаза: ясные условия.', 'Прояснить условия одной фразой.'],
-  ['Свет, порядок, освобождение от помех', 'Распространение порядка: разборка помех и передача знания дальше.', 'Сбой: хаос и сопротивление. Чистая фаза: понятная система.', 'Убрать одну помеху с рабочего места.'],
-  ['Здоровье, долголетие, защита', 'Ресурс на дистанцию: забота о теле и режиме ради длинной работы.', 'Сбой: износ, пренебрежение сигналами тела. Чистая фаза: устойчивый тонус.', 'Назначить жёсткое время окончания задачи.'],
-  ['Освобождение, правда, защита', 'Снятие давления: освобождение от навязанных рамок и ложных обязательств.', 'Сбой: зажим, ощущение ловушки. Чистая фаза: свобода выбора.', 'Назвать одно обязательство, которое можно снять.'],
-  ['Плодородие, рост, множественность', 'Размножение удачного: развитие того, что уже даёт плоды.', 'Сбой: распыление или застой. Чистая фаза: рост без перегруза.', 'Повторить одно удачное действие ещё раз.'],
-  ['Талант, ум, практическое применение', 'Применение способностей: превращение таланта в конкретный результат.', 'Сбой: талант без применения. Чистая фаза: умение и результат.', 'Сделать одну маленькую законченную часть работы.'],
-  ['Справедливость, милость, память', 'Мягкая справедливость: честные решения без жестокости.', 'Сбой: обвинение или потакание. Чистая фаза: взвешенность.', 'Принять одно решение по правилу: два варианта, один критерий.'],
-  ['Верность, преданность, служение', 'Стойкость в обязательствах: верность делу и людям при внешнем давлении.', 'Сбой: слепое подчинение или измена себе. Чистая фаза: осознанная верность.', 'Выполнить одно данное обещание сегодня.'],
-  ['Порядок, согласие, покой ума', 'Наведение порядка: упорядочивание дел и подчинение их ясному распорядку.', 'Сбой: бунт против структуры или рабство перед ней. Чистая фаза: спокойный распорядок.', 'Удалить или перенести три пункта из списка дел.'],
-  ['Примирение, семья, возврат долгов', 'Восстановление баланса: возврат того, что должно вернуться, и мирное завершение.', 'Сбой: затяжной спор о справедливости. Чистая фаза: мир и закрытие долгов.', 'Закрыть один незавершённый вопрос с человеком.'],
-  ['Труд, свобода, возвращение на место', 'Работа как опора: свободное и осознанное участие в деле, возвращение на своё место.', 'Сбой: ощущение ссылки, работа через силу. Чистая фаза: своё место и спокойный труд.', 'Записать одно работающее правило и поставить напоминание.'],
-  ['Смелость, разрыв цикла, победа', 'Выход из повторяющегося круга: решение прервать привычную схему.', 'Сбой: зацикленность на прежнем. Чистая фаза: смелый шаг в сторону.', 'Сделать одно действие иначе, чем обычно.'],
-  ['Истина, порядок, защита ищущих', 'Структурированный поиск: способность держать направление в поисках смысла.', 'Сбой: хаотичный поиск. Чистая фаза: ясная линия.', 'Записать мысли за две минуты и выделить главную.'],
-  ['Уважение, здоровье, принятие поддержки', 'Уважительное отношение к опыту и поддержке: приём помощи и благодарность без унижения.', 'Сбой: гордыня или самоуничижение. Чистая фаза: достоинство и открытость.', 'Попросить об одной небольшой помощи или поблагодарить.'],
-  ['Утешение, освобождение, творчество', 'Выход из зажима через слово и образ: выражение накопленного в понятной форме.', 'Сбой: застрявшая тяжесть. Чистая фаза: освобождение через выражение.', 'Написать три предложения о том, что тревожит, и отложить.'],
-  ['Призвание, вера, миссия', 'Служение смыслу: верность цели даже при отсутствии быстрых результатов.', 'Сбой: сомнение и распыление. Чистая фаза: спокойная вера в дело.', 'Назвать одно действие, которое сегодня служит главной цели.'],
-  ['Порядок, организация, защита', 'Организующая сила: выстраивание структуры и безопасных процедур.', 'Сбой: контроль ради контроля. Чистая фаза: ясные правила.', 'Нарисовать схему задачи из трёх блоков.'],
-  ['Достаток, мир, стабильность', 'Устойчивое изобилие: поддержание спокойного достатка без жадности.', 'Сбой: тревога о нехватке или расточительность. Чистая фаза: ровный достаток.', 'Записать остаток времени, сил и средств на сегодня.'],
-  ['Успех, защита, справедливая борьба', 'Достойное усилие: настойчивость в справедливом деле и умение вовремя остановиться.', 'Сбой: борьба ради борьбы. Чистая фаза: собранность и удача.', 'Отметить, где усилие нужно, а где можно отпустить.'],
-  ['Воля к жизни, мотивация, восстановление', 'Возврат энергии: подъём мотивации и желания действовать.', 'Сбой: апатия. Чистая фаза: лёгкая энергия.', 'Встать, пройти 50 шагов и начать с самого лёгкого пункта.'],
-  ['Восприятие, откровение, открытие', 'Прозрение: способность увидеть скрытое и понять собственный следующий этап.', 'Сбой: слепота к очевидному. Чистая фаза: ясное видение пути.', 'Записать, чему научился за год, и определить следующий навык.'],
-  ['Созерцание, истина, внутренняя опора', 'Спокойное наблюдение: видеть суть без вмешательства и оценок.', 'Сбой: суета и вмешательство. Чистая фаза: наблюдение.', 'Посидеть 3 минуты и описать происходящее без оценок.'],
-  ['Союз, согласие, верность', 'Партнёрство: согласование интересов и создание устойчивого союза.', 'Сбой: борьба за верх. Чистая фаза: равноправный контакт.', 'Сверить с партнёром один пункт плана.'],
-  ['Подъём, величие, признательность', 'Расширение масштаба: способность видеть большое и благодарить за пройденное.', 'Сбой: раздутое самомнение или мелочность. Чистая фаза: достойный масштаб.', 'Назвать одну вещь, за которую благодарен сегодня.'],
-  ['Красноречие, справедливость, милость', 'Ясное слово: умение выразить мысль так, чтобы её поняли.', 'Сбой: многословие или молчание. Чистая фаза: точная речь.', 'Сказать цель одной фразой без вводных слов.'],
-  ['Исцеление, универсальное знание, лекарство', 'Целебный синтез: соединение знаний и практик в то, что действительно помогает.', 'Сбой: коллекционирование методов. Чистая фаза: один рабочий метод.', 'Выбрать один метод и применить его сегодня.'],
-  ['Смирение, преодоление, поворот судьбы', 'Мудрое смирение: принятие реальности и опора на неё для следующего шага.', 'Сбой: сопротивление очевидному. Чистая фаза: спокойный поворот.', 'Признать один факт и сделать из него шаг.'],
-  ['Духовная связь, учение, освобождение', 'Диалог с учителем и опытом: получение знания и его осмысление.', 'Сбой: чужое мнение вместо своего. Чистая фаза: собственный вывод.', 'Спросить одно мнение и записать свой вывод.'],
-  ['Обновление, долголетие, достойная власть', 'Омоложение подхода: освежение старых практик и достойное управление ресурсом.', 'Сбой: окостенение. Чистая фаза: свежесть.', 'Изменить одну привычную деталь распорядка.'],
-  ['Утешение, ясность ума, продолжение', 'Ясный разум после волнения: успокоение чувств для ясного решения.', 'Сбой: путаница чувств и мыслей. Чистая фаза: ясность.', 'Назвать состояние одним словом и оценить его от 1 до 10.'],
-  ['Удача, поддержка, опора', 'Принятие поддержки: умение опереться на помощь и благоприятные обстоятельства.', 'Сбой: зависимость или отказ от помощи. Чистая фаза: доверие.', 'Принять небольшую помощь и поблагодарить.'],
-  ['Различение, лидерство, успех', 'Трезвое различение: умение отделить важное от второстепенного.', 'Сбой: сомнение в каждом решении. Чистая фаза: уверенный выбор.', 'Записать три важнейших дела и вычеркнуть остальное.'],
-  ['Внутренняя сила, исцеление, стойкость', 'Восстановительная сила: опора на внутренний ресурс после перегрузки.', 'Сбой: изнеможение. Чистая фаза: тихая сила.', 'Сделать 8 циклов дыхания 4/6.'],
-  ['Знание, память, накопленное богатство ума', 'Хранилище опыта: умение сохранить и снова использовать накопленное.', 'Сбой: информационный склад без порядка. Чистая фаза: доступный архив.', 'Оформить заметку из пяти строк по одной задаче.'],
-  ['Исправление, восстановление, мягкая вера', 'Мягкая коррекция: возвращение душевного равновесия после срыва.', 'Сбой: самообвинение. Чистая фаза: спокойное исправление.', 'Записать итог без оценок одним предложением.'],
-  ['Дружба, близость, сродство', 'Близость по сродству: поддержание связей, в которых легко быть собой.', 'Сбой: общение по обязанности. Чистая фаза: живой контакт.', 'Написать одному близкому человеку короткое тёплое сообщение.'],
-  ['Мудрость, созерцание, уединение', 'Уединение для ясности: время наедине для осмысления без шума.', 'Сбой: изоляция или постоянная вовлечённость. Чистая фаза: целебная тишина.', 'Побыть 5 минут в тишине без экрана.'],
-  ['Единство, обмен, здоровье', 'Здоровый обмен: справедливый обмен ресурсами и вниманием.', 'Сбой: перекос в отдавании или в получении. Чистая фаза: баланс.', 'Проверить один счёт или расход и записать сумму.'],
-  ['Вдохновение, слово, оживление', 'Живое слово: идея, которую получается выразить и передать.', 'Сбой: блок на выражении. Чистая фаза: лёгкий поток.', 'Набросать пять идей за три минуты, не оценивая.'],
-  ['Мудрость, источник, спокойное плавание', 'Глубинный источник: опора на внутренний ресурс и мягкое движение вперёд.', 'Сбой: пересушенность. Чистая фаза: спокойный поток.', 'Выпить тёплый напиток и посидеть минуту без дел.'],
-  ['Доброта, покой, сон', 'Мягкость и покой: доброжелательный фон, в котором легко восстановиться.', 'Сбой: раздражение и бессонница. Чистая фаза: умиротворение.', 'Приглушить свет и отложить экраны на 20 минут.'],
-  ['Утешение, помощь, лёгкость', 'Поддержка в трудный момент: способность дать и принять утешение.', 'Сбой: одиночество в тяжести. Чистая фаза: ощущение поддержки.', 'Выслушать человека и предложить один шаг помощи.'],
-  ['Исцеление, питание, плодородие', 'Питание ресурса: забота о теле и простой регулярной еде как основе сил.', 'Сбой: пропуски и случайные перекусы. Чистая фаза: регулярность.', 'Съесть простую порцию еды и выпить воды.'],
-  ['Возвращение утраченного, справедливость', 'Возврат: находка того, что было потеряно, и честное признание потерь.', 'Сбой: цепляние за утраченное. Чистая фаза: спокойное возвращение или отпускание.', 'Назвать одну задачу, которую пора отпустить.'],
-  ['Возрождение, превращение, новое начало', 'Обновление через перемену: способность начать заново с накопленным опытом.', 'Сбой: страх нового. Чистая фаза: лёгкая трансформация.', 'Выполнить минимальную версию новой привычки за 2 минуты.'],
-  ['Защита, мужество, победа', 'Защитная сила: стойкость, позволяющая удержать границы без агрессии.', 'Сбой: агрессия или уязвимость. Чистая фаза: спокойная сила.', 'Отказать в одной лишней просьбе без оправданий.'],
-  ['Завершение, возрождение, итог', 'Конец цикла: честное подведение итога и подготовка к новому.', 'Сбой: незавершённость. Чистая фаза: полное закрытие.', 'Подвести итог тремя строками и выбрать задачу на завтра.'],
-];
 
 
 // [имя (латиница), суть окна, питание, движение, визуал, мысль]. Единый файл содержания v2: №1–36 матрица автора, №37–72 JSON автора; питание вариант 1.
@@ -1721,7 +1658,7 @@ function topbar(title, opts) {
 const ICON_CABINET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9.5"/><circle cx="12" cy="9.6" r="3.2"/><path d="M5.8 18.2c1.6-3 4-4.4 6.2-4.4s4.6 1.4 6.2 4.4"/></svg>';
 function dashTopbar(isProfile, name, birthDate) {
   const center = isProfile
-    ? '<div class="top-cap">Профиль</div><div class="top-name">' + esc(name) + '</div><div class="top-status">Наблюдатель</div>'
+    ? '<div class="top-cap">Профиль</div><div class="top-name nt">' + esc(name) + '</div><div class="top-status">Наблюдатель</div>'
     : '<div class="top-name">БЫСТРЫЙ РАСЧЁТ</div><div class="top-sub">' + esc(birthDate) + '</div>';
   const cab = isProfile ? '<button class="icon-btn sm" data-action="open-cabinet" aria-label="Личный кабинет">' + ICON_CABINET + '</button>' : '';
   return '<div class="topbar dash"><button class="icon-btn" data-action="back" aria-label="Назад">‹</button>' +
@@ -1803,7 +1740,7 @@ function entryHTML(l, withArrow) {
   const thumb = l.kind === 'r' && l.art ? '<div class="log-thumb">' + visualHTML(l.art, 44) + '</div>' : '';
   return '<div class="log' + (withArrow ? ' tap" data-action="open-journal' : '') + '"><div class="log-bar" style="background:' + col(reg) + '"></div>' +
     '<div class="log-main">' + (p.label ? '<div class="log-kind">' + p.label + '</div>' : '') + '<div class="log-text">' + esc(p.text) + '</div>' +
-    (l.comment ? '<div class="log-comment">«' + esc(l.comment) + '»</div>' : '') +
+    (l.comment ? '<div class="log-comment nt">«' + esc(l.comment) + '»</div>' : '') +
     '<div class="log-meta">' + formatDateTime(new Date(l.timestamp)) + ' · №' + reg.id + ' ' + rname(reg) + '</div></div>' +
     thumb + (withArrow ? '<span class="chev">›</span>' : '') + '</div>';
 }
@@ -2006,7 +1943,7 @@ function proHTML(route) {
 }
 
 function beaconHTML(route) {
-  const h = route.h, regId = beaconReg(h), reg = getRegister(regId), full = REG_FULL[regId - 1];
+  const h = route.h, regId = beaconReg(h), reg = getRegister(regId);
   const color = col(reg), t = beaconTime(h);
   const sec = (title, text) => '<div class="dsec"><div class="label">' + title + '</div><div class="body">' + esc(text) + '</div></div>';
   const what = h === 0
@@ -2061,7 +1998,7 @@ function sheetHTML() {
   const p = S.profiles.find((x) => x.id === S.confirmId);
   if (!p) return '';
   return '<div class="backdrop" data-action="cancel-delete"><div class="sheet" data-action="noop">' +
-    '<h3>Удалить профиль</h3><div class="body">Профиль «' + esc(p.name) + '» и весь его журнал заземлений будут удалены.</div>' +
+    '<h3>Удалить профиль</h3><div class="body">Профиль «<span class="nt">' + esc(p.name) + '</span>» и весь его журнал заземлений будут удалены.</div>' +
     '<div class="sheet-row"><button class="btn btn-cancel" data-action="cancel-delete">ОТМЕНА</button>' +
     '<button class="btn btn-danger" data-action="confirm-delete">УДАЛИТЬ</button></div></div></div>';
 }
@@ -2103,6 +2040,8 @@ function render(animate) {
   else if (route.name === 'solar') body = solarHTML();
   else if (route.name === 'sanctuary') body = sanctuaryHTML();
   else if (route.name === 'keys') body = keysPageHTML();
+  else if (route.name === 'legal') body = legalHTML(route);
+  else if (route.name === 'soon') body = soonHTML(route);
   else if (route.name === 'hospitium') body = hospitiumHTML();
   else if (route.name === 'analysis') body = analysisHTML();
   else if (route.name === 'reg') body = regHTML(route);
@@ -2264,12 +2203,15 @@ async function handle(action, el) {
     case 'toggle-key': KEYS[el.dataset.k] = !KEYS[el.dataset.k]; render(false); break;
     case 'toggle-levels': S.lvlOpen = !S.lvlOpen; render(false); break;
     case 'open-keys': go({ name: 'keys' }); break;
+    case 'set-lang': await setLang(el.dataset.l); break;
+    case 'toggle-lang': await setLang(I18N.lang === 'en' ? 'ru' : 'en'); break;
+    case 'open-legal': closeOverlay(); go({ name: 'legal', kind: el.dataset.k }); break;
     case 'sgn-mode': SGN.mode = el.dataset.m; syncSgnMode(); renderSignOut(); break;
     case 'open-analysis': await openAnalysis(); break;
     case 'open-reg': go({ name: 'reg', id: parseInt(el.dataset.r, 10) }); break;
     case 'toggle-lik-open': { const i = parseInt(el.dataset.i, 10); S.likOpen = S.likOpen === i ? -1 : i; render(false); break; }
     case 'open-hospitium': go({ name: 'hospitium' }); break;
-    case 'coming-soon': toast('Скоро'); break;
+    case 'coming-soon': go({ name: 'soon', k: el.dataset.k }); break;
     case 'open-sanctuary': go({ name: 'sanctuary' }); break;
     case 'open-channel': { const tg = window.Telegram && window.Telegram.WebApp; if (CHANNEL_URL) { if (tg && tg.openTelegramLink && /t\.me\//.test(CHANNEL_URL)) tg.openTelegramLink(CHANNEL_URL); else window.open(CHANNEL_URL, '_blank'); } break; }
     case 'ground': {
@@ -2552,6 +2494,8 @@ function openSettings() {
   const sw = (action, on, label) => '<div class="setrow"><span>' + label + '</span><button class="sw' + (on ? ' on' : '') + '" data-action="' + action + '" aria-label="' + label + '"><i></i></button></div>';
   ovEl().innerHTML = sheetWrap('<h3>Настройки</h3>' + sw('toggle-sound', S.settings.sound !== false, 'Звук') +
     sw('toggle-dev', S.settings.devNotes !== false, 'Заметки разработчика') +
+    '<div class="setrow"><span>Language</span><span class="langsw"><button class="lsb' + (I18N.lang === 'ru' ? ' on' : '') + '" data-action="set-lang" data-l="ru">RU</button><button class="lsb' + (I18N.lang === 'en' ? ' on' : '') + '" data-action="set-lang" data-l="en">EN</button></span></div>' +
+    '<div class="setrow"><button class="linkrow" data-action="open-legal" data-k="privacy">Политика конфиденциальности</button></div><div class="setrow"><button class="linkrow" data-action="open-legal" data-k="terms">Пользовательское соглашение</button></div>' +
     '<div class="sheet-row"><button class="btn btn-cancel" data-action="ov-close">ЗАКРЫТЬ</button></div>');
 }
 
@@ -2720,7 +2664,7 @@ const OCTS = [
   ['hospitium', 143.6, 0, 103.6, 'merkaba', 'Hospitium', 'open-hospitium'],
   ['matrix_solaris', 38.3, 79.9, 98.8, 'hex', 'Matrix Solaris', 'open-solar'],
   ['anushthana', 254.7, 79.9, 97.9, 'moon', 'अनुष्ठान', 'open-rhythm'],
-  ['left', 8.7, 196.3, 92.3, 'cube', '', 'coming-soon'],
+  ['left', 8.7, 196.3, 92.3, 'cube', 'Vision', 'coming-soon'],
   ['pratidhvani', 289.5, 196.3, 92.7, 'waves', 'प्रतिध्वनि', 'open-signal'],
   ['matrix_scan', 38.3, 310.9, 98.8, 'scan', 'Matrix Scan', 'open-sign'],
   ['porta', 253.4, 310.9, 100.1, 'door', 'Porta', 'coming-soon'],
@@ -2731,23 +2675,28 @@ function octPts(ins) {
   return [[c - k, c - h], [c + k, c - h], [c + h, c - k], [c + h, c + k], [c + k, c + h], [c - k, c + h], [c - h, c + k], [c - h, c - k]].map((p) => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
 }
 const octFrame = (ins, fill) => '<svg class="oc-frame" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polygon points="' + octPts(0) + '" fill="' + fill + '" stroke="' + OC_GOLD + '" stroke-width="2.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/><polygon points="' + octPts(ins) + '" fill="none" stroke="' + OC_GOLD + '" stroke-opacity=".8" stroke-width="1.1" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>';
+function octInner(o) {
+  const two = o[5] === 'Matrix Solaris' || o[5] === 'Matrix Scan';
+  const skr = /[\u0900-\u097F]/.test(o[5]);
+  return '<span class="oc-art"><img class="oc-img" src="hub_o_' + o[0] + '.webp" alt="" onload="this.parentNode.classList.add(\'hasimg\')" onerror="this.remove()">' +
+    '<span class="oc-vec">' + octFrame(7, 'rgba(3,5,8,.55)') + '<svg class="oc-ic" viewBox="0 0 48 48" fill="none" stroke="#E3C985" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + OC_ICONS[o[4]] + '</svg></span></span>' +
+    (o[5] ? '<span class="oc-lb' + (two ? ' two' : '') + (skr ? ' skr' : '') + '">' + (two ? o[5].replace(' ', '<br>') : o[5]) + '</span>' : '');
+}
+function soonHTML(route) {
+  const o = OCTS.find((x) => x[0] === route.k) || OCTS[0];
+  return topbar(o[5] || 'Lumina', { noClock: true }) +
+    '<div class="soon"><div class="soon-oct">' + octInner(o) + '</div><div class="soon-t">Раздел готовится</div><div class="soon-s">Скоро здесь появится новый раздел Lumina</div><button class="btn btn-ok" data-action="back">НА ГЛАВНЫЙ</button></div>';
+}
 function startHTML() {
   const u = (n) => 'calc(var(--px) * ' + n + ')';
-  const oct = (o) => {
-    const two = o[5] === 'Matrix Solaris' || o[5] === 'Matrix Scan';
-    const skr = /[\u0900-\u097F]/.test(o[5]);
-    return '<button class="oc' + (o[5] ? '' : ' nolb') + '" data-action="' + o[6] + '" aria-label="' + (o[5] || 'Скоро') + '" style="left:' + u(o[1]) + ';top:' + u(o[2]) + ';width:' + u(o[3]) + ';height:' + u(o[3]) + '">' +
-      '<span class="oc-art"><img class="oc-img" src="hub_o_' + o[0] + '.webp" alt="" onload="this.parentNode.classList.add(\'hasimg\')" onerror="this.remove()">' +
-      '<span class="oc-vec">' + octFrame(7, 'rgba(3,5,8,.55)') + '<svg class="oc-ic" viewBox="0 0 48 48" fill="none" stroke="#E3C985" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + OC_ICONS[o[4]] + '</svg></span></span>' +
-      (o[5] ? '<span class="oc-lb' + (two ? ' two' : '') + (skr ? ' skr' : '') + '">' + (two ? o[5].replace(' ', '<br>') : o[5]) + '</span>' : '') + '</button>';
-  };
+  const oct = (o) => '<button class="oc' + (o[5] ? '' : ' nolb') + '" data-action="' + o[6] + '" data-k="' + o[0] + '" aria-label="' + (o[5] || 'Скоро') + '" style="left:' + u(o[1]) + ';top:' + u(o[2]) + ';width:' + u(o[3]) + ';height:' + u(o[3]) + '">' + octInner(o) + '</button>';
   return '<div class="start-bg"><div class="hub-photo"></div></div>' +
     '<div class="hub-top"><button class="icon-btn sm spk-btn" data-action="mute-toggle" aria-label="Звук">' + (S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON) + '</button>' +
     tierPill() + '</div>' +
     (activeProfile() ? '' : '<button class="hub-tip" data-action="open-cabinet">Создай профиль</button>') +
     '<div class="hub' + (activeProfile() ? '' : ' notip') + '"><div class="hub-canvas"><div class="hub-title">LUMINA<span> OS</span></div>' +
     '<div class="hub-stage2">' + OCTS.map(oct).join('') +
-    '<button class="core" data-action="go-calib" aria-label="CORE" style="left:' + u(108.8) + ';top:' + u(153.2) + ';width:' + u(172) + ';height:' + u(172) + '">' + octFrame(11.5, 'rgba(3,5,8,.5)') +
+    '<button class="core" data-action="go-calib" aria-label="CORE" style="left:' + u(108.8) + ';top:' + u(153.2) + ';width:' + u(172) + ';height:' + u(172) + '"><img class="core-stone" src="hub_core_stone.webp" alt="" onload="this.parentNode.classList.add(\'hasstone\')" onerror="this.remove()">' + octFrame(11.5, 'rgba(3,5,8,.5)') +
     '<img class="core-gem" src="hub_gem.webp" alt="" onerror="this.parentNode.classList.add(\'nofile\')"><span class="core-vec">' + GEM_SVG + '</span><span class="core-lb">CORE</span></button>' +
     '<div class="core-skt" style="left:' + u(108.8) + ';top:' + u(332.2) + ';width:' + u(172) + '">अभ्यन्तर</div>' +
     '</div></div></div>';
@@ -2757,8 +2706,8 @@ function hospitiumHTML() {
   const ap = activeProfile();
   const row = (act, t, sub) => '<button class="lec on" data-action="' + act + '"><span class="lec-t">' + t + '</span><span class="lec-s">' + sub + '</span><span class="chev sm">›</span></button>';
   return topbar('Hospitium', { noClock: true }) + '<div class="lec-list" style="margin-top:18px">' +
-    row('open-cabinet', 'Личный кабинет', ap ? esc(ap.name) : 'создать профиль') + row('open-sanctuary', 'Sanctuary', 'канал') +
-    row('open-keys', 'Ключи', keysLabel()) + row('open-settings', 'Настройки', '') + '</div>';
+    row('open-cabinet', 'Личный кабинет', ap ? '<span class="nt">' + esc(ap.name) + '</span>' : 'создать профиль') + row('open-sanctuary', 'Sanctuary', 'канал') +
+    row('open-keys', 'Ключи', keysLabel()) + row('toggle-lang', 'Language', I18N.lang.toUpperCase()) + row('open-legal', 'Политика конфиденциальности', '').replace('data-action="open-legal"', 'data-action="open-legal" data-k="privacy"') + row('open-legal', 'Пользовательское соглашение', '').replace('data-action="open-legal"', 'data-action="open-legal" data-k="terms"') + row('open-settings', 'Настройки', '') + '</div>';
 }
 
 // ───────── Вступление: полный трек играет в фоне до конца ─────────
@@ -2830,7 +2779,7 @@ function solarHTML() {
   const ap = activeProfile();
   const note = S.settings.devNotes !== false ? '<div class="devnote" style="margin:26px auto 0"><div class="label">Заметка разработчика</div><div class="body" style="margin-top:6px">Здесь будут уведомления о смене фазы и звуки фаз. Названия фаз взяты у иерархий, но фазы считаются от твоего дня рождения.</div></div>' : '';
   if (!ap) return topbar('Solar Matrix', { noClock: true }) + '<div class="card" style="margin-top:20px"><div class="body">Фаза года считается от твоего дня рождения. Создай профиль, чтобы увидеть её.</div><button class="btn btn-soft" data-action="create" style="margin-top:12px">СОЗДАТЬ ПРОФИЛЬ</button></div>' + liksHTML() + note;
-  return topbar('Solar Matrix', { noClock: true }) + '<div class="note" style="margin-top:16px">Профиль: ' + esc(ap.name) + ' · ' + esc(ap.birthDate) + '</div><div id="solOut"></div>' + liksHTML() + note;
+  return topbar('Solar Matrix', { noClock: true }) + '<div class="note" style="margin-top:16px">Профиль: <span class="nt">' + esc(ap.name) + '</span> · ' + esc(ap.birthDate) + '</div><div id="solOut"></div>' + liksHTML() + note;
 }
 function renderSolarOut() {
   const out = document.getElementById('solOut'), ap = activeProfile();
@@ -2874,7 +2823,7 @@ function keysPageHTML() {
 }
 
 // ───────── Анализ журнала (Pro) и страница регистра ─────────
-const AN_STOP = new Set(['этот', 'этого', 'очень', 'просто', 'потому', 'когда', 'тоже', 'после', 'перед', 'чтобы', 'котор', 'сегодня', 'было', 'есть', 'меня', 'тебя', 'моя', 'мой']);
+const AN_STOP = new Set(['этот', 'этого', 'очень', 'просто', 'потому', 'когда', 'тоже', 'после', 'перед', 'чтобы', 'котор', 'сегодня', 'было', 'есть', 'меня', 'тебя', 'моя', 'мой', 'this', 'that', 'with', 'from', 'have', 'just', 'very', 'what', 'when', 'were', 'will', 'your', 'been', 'they', 'them', 'then', 'than', 'also', 'into', 'because', 'after', 'before', 'about', 'there', 'their', 'which', 'would', 'could', 'today', 'felt']);
 async function openAnalysis() {
   const ap = activeProfile();
   S.journal = ap ? await loadAllLogs(ap.id) : [];
@@ -2906,7 +2855,7 @@ function analysisHTML() {
     '<div class="section">По источникам</div><div class="card">' + JSRC.filter((x) => bySrc[x[0]]).map((x) => anRow(x[1], bySrc[x[0]], maxS)).join('') + '</div>' +
     '<div class="section">Когда ты записываешь</div><div class="card">' + ['00–06', '06–12', '12–18', '18–24'].map((x, i) => anRow(x, byBand[i], maxB)).join('') + '</div>' +
     (regs.length ? '<div class="section">Частые регистры</div><div class="card">' + regs.map((r) => anRow('№' + r + ' ' + rname(getRegister(+r)), byReg[r], byReg[regs[0]])).join('') + '</div>' : '') +
-    (ws.length ? '<div class="section">Слова из комментариев</div><div class="card">' + ws.map((w) => anRow(esc(w), words[w], words[ws[0]])).join('') + '</div>' : '');
+    (ws.length ? '<div class="section">Слова из комментариев</div><div class="card">' + ws.map((w) => anRow('<span class="nt">' + esc(w) + '</span>', words[w], words[ws[0]])).join('') + '</div>' : '');
 }
 function regHTML(route) {
   const r = route.id, g = getRegister(r);
@@ -3242,7 +3191,7 @@ function cabinetHTML(route) {
   const p = S.profiles.find((x) => x.id === route.id);
   if (!p) return '<div class="empty">Профиль не найден.</div>';
   return topbar('Личный кабинет', { noClock: true }) +
-    '<div class="card cab-card" style="margin-top:18px"><div class="label">Профиль</div><div class="cab-name">' + esc(p.name) + '</div><div class="body">' + esc(p.birthDate) + '</div>' +
+    '<div class="card cab-card" style="margin-top:18px"><div class="label">Профиль</div><div class="cab-name nt">' + esc(p.name) + '</div><div class="body">' + esc(p.birthDate) + '</div>' +
     '<button class="btn btn-ghost" data-action="edit-profile" style="margin-top:12px">ИЗМЕНИТЬ</button></div>' +
     '<div class="section">Твой статус</div>' +
     (S.lvlOpen ? LEVELS : LEVELS.slice(0, 1)).map((l, i) => '<div class="lvl' + (i === 0 ? ' now tapx" data-action="toggle-levels' : '') + '"><div class="lvl-h"><span class="lvl-n">' + l[0] + '</span>' + (i === 0 ? '<span class="lvl-b">сейчас ' + (S.lvlOpen ? '▾' : '▸') + '</span>' : '<span class="lvl-s">скоро</span>') + '</div><div class="body">' + l[1] + '</div></div>').join('') +
@@ -3280,7 +3229,7 @@ const PRO_DEMO = { pairs: null, state: 'idle' };
 function loadProPairs() {
   if (PRO_DEMO.state !== 'idle') return;
   PRO_DEMO.state = 'loading';
-  fetch('pro_core_vector_16.json').then((r) => { if (!r.ok) throw new Error('http'); return r.json(); })
+  fetch(I18N.lang === 'en' ? 'pro_core_vector_16.en.json' : 'pro_core_vector_16.json').then((r) => { if (!r.ok) throw new Error('http'); return r.json(); })
     .then((j) => { PRO_DEMO.pairs = j.pairs; PRO_DEMO.state = 'ready'; if (cur().name === 'pro' || cur().name === 'reg') render(false); })
     .catch(() => { PRO_DEMO.state = 'error'; if (cur().name === 'pro' || cur().name === 'reg') render(false); });
 }
@@ -3301,7 +3250,7 @@ const PRO_REG = { regs: null, state: 'idle' };
 function loadProRegs() {
   if (PRO_REG.state !== 'idle') return;
   PRO_REG.state = 'loading';
-  fetch('pro_registers_72.json').then((r) => { if (!r.ok) throw new Error('http'); return r.json(); })
+  fetch(I18N.lang === 'en' ? 'pro_registers_72.en.json' : 'pro_registers_72.json').then((r) => { if (!r.ok) throw new Error('http'); return r.json(); })
     .then((j) => { PRO_REG.regs = j.registers; PRO_REG.state = 'ready'; if (cur().name === 'pro' || cur().name === 'reg') render(false); })
     .catch(() => { PRO_REG.state = 'error'; if (cur().name === 'pro' || cur().name === 'reg') render(false); });
 }
@@ -3355,11 +3304,183 @@ function proPentadHTML(ps) {
     '<div class="body" style="margin-bottom:10px">Фокус пентады: ' + esc(pt[0]) + '</div>' + rows.join('');
 }
 
+// ───────── Язык: RU / EN ─────────
+const I18N = { lang: 'ru', on: false, dict: null, obs: null, seen: new WeakMap(), cache: new Map(), miss: new Set() };
+const CYR = /[А-Яа-яЁё]/;
+const RU_REGIONS = ['ru', 'uk', 'be', 'kk', 'ky', 'uz', 'tg', 'hy', 'az', 'ka', 'tk', 'mo'];
+function detectLang() {
+  let c = '';
+  try { c = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.language_code) || ''; } catch (e) {}
+  if (!c) c = (navigator.language || 'ru');
+  return RU_REGIONS.indexOf(String(c).toLowerCase().slice(0, 2)) >= 0 ? 'ru' : 'en';
+}
+async function i18nLoadDict() {
+  if (I18N.dict) return true;
+  try {
+    const r = await fetch('i18n_en.json');
+    if (!r.ok) throw new Error('http');
+    const d = await r.json();
+    Object.keys(d).forEach((k) => {
+      const v = String(d[k]);
+      const k2 = k.replace(/[\s:·№«"(]+$/, '').replace(/^[\s.·»")]+/, '');
+      if (k2 && k2 !== k && !has(d, k2)) d[k2] = v.replace(/[\s:·№«"(]+$/, '').replace(/^[\s.·»")]+/, '');
+    });
+    I18N.dict = d;
+    return true;
+  } catch (e) { return false; }
+}
+const NUMTOK = /([^\s\u0400-\u04FF.,!?:;«»"'…—–-]+)/;
+const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k);
+function adjCase(r, toLower) {
+  if (!r) return r;
+  if (toLower) return (r.length > 1 && r[1] === r[1].toLowerCase() && r.slice(0, 2) !== 'I ' && r.slice(0, 2) !== 'I\'') || r.length === 1 ? r[0].toLowerCase() + r.slice(1) : r;
+  return r[0].toUpperCase() + r.slice(1);
+}
+function trLookup(s) {
+  const d = I18N.dict;
+  const vs = [s];
+  if (/[.:]$/.test(s)) vs.push(s.slice(0, -1)); else { vs.push(s + '.'); vs.push(s + ':'); }
+  for (const v of vs) {
+    let r = has(d, v) ? d[v] : undefined, flipped = false;
+    if (r === undefined) {
+      const c = v[0], f = (c === c.toLowerCase() ? c.toUpperCase() : c.toLowerCase());
+      const k2 = f + v.slice(1);
+      if (has(d, k2)) { r = adjCase(d[k2], c === c.toLowerCase()); flipped = true; }
+    }
+    if (r === undefined) continue;
+    if (/\.$/.test(v) && !/\.$/.test(s)) r = r.replace(/\.$/, '');
+    else if (/:$/.test(v) && !/:$/.test(s)) r = r.replace(/:$/, '');
+    else if (!/[.:]$/.test(v) && /\.$/.test(s) && !/[.!?]$/.test(r)) r += '.';
+    else if (!/[.:]$/.test(v) && /:$/.test(s) && !/:$/.test(r)) r += ':';
+    return r;
+  }
+  return null;
+}
+function trPiece(piece) {
+  const core = piece.trim();
+  if (!core || !CYR.test(core)) return piece;
+  const lead = piece.match(/^\s*/)[0], trail = piece.match(/\s*$/)[0];
+  let r = trLookup(core);
+  if (r === null) {
+    const w = core.match(/^([«"“(\[]*)([\s\S]*?)([»"”)\]?!]*)$/);
+    if (w && (w[1] || w[3]) && w[2]) { const t = trLookup(w[2].trim()); if (t !== null) r = w[1] + t + w[3]; }
+  }
+  if (r === null) {
+    const parts = core.split(NUMTOK);
+    let ok = true;
+    const out = parts.map((p, i) => {
+      if (i % 2 === 1 || !CYR.test(p)) return p;
+      const t = trLookup(p.trim());
+      if (t === null) { ok = false; return p; }
+      return p.replace(p.trim(), () => t);
+    });
+    if (ok) r = out.join('');
+  }
+  if (r === null) return null;
+  return lead + r + trail;
+}
+function trSplit(text, re, deeper) {
+  const parts = text.split(re);
+  return parts.map((p, i) => {
+    if (i % 2 === 1 || !CYR.test(p)) return p;
+    let t = trPiece(p);
+    if (t === null && deeper) t = deeper(p);
+    if (t === null) { I18N.miss.add(p.trim()); return p; }
+    return t;
+  }).join('');
+}
+function i18nText(src) {
+  if (!CYR.test(src)) return src;
+  if (I18N.cache.has(src)) return I18N.cache.get(src);
+  let out = trPiece(src);
+  if (out === null) {
+    out = trSplit(src, /(\s*[.!?…]\s+|\s*\n\s*)/, (p) => trSplit(p, /(\s*[:;]\s+|\s+[·•—–]\s+)/, null));
+  }
+  out = out.replace(/\$(\d+),(\d{2})/g, (m, a, b) => '$' + a + '.' + b);
+  if (I18N.cache.size > 3000) I18N.cache.clear();
+  I18N.cache.set(src, out);
+  return out;
+}
+function i18nNode(n) {
+  const v = n.nodeValue;
+  if (!v || !CYR.test(v)) return;
+  const seen = I18N.seen.get(n);
+  if (seen && seen.out === v) return;
+  const t = i18nText(v);
+  if (t !== v) { I18N.seen.set(n, { src: v, out: t }); n.nodeValue = t; }
+}
+function i18nAttrs(el) {
+  if (!el.getAttribute) return;
+  ['aria-label', 'placeholder', 'title', 'alt'].forEach((a) => {
+    const v = el.getAttribute(a);
+    if (v && CYR.test(v)) { const t = i18nText(v); if (t !== v) el.setAttribute(a, t); }
+  });
+}
+function i18nWalk(root) {
+  if (!I18N.on || !root) return;
+  if (root.nodeType === 3) { i18nNode(root); return; }
+  if (root.nodeType !== 1) return;
+  if (root.closest && root.closest('.nt')) return;
+  const w = document.createTreeWalker(root, 5, { acceptNode: (n) => (n.nodeType === 1 && (n.classList.contains('nt') || n.tagName === 'SCRIPT' || n.tagName === 'STYLE')) ? 2 : 1 });
+  i18nAttrs(root);
+  let n;
+  while ((n = w.nextNode())) { if (n.nodeType === 3) i18nNode(n); else i18nAttrs(n); }
+}
+function i18nStart() {
+  I18N.on = true;
+  document.documentElement.lang = 'en';
+  if (!I18N.obs) {
+    I18N.obs = new MutationObserver((muts) => {
+      for (const m of muts) {
+        if (m.type === 'childList') m.addedNodes.forEach((n) => i18nWalk(n));
+        else if (m.type === 'characterData') { if (!(m.target.parentElement && m.target.parentElement.closest('.nt'))) i18nNode(m.target); }
+        else if (m.type === 'attributes') i18nAttrs(m.target);
+      }
+    });
+  }
+  I18N.obs.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['aria-label', 'placeholder', 'title', 'alt'] });
+  i18nWalk(document.body);
+}
+function i18nStop() {
+  I18N.on = false;
+  document.documentElement.lang = 'ru';
+  if (I18N.obs) I18N.obs.disconnect();
+}
+async function setLang(l) {
+  l = l === 'en' ? 'en' : 'ru';
+  if (l === 'en' && !(await i18nLoadDict())) { toast('Не удалось загрузить английский словарь'); return; }
+  S.settings.lang = l; I18N.lang = l;
+  await saveSettings();
+  PRO_DEMO.state = 'idle'; PRO_REG.state = 'idle';
+  if (l === 'en') i18nStart(); else i18nStop();
+  closeOverlay();
+  render(false);
+}
+
+// ───────── Юридические страницы (политика и соглашение) ─────────
+const LEGAL = { data: null, state: 'idle' };
+function loadLegal() {
+  if (LEGAL.state !== 'idle') return;
+  LEGAL.state = 'loading';
+  fetch('legal.json').then((r) => { if (!r.ok) throw new Error('http'); return r.json(); })
+    .then((j) => { LEGAL.data = j; LEGAL.state = 'ready'; if (cur().name === 'legal') render(false); })
+    .catch(() => { LEGAL.state = 'error'; if (cur().name === 'legal') render(false); });
+}
+function legalHTML(route) {
+  const title = route.kind === 'terms' ? 'Пользовательское соглашение' : 'Политика конфиденциальности';
+  loadLegal();
+  const body = LEGAL.state === 'ready' ? (LEGAL.data[I18N.lang] || LEGAL.data.ru)[route.kind] : LEGAL.state === 'error' ? '<div class="body muted">Не удалось загрузить текст. Проверь, что файл legal.json лежит рядом с index.html.</div>' : '<div class="body muted">Загрузка…</div>';
+  return topbar(title, { noClock: true }) + '<div class="legal">' + body + '</div>';
+}
+
 // ───────── Запуск ─────────
 (async function init() {
   setupTelegram();
   try { const raw = await store.get(SETTINGS_KEY); if (raw) Object.assign(S.settings, JSON.parse(raw)); } catch (e) {}
   try { const rr = await store.get('lumina_rhythm'); if (rr) Object.assign(S.rhythm, JSON.parse(rr)); } catch (e) {}
+  if (!S.settings.lang) { S.settings.lang = detectLang(); await saveSettings(); }
+  I18N.lang = S.settings.lang === 'en' ? 'en' : 'ru';
+  if (I18N.lang === 'en') { if (await i18nLoadDict()) i18nStart(); else I18N.lang = 'ru'; }
   S.profiles = await loadProfiles();
   try { const ap = activeProfile(); if (ap) { const all = await loadAllLogs(ap.id); S.lastLog = all.reduce((a, b) => (!a || b.timestamp > a.timestamp ? b : a), null); } } catch (e) {}
   document.addEventListener('visibilitychange', () => document.body.classList.toggle('anim-off', document.hidden));
