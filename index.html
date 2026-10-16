@@ -610,6 +610,11 @@ body.is-start::before{background:#050609!important}
 .soon-oct{position:relative;width:200px;height:200px;--px:1.35;margin:10px auto 26px}
 .soon-t{font-size:20px;color:#F1F3F8;letter-spacing:.04em;margin-bottom:8px}
 .soon-s{font-size:14px;color:#B9BECB;line-height:1.5;max-width:280px;margin-bottom:30px}
+.lang-btn{flex-direction:column;gap:0;padding:0!important;position:relative}
+.lang-btn svg{width:17px!important;height:17px!important;margin-top:3px}
+.lang-tag{font-size:8.5px;font-weight:700;letter-spacing:.06em;line-height:1;margin-top:1px;color:#E3C985}
+.wel-snd{font-size:12px;margin-top:10px;color:#E6D9B0;line-height:1.5}
+
 </style>
 </head>
 <body>
@@ -2037,6 +2042,8 @@ function render(animate) {
   else if (route.name === 'rhythm') body = rhythmHTML();
   else if (route.name === 'cabinet') body = cabinetHTML(route);
   else if (route.name === 'lectures') body = lecturesHTML();
+  else if (route.name === 'repo') body = repoHTML();
+  else if (route.name === 'vision') body = visionHTML();
   else if (route.name === 'solar') body = solarHTML();
   else if (route.name === 'sanctuary') body = sanctuaryHTML();
   else if (route.name === 'keys') body = keysPageHTML();
@@ -2212,6 +2219,11 @@ async function handle(action, el) {
     case 'toggle-lik-open': { const i = parseInt(el.dataset.i, 10); S.likOpen = S.likOpen === i ? -1 : i; render(false); break; }
     case 'open-hospitium': go({ name: 'hospitium' }); break;
     case 'coming-soon': go({ name: 'soon', k: el.dataset.k }); break;
+    case 'open-repo': go({ name: 'repo' }); break;
+    case 'open-lec-url': openTgLink(LECTURE_URLS[parseInt(el.dataset.n, 10) - 1]); break;
+    case 'open-vision': go({ name: 'vision' }); break;
+    case 'open-vision-videos': openTgLink(VISION_URL); break;
+    case 'vision-soon': go({ name: 'soon', k: 'left', t: el.dataset.t }); break;
     case 'open-sanctuary': go({ name: 'sanctuary' }); break;
     case 'open-channel': { const tg = window.Telegram && window.Telegram.WebApp; if (CHANNEL_URL) { if (tg && tg.openTelegramLink && /t\.me\//.test(CHANNEL_URL)) tg.openTelegramLink(CHANNEL_URL); else window.open(CHANNEL_URL, '_blank'); } break; }
     case 'ground': {
@@ -2664,11 +2676,11 @@ const OCTS = [
   ['hospitium', 143.6, 0, 103.6, 'merkaba', 'Hospitium', 'open-hospitium'],
   ['matrix_solaris', 38.3, 79.9, 98.8, 'hex', 'Matrix Solaris', 'open-solar'],
   ['anushthana', 254.7, 79.9, 97.9, 'moon', 'अनुष्ठान', 'open-rhythm'],
-  ['left', 8.7, 196.3, 92.3, 'cube', 'Vision', 'coming-soon'],
+  ['left', 8.7, 196.3, 92.3, 'cube', 'Vision', 'open-vision'],
   ['pratidhvani', 289.5, 196.3, 92.7, 'waves', 'प्रतिध्वनि', 'open-signal'],
   ['matrix_scan', 38.3, 310.9, 98.8, 'scan', 'Matrix Scan', 'open-sign'],
   ['porta', 253.4, 310.9, 100.1, 'door', 'Porta', 'coming-soon'],
-  ['repositorium', 143.6, 388.8, 103.6, 'chest', 'Repositorium', 'go-lectures'],
+  ['repositorium', 143.6, 388.8, 103.6, 'chest', 'Repositorium', 'open-repo'],
 ];
 function octPts(ins) {
   const c = 50, h = 49 - ins, k = 0.4224 * h;
@@ -2683,7 +2695,8 @@ function octInner(o) {
     (o[5] ? '<span class="oc-lb' + (two ? ' two' : '') + (skr ? ' skr' : '') + '">' + (two ? o[5].replace(' ', '<br>') : o[5]) + '</span>' : '');
 }
 function soonHTML(route) {
-  const o = OCTS.find((x) => x[0] === route.k) || OCTS[0];
+  const o0 = OCTS.find((x) => x[0] === route.k) || OCTS[0];
+  const o = route.t ? [o0[0], o0[1], o0[2], o0[3], o0[4], route.t, o0[6]] : o0;
   return topbar(o[5] || 'Lumina', { noClock: true }) +
     '<div class="soon"><div class="soon-oct">' + octInner(o) + '</div><div class="soon-t">Раздел готовится</div><div class="soon-s">Скоро здесь появится новый раздел Lumina</div><button class="btn btn-ok" data-action="back">НА ГЛАВНЫЙ</button></div>';
 }
@@ -2691,7 +2704,7 @@ function startHTML() {
   const u = (n) => 'calc(var(--px) * ' + n + ')';
   const oct = (o) => '<button class="oc' + (o[5] ? '' : ' nolb') + '" data-action="' + o[6] + '" data-k="' + o[0] + '" aria-label="' + (o[5] || 'Скоро') + '" style="left:' + u(o[1]) + ';top:' + u(o[2]) + ';width:' + u(o[3]) + ';height:' + u(o[3]) + '">' + octInner(o) + '</button>';
   return '<div class="start-bg"><div class="hub-photo"></div></div>' +
-    '<div class="hub-top"><button class="icon-btn sm spk-btn" data-action="mute-toggle" aria-label="Звук">' + (S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON) + '</button>' +
+    '<div class="hub-top"><button class="icon-btn sm spk-btn lang-btn" data-action="toggle-lang" aria-label="Language">' + ICON_GLOBE + '<span class="lang-tag">' + (I18N.lang === 'en' ? 'EN' : 'RU') + '</span></button><button class="icon-btn sm spk-btn" data-action="mute-toggle" aria-label="Звук">' + (S.settings.sound === false ? ICON_SPK_OFF : ICON_SPK_ON) + '</button>' +
     tierPill() + '</div>' +
     (activeProfile() ? '' : '<button class="hub-tip" data-action="open-cabinet">Создай профиль</button>') +
     '<div class="hub' + (activeProfile() ? '' : ' notip') + '"><div class="hub-canvas"><div class="hub-title">LUMINA<span> OS</span></div>' +
@@ -2881,11 +2894,37 @@ const ICON_LOCK = SVG_OPEN + '<rect x="5" y="11" width="14" height="9" rx="2"/><
 function lecturesHTML() {
   const off = (n) => '<div class="lec off"><span class="lec-ic">' + ICON_LOCK + '</span><span class="lec-t">Лекция ' + n + '</span><span class="lec-s">Скоро</span></div>';
   const promo = (n, t, d) => '<button class="lec on" data-action="open-lecture" data-n="' + n + '"><span class="lec-ic">' + ICON_PLAY + '</span><span class="lec-t">' + t + '</span><span class="lec-s">' + d + '</span><span class="chev sm">›</span></button>';
-  return topbar('Lectures', { noClock: true }) + '<div class="lec-list">' + promo(1, 'Промо', '4:20') + promo(2, 'Промо 2', '5:17') + [3, 4, 5].map(off).join('') + '</div>';
+  return topbar('Lectures', { noClock: true }) + '<div class="lec-list">' + promo(1, 'Вступление', '4:20') + promo(2, 'Вступление 2', '5:17') + [3, 4, 5].map(off).join('') + '</div>';
+}
+
+// ───────── Repositorium (8 лекций в Telegram-канале) и Vision (подразделы) ─────────
+const LECTURE_URLS = ['', '', '', '', '', '', '', ''];   // ссылки на 8 лекций в Telegram-канале, по одной на кнопку
+const VISION_URL = '';                                   // ссылка на Telegram-канал Vision (ролики)
+const ICON_GLOBE = SVG_OPEN + '<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 2.5 4 5.5 4 9s-1.4 6.5-4 9c-2.6-2.5-4-5.5-4-9s1.4-6.5 4-9z"/></svg>';
+const ICON_VID = SVG_OPEN + '<rect x="3" y="6" width="18" height="12" rx="3.5"/><polygon points="10,9.5 15,12 10,14.5"/></svg>';
+const ICON_COLOR = SVG_OPEN + '<circle cx="9.5" cy="9.5" r="4.5"/><circle cx="14.5" cy="9.5" r="4.5"/><circle cx="12" cy="14.5" r="4.5"/></svg>';
+const ICON_STONE = SVG_OPEN + '<path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z"/><path d="M3 8l5 4 4-9M21 8l-5 4-4 9M8 12l4 9M16 12l-4-9"/></svg>';
+function openTgLink(url) {
+  if (!url) { toast('Ссылка на канал появится позже.'); return; }
+  const tg = window.Telegram && window.Telegram.WebApp;
+  if (tg && tg.openTelegramLink && /t\.me\//.test(url)) tg.openTelegramLink(url);
+  else if (tg && tg.openLink) tg.openLink(url);
+  else window.open(url, '_blank');
+}
+function repoHTML() {
+  const row = (n) => '<button class="lec on" data-action="open-lec-url" data-n="' + n + '"><span class="lec-ic">' + ICON_PLAY + '</span><span class="lec-t">Лекция ' + n + '</span><span class="chev sm">›</span></button>';
+  return topbar('Repositorium', { noClock: true }) +
+    '<div class="card" style="margin-top:20px"><div class="body">Лекции и материалы Lumina публикуются в Telegram-канале.</div></div>' +
+    '<div class="lec-list" style="margin-top:14px">' + [1, 2, 3, 4, 5, 6, 7, 8].map(row).join('') + '</div>';
+}
+function visionHTML() {
+  const row = (act, ic, t, extra) => '<button class="lec on" data-action="' + act + '"' + (extra || '') + '><span class="lec-ic">' + ic + '</span><span class="lec-t">' + t + '</span><span class="chev sm">›</span></button>';
+  return topbar('Vision', { noClock: true }) + '<div class="lec-list" style="margin-top:18px">' +
+    row('open-vision-videos', ICON_VID, 'Ролики') + row('vision-soon', ICON_COLOR, 'Цвет', ' data-t="Цвет"') + row('vision-soon', ICON_STONE, 'Камни', ' data-t="Камни"') + '</div>';
 }
 
 const LEC = { audio: null, state: 'idle', n: 1 };   // idle | loading | playing | paused | error
-const LEC_TRACKS = { 1: ['intro_full.mp3', 'Промо', '4:20', 259.7], 2: ['intro2.mp3', 'Промо 2', '5:17', 317.3] };
+const LEC_TRACKS = { 1: ['intro_full.mp3', 'Вступление', '4:20', 259.7], 2: ['intro2.mp3', 'Вступление 2', '5:17', 317.3] };
 function stopLecture() {
   if (LEC.audio) { try { LEC.audio.pause(); LEC.audio.currentTime = 0; } catch (e) {} }
   if (LEC.state !== 'error') LEC.state = 'idle';
@@ -2942,7 +2981,7 @@ function seekLecture(e, el) {
 function signalHTML() {
   return topbar('Сигнал', { noClock: true }) +
     '<div class="sig-grid sig-one"><button class="rel-plate" data-action="open-listen">' + ICON_LISTEN + '<span>Слушай момент</span></button></div>' +
-    '<div class="lec-list" style="margin-top:18px"><button class="lec on" data-action="go-lectures"><span class="lec-ic">' + ICON_PLAY + '</span><span class="lec-t">Lectures</span><span class="lec-s">Промо</span><span class="chev sm">›</span></button></div>';
+    '<div class="lec-list" style="margin-top:18px"><button class="lec on" data-action="go-lectures"><span class="lec-ic">' + ICON_PLAY + '</span><span class="lec-t">Lectures</span><span class="lec-s">Вступление</span><span class="chev sm">›</span></button></div>';
 }
 
 const SGN = { stream: null, track: null, text: '', mode: null, zoom: 1, ptrs: {}, startDist: 0, startZoom: 1, zt: null };
@@ -3198,16 +3237,20 @@ function cabinetHTML(route) {
     '<div class="note" style="text-align:center;margin-top:18px">Условия повышения статуса появятся позже.</div>' +
     '<button class="btn btn-ghost" data-action="ask-delete" data-id="' + p.id + '" style="margin-top:24px;color:#E08A8A">УДАЛИТЬ ПРОФИЛЬ</button>';
 }
+const todayKey = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
 function showWelcome() {
   if (S.welcomed || cur().name !== 'start') return;
   S.welcomed = true;
+  const day = todayKey();
+  if (S.settings.welcomeDay === day) return;
+  S.settings.welcomeDay = day; saveSettings();
   const el = document.createElement('div');
   el.id = 'wel'; el.className = 'wel';
-  el.innerHTML = '<div class="wel-card"><div class="wel-t">Lumina Core приветствует.</div><div class="wel-s">Твой текущий статус «Наблюдатель»</div><div class="wel-x">За подробностями заходи в личный кабинет</div></div>';
+  el.innerHTML = '<div class="wel-card"><div class="wel-t">Lumina Core приветствует.</div><div class="wel-s">Твой текущий статус «Наблюдатель»</div><div class="wel-x">За подробностями заходи в личный кабинет</div><div class="wel-snd">Для полного погружения рекомендуем включить звук</div></div>';
   document.body.appendChild(el);
   const close = () => { el.classList.add('out'); setTimeout(() => el.remove(), 450); };
   el.addEventListener('click', close);
-  setTimeout(close, 5200);
+  setTimeout(close, 8000);
 }
 
 const HIER = [['Серафимы', 1, 8], ['Херувимы', 9, 16], ['Престолы', 17, 24], ['Господства', 25, 32], ['Силы', 33, 40], ['Власти', 41, 48], ['Начала', 49, 56], ['Архангелы', 57, 64], ['Ангелы', 65, 72]];
@@ -3307,13 +3350,6 @@ function proPentadHTML(ps) {
 // ───────── Язык: RU / EN ─────────
 const I18N = { lang: 'ru', on: false, dict: null, obs: null, seen: new WeakMap(), cache: new Map(), miss: new Set() };
 const CYR = /[А-Яа-яЁё]/;
-const RU_REGIONS = ['ru', 'uk', 'be', 'kk', 'ky', 'uz', 'tg', 'hy', 'az', 'ka', 'tk', 'mo'];
-function detectLang() {
-  let c = '';
-  try { c = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.language_code) || ''; } catch (e) {}
-  if (!c) c = (navigator.language || 'ru');
-  return RU_REGIONS.indexOf(String(c).toLowerCase().slice(0, 2)) >= 0 ? 'ru' : 'en';
-}
 async function i18nLoadDict() {
   if (I18N.dict) return true;
   try {
@@ -3478,7 +3514,7 @@ function legalHTML(route) {
   setupTelegram();
   try { const raw = await store.get(SETTINGS_KEY); if (raw) Object.assign(S.settings, JSON.parse(raw)); } catch (e) {}
   try { const rr = await store.get('lumina_rhythm'); if (rr) Object.assign(S.rhythm, JSON.parse(rr)); } catch (e) {}
-  if (!S.settings.lang) { S.settings.lang = detectLang(); await saveSettings(); }
+  if (!S.settings.lang) { S.settings.lang = 'en'; await saveSettings(); }
   I18N.lang = S.settings.lang === 'en' ? 'en' : 'ru';
   if (I18N.lang === 'en') { if (await i18nLoadDict()) i18nStart(); else I18N.lang = 'ru'; }
   S.profiles = await loadProfiles();
