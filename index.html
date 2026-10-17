@@ -615,6 +615,8 @@ body.is-start::before{background:#050609!important}
 .lang-tag{font-size:8.5px;font-weight:700;letter-spacing:.06em;line-height:1;margin-top:1px;color:#E3C985}
 .wel-snd{font-size:12px;margin-top:10px;color:#E6D9B0;line-height:1.5}
 
+.idle-fx{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:5}
+
 </style>
 </head>
 <body>
@@ -2015,8 +2017,123 @@ let liveActive = null;
 let liveMeso = null;
 let liveBeacon = false;
 
+// ───────── Анимация покоя на главном экране ─────────
+// Ритм ядра (1 удар в секунду, CSS-анимация heart): на пике удара импульс невидимо идёт по линиям к граням октагонов;
+// в точке входа в контур вспыхивает зелёный свет и от неё плавно затухает по контуру до прозрачности; с каждым ударом граница заполнения растёт.
+const IDLE = { raf: 0, timer: 0, run: false, anim: null, canvas: null, ctx: null, geo: null, beat: 0, lastP: -1, last: 0, dpr: 1, w: 0, h: 0 };
+const IDLE_T = 18, IDLE_N = 24, IDLE_DEP = 0.26, IDLE_ARR = 0.76, IDLE_NB = 13;
+function idleFxStop() {
+  IDLE.run = false;
+  if (IDLE.raf) cancelAnimationFrame(IDLE.raf);
+  if (IDLE.timer) clearTimeout(IDLE.timer);
+  IDLE.raf = 0; IDLE.timer = 0; IDLE.anim = null; IDLE.canvas = null; IDLE.ctx = null; IDLE.geo = null;
+}
+function idleFxGeometry(hub, stone) {
+  const hr = hub.getBoundingClientRect();
+  const R = (e) => { const r = e.getBoundingClientRect(); return { l: r.left - hr.left, t: r.top - hr.top, w: r.width, h: r.height }; };
+  const cs = R(stone), cx = cs.l + cs.w / 2, cy = cs.t + cs.h / 2, cR = cs.w / 2;
+  const POLY = [[29, 3], [71, 3], [97, 29], [97, 71], [71, 97], [29, 97], [3, 71], [3, 29]];
+  const N = IDLE_N;
+  const sample = (path) => {
+    const cum = [0];
+    for (let i = 1; i < path.length; i++) cum.push(cum[i - 1] + Math.hypot(path[i][0] - path[i - 1][0], path[i][1] - path[i - 1][1]));
+    const half = cum[cum.length - 1] / 2, pts = [];
+    for (let j = 0; j <= N; j++) {
+      const s = j * half / N; let i = 1;
+      while (i < cum.length - 1 && cum[i] < s) i++;
+      const u = (s - cum[i - 1]) / ((cum[i] - cum[i - 1]) || 1);
+      pts.push([path[i - 1][0] + (path[i][0] - path[i - 1][0]) * u, path[i - 1][1] + (path[i][1] - path[i - 1][1]) * u]);
+    }
+    return pts;
+  };
+  const items = [];
+  hub.querySelectorAll('.oc .oc-art').forEach((art) => {
+    const a = R(art), ox = a.l + a.w / 2, oy = a.t + a.h / 2;
+    const P = POLY.map(([px, py]) => [a.l + a.w * px / 100, a.t + a.h * py / 100]);
+    let dx = cx - ox, dy = cy - oy; const dn = Math.hypot(dx, dy) || 1; dx /= dn; dy /= dn;
+    let E = null, ei = 0;
+    for (let i = 0; i < 8; i++) {
+      const A = P[i], B = P[(i + 1) % 8], ex = B[0] - A[0], ey = B[1] - A[1], den = dx * ey - dy * ex;
+      if (Math.abs(den) < 1e-9) continue;
+      const sc = ((A[0] - ox) * ey - (A[1] - oy) * ex) / den, u = ((A[0] - ox) * dy - (A[1] - oy) * dx) / den;
+      if (sc > 0 && u >= 0 && u <= 1) { E = [ox + sc * dx, oy + sc * dy]; ei = i; break; }
+    }
+    if (!E) return;
+    const cw = [E]; for (let k = 1; k <= 8; k++) cw.push(P[(ei + k) % 8]); cw.push(E);
+    const ccw = [E]; for (let k = 0; k < 8; k++) ccw.push(P[(ei - k + 8) % 8]); ccw.push(E);
+    let per = 0; for (let i = 0; i < cw.length - 1; i++) per += Math.hypot(cw[i + 1][0] - cw[i][0], cw[i + 1][1] - cw[i][1]);
+    const ux = E[0] - cx, uy = E[1] - cy, dist = Math.hypot(ux, uy) || 1, s0 = cR * 0.97;
+    const segs = [];
+    [sample(cw), sample(ccw)].forEach((pts) => { for (let j = 0; j < N; j++) segs.push([pts[j][0], pts[j][1], pts[j + 1][0], pts[j + 1][1], j]); });
+    items.push({ half: per / 2, line: [cx + ux / dist * s0, cy + uy / dist * s0, E[0], E[1]], segs });
+  });
+  return { w: hr.width, h: hr.height, items };
+}
+function idleFxDraw(t) {
+  const ctx = IDLE.ctx, g = IDLE.geo; if (!ctx || !g) return;
+  const clamp = (x) => Math.max(0, Math.min(1, x)), io = (x) => { x = clamp(x); return 0.5 - 0.5 * Math.cos(Math.PI * x); };
+  ctx.setTransform(IDLE.dpr, 0, 0, IDLE.dpr, 0, 0);
+  ctx.clearRect(0, 0, g.w, g.h);
+  const lineOp = 0.30 * io(t / 0.8) * (1 - io((t - 14.2) / 2.4));
+  const fade = 1 - io((t - 13.2) / 3.0);
+  let F = 0; for (let k = 0; k < 10; k++) F += io((t - k - IDLE_ARR) / 1.0) / 10;
+  let fl = 0;
+  for (let k = 0; k < IDLE_NB; k++) { const tau = t - k - IDLE_ARR; if (tau >= 0 && tau < 0.8) fl = Math.max(fl, io(tau / 0.18) * (1 - io((tau - 0.18) / 0.6))); }
+  const gate = clamp(F * 30 + fl * 2) * fade;
+  ctx.lineCap = 'round';
+  if (lineOp > 0.004) {
+    ctx.strokeStyle = 'rgba(234,223,184,' + lineOp.toFixed(3) + ')'; ctx.lineWidth = 1.2;
+    ctx.beginPath(); g.items.forEach((it) => { ctx.moveTo(it.line[0], it.line[1]); ctx.lineTo(it.line[2], it.line[3]); }); ctx.stroke();
+  }
+  if (gate < 0.01) return;
+  g.items.forEach((it) => {
+    const L = it.half * F + 10;
+    it.segs.forEach((sg) => {
+      const s = (sg[4] + 0.5) * it.half / IDLE_N;
+      let v = s < L ? Math.pow(1 - s / L, 1.5) : 0;
+      v = Math.max(v, fl * Math.exp(-s / 20) * 0.9);
+      const op = clamp(v) * gate; if (op < 0.02) return;
+      ctx.beginPath(); ctx.moveTo(sg[0], sg[1]); ctx.lineTo(sg[2], sg[3]);
+      ctx.strokeStyle = 'rgba(70,242,182,' + (0.22 * op).toFixed(3) + ')'; ctx.lineWidth = 6.5; ctx.stroke();
+      ctx.strokeStyle = 'rgba(70,242,182,' + op.toFixed(3) + ')'; ctx.lineWidth = 2.3; ctx.stroke();
+    });
+  });
+}
+function idleFxFrame(now) {
+  if (!IDLE.run) return;
+  IDLE.raf = requestAnimationFrame(idleFxFrame);
+  if (now - IDLE.last < 30) return;
+  IDLE.last = now;
+  const ct = IDLE.anim && IDLE.anim.currentTime; if (ct == null) return;
+  const p = (Number(ct) % 1000) / 1000;
+  if (IDLE.lastP >= 0 && p < IDLE.lastP - 0.5) IDLE.beat++;
+  IDLE.lastP = p;
+  idleFxDraw((IDLE.beat + p) % IDLE_T);
+}
+function idleFxStart() {
+  idleFxStop();
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  IDLE.timer = setTimeout(() => {
+    IDLE.timer = 0;
+    const hub = document.querySelector('.hub'), gem = document.querySelector('.hub .core-gem'), stone = document.querySelector('.hub .core-stone');
+    if (!hub || !gem || !stone || !gem.getAnimations) return;
+    const anim = gem.getAnimations()[0]; if (!anim) return;
+    const geo = idleFxGeometry(hub, stone); if (!geo.items.length) return;
+    const cv = document.createElement('canvas');
+    IDLE.dpr = Math.min(window.devicePixelRatio || 1, 2);
+    cv.width = Math.round(geo.w * IDLE.dpr); cv.height = Math.round(geo.h * IDLE.dpr);
+    cv.className = 'idle-fx'; cv.setAttribute('aria-hidden', 'true');
+    hub.appendChild(cv);
+    IDLE.canvas = cv; IDLE.ctx = cv.getContext('2d'); IDLE.geo = geo; IDLE.anim = anim; IDLE.beat = 0; IDLE.lastP = -1; IDLE.last = 0; IDLE.run = true;
+    IDLE.raf = requestAnimationFrame(idleFxFrame);
+  }, 700);
+}
+let idleResizeT = 0;
+window.addEventListener('resize', () => { clearTimeout(idleResizeT); idleResizeT = setTimeout(() => { if (cur().name === 'start') idleFxStart(); }, 250); });
+
 function render(animate) {
   const route = cur();
+  idleFxStop();
   if (route.name !== 'listen') stopListen();
   if (route.name !== 'lecture') stopLecture();
   if (route.name !== 'sign') stopCamera();
@@ -2071,6 +2188,7 @@ function render(animate) {
   if (route.name === 'rhythm') updateRhythmUI();
   if (route.name === 'solar') renderSolarOut();
   if (route.name === 'start' && activeProfile() && !S.welcomed) setTimeout(showWelcome, 350);
+  if (route.name === 'start') idleFxStart();
   if (route.name !== 'sign') document.body.classList.remove('padopen');
   syncBackButton();
   startLive();
@@ -2208,7 +2326,6 @@ async function handle(action, el) {
     }
     case 'go-calib': { const ap = activeProfile(); if (ap) { S.axisOpen = false; go({ name: 'profile', id: ap.id }); } else go({ name: 'create', initialDate: '' }); break; }
     case 'toggle-key': KEYS[el.dataset.k] = !KEYS[el.dataset.k]; render(false); break;
-    case 'toggle-levels': S.lvlOpen = !S.lvlOpen; render(false); break;
     case 'open-keys': go({ name: 'keys' }); break;
     case 'set-lang': await setLang(el.dataset.l); break;
     case 'toggle-lang': await setLang(I18N.lang === 'en' ? 'ru' : 'en'); break;
@@ -3233,7 +3350,7 @@ function cabinetHTML(route) {
     '<div class="card cab-card" style="margin-top:18px"><div class="label">Профиль</div><div class="cab-name nt">' + esc(p.name) + '</div><div class="body">' + esc(p.birthDate) + '</div>' +
     '<button class="btn btn-ghost" data-action="edit-profile" style="margin-top:12px">ИЗМЕНИТЬ</button></div>' +
     '<div class="section">Твой статус</div>' +
-    (S.lvlOpen ? LEVELS : LEVELS.slice(0, 1)).map((l, i) => '<div class="lvl' + (i === 0 ? ' now tapx" data-action="toggle-levels' : '') + '"><div class="lvl-h"><span class="lvl-n">' + l[0] + '</span>' + (i === 0 ? '<span class="lvl-b">сейчас ' + (S.lvlOpen ? '▾' : '▸') + '</span>' : '<span class="lvl-s">скоро</span>') + '</div><div class="body">' + l[1] + '</div></div>').join('') +
+    LEVELS.map((l, i) => '<div class="lvl' + (i === 0 ? ' now' : '') + '"><div class="lvl-h"><span class="lvl-n">' + l[0] + '</span>' + (i === 0 ? '<span class="lvl-b">сейчас</span>' : '<span class="lvl-s">скоро</span>') + '</div><div class="body">' + l[1] + '</div></div>').join('') +
     '<div class="note" style="text-align:center;margin-top:18px">Условия повышения статуса появятся позже.</div>' +
     '<button class="btn btn-ghost" data-action="ask-delete" data-id="' + p.id + '" style="margin-top:24px;color:#E08A8A">УДАЛИТЬ ПРОФИЛЬ</button>';
 }
